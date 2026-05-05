@@ -6,6 +6,7 @@ import {
   SlideInLeft,
   CoverageBar,
 } from "./DashboardAnimations"
+import { DONE, OPEN } from "../roadmap/constants"
 
 export const metadata = { title: "Dashboard | UtilityHub Intern" }
 
@@ -88,9 +89,19 @@ const CUSTOMER_STATUS_LABEL: Record<string, string> = {
   active: "Aktiv", inactive: "Inaktiv", blocked: "Gesperrt", pending: "Ausstehend",
 }
 
+// Roadmap numbers from shared source
+const ROADMAP_TOTAL = DONE.length + OPEN.length
+const ROADMAP_PCT   = Math.round((DONE.length / ROADMAP_TOTAL) * 100)
+
 export default async function AppDashboardPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
+
+  // Date boundaries for aging buckets (server-side)
+  const now   = new Date()
+  const d1ago  = new Date(now.getTime() - 1  * 24 * 60 * 60 * 1000)
+  const d7ago  = new Date(now.getTime() - 7  * 24 * 60 * 60 * 1000)
+  const d30ago = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
 
   const [
     { data: profile },
@@ -105,6 +116,11 @@ export default async function AppDashboardPage() {
     { data: recentCustomers },
     { data: telesonCustomerIds },
     { data: fgFinanzCustomerIds },
+    // Aging counter buckets
+    { count: agingToday },
+    { count: agingWeek },
+    { count: agingMonth },
+    { count: agingOlder },
   ] = await Promise.all([
     supabase.from("profiles").select("full_name, role").eq("id", user?.id ?? "").single(),
     supabase.from("customers").select("*", { count: "exact", head: true }),
@@ -124,11 +140,29 @@ export default async function AppDashboardPage() {
         "teleson_records(energie, neuer_versorger, neu_ap, status, malo, zaehlernummer, knr, created_at), " +
         "customer_identities(system, external_id)"
       )
-      .not("full_name", "ilike", "% (Allgemein)")  // Hauptordner are not real objects
+      .not("full_name", "ilike", "% (Allgemein)")
       .order("created_at", { ascending: false })
       .limit(8),
     supabase.from("teleson_records").select("customer_id"),
     supabase.from("fg_finanz_records").select("customer_id"),
+    // Aging: last 24h
+    supabase.from("customers").select("*", { count: "exact", head: true })
+      .not("full_name", "ilike", "% (Allgemein)")
+      .gte("created_at", d1ago.toISOString()),
+    // Aging: 1–7 days
+    supabase.from("customers").select("*", { count: "exact", head: true })
+      .not("full_name", "ilike", "% (Allgemein)")
+      .gte("created_at", d7ago.toISOString())
+      .lt("created_at", d1ago.toISOString()),
+    // Aging: 7–30 days
+    supabase.from("customers").select("*", { count: "exact", head: true })
+      .not("full_name", "ilike", "% (Allgemein)")
+      .gte("created_at", d30ago.toISOString())
+      .lt("created_at", d7ago.toISOString()),
+    // Aging: 30+ days
+    supabase.from("customers").select("*", { count: "exact", head: true })
+      .not("full_name", "ilike", "% (Allgemein)")
+      .lt("created_at", d30ago.toISOString()),
   ])
 
   // ── Coverage metrics ──────────────────────────────────────────────────────
@@ -155,6 +189,14 @@ export default async function AppDashboardPage() {
   ]
 
   const batches = (recentBatches ?? []) as BatchRow[]
+
+  // Aging buckets for display
+  const agingBuckets = [
+    { label: "Letzte 24h",  count: agingToday  ?? 0, color: "#3fb950", border: "rgba(63,185,80,0.2)",   bg: "rgba(63,185,80,0.08)"   },
+    { label: "1–7 Tage",    count: agingWeek   ?? 0, color: "#58a6ff", border: "rgba(88,166,255,0.2)",  bg: "rgba(88,166,255,0.08)"  },
+    { label: "7–30 Tage",   count: agingMonth  ?? 0, color: "#ffa600", border: "rgba(255,166,0,0.2)",   bg: "rgba(255,166,0,0.08)"   },
+    { label: "Älter 30 T.", count: agingOlder  ?? 0, color: "#8b949e", border: "rgba(139,148,158,0.2)", bg: "rgba(139,148,158,0.08)" },
+  ]
 
   type RecentRow = {
     id: string; full_name: string; status: string
@@ -202,15 +244,64 @@ export default async function AppDashboardPage() {
         </div>
       </div>
 
-      {/* ── MVP Fortschritt ────────────────────────────────────────────────── */}
-      <div>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--space-1)" }}>
-          <span style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>MVP Fortschritt — 50 von 57 Punkten erledigt</span>
-          <span style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", fontWeight: 600 }}>88 %</span>
+      {/* ── MVP Fortschritt + Aging-Counter (2-Spalten) ──────────────────── */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-4)" }}>
+
+        {/* Roadmap-Widget */}
+        <a href="/app/roadmap" style={{
+          background: "var(--surface)", border: "1px solid var(--border)",
+          borderRadius: "var(--radius-lg)", padding: "var(--space-5) var(--space-6)",
+          textDecoration: "none", color: "inherit", display: "flex", flexDirection: "column", gap: "var(--space-3)",
+        }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <span style={{ fontSize: "var(--text-xs)", fontWeight: 600, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+              MVP Fortschritt
+            </span>
+            <span style={{ fontSize: "var(--text-sm)", fontWeight: 800, color: "var(--primary-bright)" }}>
+              {ROADMAP_PCT} %
+            </span>
+          </div>
+          <div style={{ height: "5px", background: "var(--border)", borderRadius: "999px", overflow: "hidden" }}>
+            <div style={{ width: `${ROADMAP_PCT}%`, height: "100%", background: "var(--primary-bright)", borderRadius: "999px" }} />
+          </div>
+          <div style={{ display: "flex", gap: "var(--space-4)", fontSize: "var(--text-xs)" }}>
+            <span>
+              <span style={{ color: "#3fb950", fontWeight: 700 }}>{DONE.length}</span>
+              <span style={{ color: "var(--text-muted)" }}> erledigt</span>
+            </span>
+            <span>
+              <span style={{ color: "#ffa600", fontWeight: 700 }}>{OPEN.length}</span>
+              <span style={{ color: "var(--text-muted)" }}> offen</span>
+            </span>
+            <span style={{ marginLeft: "auto", color: "var(--primary-bright)" }}>Zur Roadmap →</span>
+          </div>
+        </a>
+
+        {/* Aging-Counter */}
+        <div style={{
+          background: "var(--surface)", border: "1px solid var(--border)",
+          borderRadius: "var(--radius-lg)", padding: "var(--space-5) var(--space-6)",
+          display: "flex", flexDirection: "column", gap: "var(--space-3)",
+        }}>
+          <span style={{ fontSize: "var(--text-xs)", fontWeight: 600, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+            Objekt-Alter (Import-Datum)
+          </span>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-2)" }}>
+            {agingBuckets.map(bucket => (
+              <div key={bucket.label} style={{
+                background: bucket.bg, border: `1px solid ${bucket.border}`,
+                borderRadius: "var(--radius-md)", padding: "var(--space-2) var(--space-3)",
+                display: "flex", flexDirection: "column", gap: "2px",
+              }}>
+                <span style={{ fontSize: "var(--text-base)", fontWeight: 700, color: bucket.color, lineHeight: 1 }}>
+                  {bucket.count.toLocaleString("de-DE")}
+                </span>
+                <span style={{ fontSize: "10px", color: "var(--text-muted)" }}>{bucket.label}</span>
+              </div>
+            ))}
+          </div>
         </div>
-        <div style={{ height: "5px", background: "var(--border)", borderRadius: "999px", overflow: "hidden" }}>
-          <div style={{ width: "88%", height: "100%", background: "var(--primary-bright)", borderRadius: "999px" }} />
-        </div>
+
       </div>
 
       {/* ── KPI cards ──────────────────────────────────────────────────────── */}
@@ -365,7 +456,6 @@ export default async function AppDashboardPage() {
                   const gasRec      = telesonRecs.find(r => r.energie?.toLowerCase() === "gas")   ?? null
                   const objType     = row.object_type
                   const malo        = telesonRecs.map(r => r.malo).find(Boolean) ?? null
-                  // Objekt: extract street part after the slash (tolerates "\n" or any whitespace).
                   const objektLabel = getStreet(row.full_name)
                   const latestRec   = [...telesonRecs].sort((a, b) =>
                     String(b.created_at ?? "").localeCompare(String(a.created_at ?? ""))
@@ -378,6 +468,13 @@ export default async function AppDashboardPage() {
                   const statusColor = CUSTOMER_STATUS_COLOR[row.status] ?? "var(--text-muted)"
                   const statusLabel = CUSTOMER_STATUS_LABEL[row.status] ?? row.status
                   const lieferStatus = stromRec?.status ?? gasRec?.status ?? null
+
+                  // Aging label for this row
+                  const createdMs = new Date(row.created_at).getTime()
+                  const ageMs     = now.getTime() - createdMs
+                  const ageDays   = Math.floor(ageMs / (24 * 60 * 60 * 1000))
+                  const ageLabel  = ageDays === 0 ? "Heute" : ageDays === 1 ? "Gestern" : `${ageDays}T`
+                  const ageColor  = ageDays === 0 ? "#3fb950" : ageDays <= 7 ? "#58a6ff" : ageDays <= 30 ? "#ffa600" : "var(--text-muted)"
 
                   const monoMuted: React.CSSProperties = {
                     fontFamily: "monospace", fontSize: "var(--text-xs)", color: "var(--text-muted)",
@@ -397,7 +494,7 @@ export default async function AppDashboardPage() {
                         </a>
                       </td>
 
-                      {/* Adresse — PLZ on top, city below */}
+                      {/* Adresse */}
                       <td style={{ padding: "var(--space-3) var(--space-4)", color: "var(--text-muted)", fontSize: "var(--text-xs)", whiteSpace: "nowrap" }}>
                         {(row.postal_code || row.city) ? (
                           <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.3 }}>
@@ -422,7 +519,7 @@ export default async function AppDashboardPage() {
                         {knr ? <span style={monoMuted}>{knr}</span> : dash}
                       </td>
 
-                      {/* Strom-Tarif (blue) */}
+                      {/* Strom-Tarif */}
                       <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
                         {stromRec?.neuer_versorger ? (
                           <div style={{ display: "flex", flexDirection: "column", gap: "1px" }}>
@@ -436,7 +533,7 @@ export default async function AppDashboardPage() {
                         ) : dash}
                       </td>
 
-                      {/* Gas-Tarif (orange) */}
+                      {/* Gas-Tarif */}
                       <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
                         {gasRec?.neuer_versorger ? (
                           <div style={{ display: "flex", flexDirection: "column", gap: "1px" }}>
@@ -471,13 +568,11 @@ export default async function AppDashboardPage() {
                         }}>{objType === "weg" ? "WEG" : "Privat"}</span>
                       </td>
 
-                      {/* Status + Datum (right-aligned) */}
+                      {/* Status + Alter */}
                       <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap", textAlign: "right" }}>
                         <div style={{ display: "flex", flexDirection: "column", gap: "2px", alignItems: "flex-end" }}>
                           <span style={{ fontSize: "var(--text-xs)", fontWeight: 600, color: statusColor }}>{statusLabel}</span>
-                          <span style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>
-                            {new Date(row.created_at).toLocaleDateString("de-DE")}
-                          </span>
+                          <span style={{ fontSize: "10px", fontWeight: 600, color: ageColor }}>{ageLabel}</span>
                         </div>
                       </td>
                     </FadeInRow>
