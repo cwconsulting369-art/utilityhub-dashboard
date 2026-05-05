@@ -150,68 +150,66 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
         overflowY: "auto", maxWidth: "calc(100% - 240px)",
         display: "flex", flexDirection: "column",
       }}>
-        {/* Top header bar with profile icon (portal only) */}
-        {portalType === "portal" && (
-          <div style={{
-            display: "flex", justifyContent: "flex-end", alignItems: "center",
-            padding: "var(--space-3) var(--space-8)",
-            borderBottom: "1px solid var(--border)",
-            position: "sticky", top: 0, zIndex: 20,
-            background: "var(--background)",
-          }}>
-            <div ref={profileRef} style={{ position: "relative" }}>
-              <button
-                onClick={() => setProfileOpen(o => !o)}
-                title={user.name || user.email}
-                style={{
-                  width: "36px", height: "36px", borderRadius: "50%",
-                  background: accentColor,
-                  border: "none", cursor: "pointer",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontWeight: 700, fontSize: "13px", color: "#fff",
-                  flexShrink: 0,
-                }}
-              >
-                {initials}
-              </button>
-              {profileOpen && (
-                <div style={{
-                  position: "absolute", right: 0, top: "calc(100% + 8px)",
-                  background: "var(--surface)", border: "1px solid var(--border)",
-                  borderRadius: "var(--radius-md)", overflow: "hidden",
-                  minWidth: "180px", zIndex: 50,
-                  boxShadow: "0 4px 16px rgba(0,0,0,0.4)",
-                }}>
-                  <div style={{ padding: "var(--space-3) var(--space-4)", borderBottom: "1px solid var(--border)" }}>
-                    <div style={{ fontSize: "var(--text-xs)", fontWeight: 600, marginBottom: "2px" }}>{user.name}</div>
-                    <div style={{ fontSize: "10px", color: "var(--text-muted)" }}>{user.email}</div>
-                  </div>
-                  <a href="/portal/settings" style={{
-                    display: "flex", alignItems: "center", gap: "var(--space-2)",
-                    padding: "var(--space-2) var(--space-4)",
-                    fontSize: "var(--text-sm)", color: "var(--text)", textDecoration: "none",
-                  }}
-                  onClick={() => setProfileOpen(false)}
-                  >
-                    <span>⚙</span> Einstellungen
-                  </a>
-                  <button
-                    onClick={handleSignOut}
-                    style={{
-                      width: "100%", padding: "var(--space-2) var(--space-4)",
-                      display: "flex", alignItems: "center", gap: "var(--space-2)",
-                      textAlign: "left", fontSize: "var(--text-sm)",
-                      color: "#f85149", background: "transparent", border: "none",
-                      cursor: "pointer", borderTop: "1px solid var(--border)",
-                    }}
-                  >
-                    <span>↪</span> Abmelden
-                  </button>
+        {/* Top header bar with profile icon */}
+        <div style={{
+          display: "flex", justifyContent: "flex-end", alignItems: "center",
+          padding: "var(--space-3) var(--space-8)",
+          borderBottom: "1px solid var(--border)",
+          position: "sticky", top: 0, zIndex: 20,
+          background: "var(--background)",
+        }}>
+          <div ref={profileRef} style={{ position: "relative" }}>
+            <button
+              onClick={() => setProfileOpen(o => !o)}
+              title={user.name || user.email}
+              style={{
+                width: "42px", height: "42px", borderRadius: "50%",
+                background: accentColor,
+                border: "none", cursor: "pointer",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontWeight: 700, fontSize: "14px", color: "#fff",
+                flexShrink: 0,
+              }}
+            >
+              {initials}
+            </button>
+            {profileOpen && (
+              <div style={{
+                position: "absolute", right: 0, top: "calc(100% + 8px)",
+                background: "var(--surface)", border: "1px solid var(--border)",
+                borderRadius: "var(--radius-md)", overflow: "hidden",
+                minWidth: "180px", zIndex: 50,
+                boxShadow: "0 4px 16px rgba(0,0,0,0.4)",
+              }}>
+                <div style={{ padding: "var(--space-3) var(--space-4)", borderBottom: "1px solid var(--border)" }}>
+                  <div style={{ fontSize: "var(--text-xs)", fontWeight: 600, marginBottom: "2px" }}>{user.name}</div>
+                  <div style={{ fontSize: "10px", color: "var(--text-muted)" }}>{user.email}</div>
                 </div>
-              )}
-            </div>
+                <a href={portalType === "app" ? "/app/settings" : "/portal/settings"} style={{
+                  display: "flex", alignItems: "center", gap: "var(--space-2)",
+                  padding: "var(--space-2) var(--space-4)",
+                  fontSize: "var(--text-sm)", color: "var(--text)", textDecoration: "none",
+                }}
+                onClick={() => setProfileOpen(false)}
+                >
+                  <span>⚙</span> Einstellungen
+                </a>
+                <button
+                  onClick={handleSignOut}
+                  style={{
+                    width: "100%", padding: "var(--space-2) var(--space-4)",
+                    display: "flex", alignItems: "center", gap: "var(--space-2)",
+                    textAlign: "left", fontSize: "var(--text-sm)",
+                    color: "#f85149", background: "transparent", border: "none",
+                    cursor: "pointer", borderTop: "1px solid var(--border)",
+                  }}
+                >
+                  <span>↪</span> Abmelden
+                </button>
+              </div>
+            )}
           </div>
-        )}
+        </div>
 
         <div style={{ padding: "var(--space-8)" }}>
           {children}
