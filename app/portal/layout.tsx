@@ -20,13 +20,10 @@ export default async function PortalLayout({ children }: { children: React.React
   if (profile?.role === "admin" || profile?.role === "staff") redirect("/app/dashboard")
 
   const navItems = [
-    { href: "/portal/dashboard",  label: "Übersicht",       icon: "⊞"  },
-    { href: "/portal/objects",    label: "Objekte",          icon: "🏢" },
-    { href: "/portal/documents",  label: "Meine Dokumente",  icon: "📁" },
-    { href: "/portal/fg-finanz",  label: "FG Finanz",        icon: "💼" },
-    { href: "/portal/contacts",   label: "Ansprechpartner",  icon: "👥" },
-    { href: "/portal/incentives", label: "Incentives",       icon: "🎁" },
-    { href: "/portal/settings",   label: "Einstellungen",   icon: "⚙"  },
+    { href: "/portal/dashboard", label: "Dashboard", icon: "⊞"  },
+    { href: "/portal/objects",   label: "Objekte",   icon: "🏢" },
+    { href: "/portal/fg-finanz", label: "Verträge",  icon: "📋" },
+    { href: "/portal/contacts",  label: "Support",   icon: "🎧" },
   ]
 
   return (

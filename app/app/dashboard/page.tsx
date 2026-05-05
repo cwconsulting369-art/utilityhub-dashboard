@@ -6,8 +6,6 @@ import {
   SlideInLeft,
   CoverageBar,
 } from "./DashboardAnimations"
-import { DONE, OPEN } from "../roadmap/constants"
-
 export const metadata = { title: "Dashboard | UtilityHub Intern" }
 
 interface BatchErrorLogSummary {
@@ -89,19 +87,11 @@ const CUSTOMER_STATUS_LABEL: Record<string, string> = {
   active: "Aktiv", inactive: "Inaktiv", blocked: "Gesperrt", pending: "Ausstehend",
 }
 
-// Roadmap numbers from shared source
-const ROADMAP_TOTAL = DONE.length + OPEN.length
-const ROADMAP_PCT   = Math.round((DONE.length / ROADMAP_TOTAL) * 100)
-
 export default async function AppDashboardPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  // Date boundaries for aging buckets (server-side)
-  const now   = new Date()
-  const d1ago  = new Date(now.getTime() - 1  * 24 * 60 * 60 * 1000)
-  const d7ago  = new Date(now.getTime() - 7  * 24 * 60 * 60 * 1000)
-  const d30ago = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
+  const now = new Date()
 
   const [
     { data: profile },
@@ -116,11 +106,6 @@ export default async function AppDashboardPage() {
     { data: recentCustomers },
     { data: telesonCustomerIds },
     { data: fgFinanzCustomerIds },
-    // Aging counter buckets
-    { count: agingToday },
-    { count: agingWeek },
-    { count: agingMonth },
-    { count: agingOlder },
   ] = await Promise.all([
     supabase.from("profiles").select("full_name, role").eq("id", user?.id ?? "").single(),
     supabase.from("customers").select("*", { count: "exact", head: true }),
@@ -145,24 +130,6 @@ export default async function AppDashboardPage() {
       .limit(8),
     supabase.from("teleson_records").select("customer_id"),
     supabase.from("fg_finanz_records").select("customer_id"),
-    // Aging: last 24h
-    supabase.from("customers").select("*", { count: "exact", head: true })
-      .not("full_name", "ilike", "% (Allgemein)")
-      .gte("created_at", d1ago.toISOString()),
-    // Aging: 1–7 days
-    supabase.from("customers").select("*", { count: "exact", head: true })
-      .not("full_name", "ilike", "% (Allgemein)")
-      .gte("created_at", d7ago.toISOString())
-      .lt("created_at", d1ago.toISOString()),
-    // Aging: 7–30 days
-    supabase.from("customers").select("*", { count: "exact", head: true })
-      .not("full_name", "ilike", "% (Allgemein)")
-      .gte("created_at", d30ago.toISOString())
-      .lt("created_at", d7ago.toISOString()),
-    // Aging: 30+ days
-    supabase.from("customers").select("*", { count: "exact", head: true })
-      .not("full_name", "ilike", "% (Allgemein)")
-      .lt("created_at", d30ago.toISOString()),
   ])
 
   // ── Coverage metrics ──────────────────────────────────────────────────────
@@ -189,14 +156,6 @@ export default async function AppDashboardPage() {
   ]
 
   const batches = (recentBatches ?? []) as BatchRow[]
-
-  // Aging buckets for display
-  const agingBuckets = [
-    { label: "Letzte 24h",  count: agingToday  ?? 0, color: "#3fb950", border: "rgba(63,185,80,0.2)",   bg: "rgba(63,185,80,0.08)"   },
-    { label: "1–7 Tage",    count: agingWeek   ?? 0, color: "#58a6ff", border: "rgba(88,166,255,0.2)",  bg: "rgba(88,166,255,0.08)"  },
-    { label: "7–30 Tage",   count: agingMonth  ?? 0, color: "#ffa600", border: "rgba(255,166,0,0.2)",   bg: "rgba(255,166,0,0.08)"   },
-    { label: "Älter 30 T.", count: agingOlder  ?? 0, color: "#8b949e", border: "rgba(139,148,158,0.2)", bg: "rgba(139,148,158,0.08)" },
-  ]
 
   type RecentRow = {
     id: string; full_name: string; status: string
@@ -242,66 +201,6 @@ export default async function AppDashboardPage() {
             <div style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", marginTop: "4px" }}>Lieferstellen</div>
           </a>
         </div>
-      </div>
-
-      {/* ── MVP Fortschritt + Aging-Counter (2-Spalten) ──────────────────── */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-4)" }}>
-
-        {/* Roadmap-Widget */}
-        <a href="/app/roadmap" style={{
-          background: "var(--surface)", border: "1px solid var(--border)",
-          borderRadius: "var(--radius-lg)", padding: "var(--space-5) var(--space-6)",
-          textDecoration: "none", color: "inherit", display: "flex", flexDirection: "column", gap: "var(--space-3)",
-        }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <span style={{ fontSize: "var(--text-xs)", fontWeight: 600, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
-              MVP Fortschritt
-            </span>
-            <span style={{ fontSize: "var(--text-sm)", fontWeight: 800, color: "var(--primary-bright)" }}>
-              {ROADMAP_PCT} %
-            </span>
-          </div>
-          <div style={{ height: "5px", background: "var(--border)", borderRadius: "999px", overflow: "hidden" }}>
-            <div style={{ width: `${ROADMAP_PCT}%`, height: "100%", background: "var(--primary-bright)", borderRadius: "999px" }} />
-          </div>
-          <div style={{ display: "flex", gap: "var(--space-4)", fontSize: "var(--text-xs)" }}>
-            <span>
-              <span style={{ color: "#3fb950", fontWeight: 700 }}>{DONE.length}</span>
-              <span style={{ color: "var(--text-muted)" }}> erledigt</span>
-            </span>
-            <span>
-              <span style={{ color: "#ffa600", fontWeight: 700 }}>{OPEN.length}</span>
-              <span style={{ color: "var(--text-muted)" }}> offen</span>
-            </span>
-            <span style={{ marginLeft: "auto", color: "var(--primary-bright)" }}>Zur Roadmap →</span>
-          </div>
-        </a>
-
-        {/* Aging-Counter */}
-        <div style={{
-          background: "var(--surface)", border: "1px solid var(--border)",
-          borderRadius: "var(--radius-lg)", padding: "var(--space-5) var(--space-6)",
-          display: "flex", flexDirection: "column", gap: "var(--space-3)",
-        }}>
-          <span style={{ fontSize: "var(--text-xs)", fontWeight: 600, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
-            Objekt-Alter (Import-Datum)
-          </span>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-2)" }}>
-            {agingBuckets.map(bucket => (
-              <div key={bucket.label} style={{
-                background: bucket.bg, border: `1px solid ${bucket.border}`,
-                borderRadius: "var(--radius-md)", padding: "var(--space-2) var(--space-3)",
-                display: "flex", flexDirection: "column", gap: "2px",
-              }}>
-                <span style={{ fontSize: "var(--text-base)", fontWeight: 700, color: bucket.color, lineHeight: 1 }}>
-                  {bucket.count.toLocaleString("de-DE")}
-                </span>
-                <span style={{ fontSize: "10px", color: "var(--text-muted)" }}>{bucket.label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
       </div>
 
       {/* ── KPI cards ──────────────────────────────────────────────────────── */}

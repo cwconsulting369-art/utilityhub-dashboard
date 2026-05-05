@@ -3,7 +3,6 @@ import { createClient } from "@/lib/supabase/server"
 import { NoteForm } from "./NoteForm"
 import { StatusSelect } from "./StatusSelect"
 import { DocumentsSection } from "./DocumentsSection"
-import { StammdatenForm, type OrgOption } from "./StammdatenForm"
 import type { DocumentRow } from "./DocumentsSection"
 
 export const metadata = { title: "Objektdetail | UtilityHub" }
@@ -126,7 +125,6 @@ export default async function CustomerDetailPage({ params }: Props) {
     { data: upsellRecords },
     { data: notes },
     { data: documents },
-    { data: orgList },
   ] = await Promise.all([
     supabase.from("customers").select("*, organization:organizations!organization_id(id, name)").eq("id", id).single(),
     supabase.from("customer_identities").select("*").eq("customer_id", id).order("created_at"),
@@ -135,7 +133,6 @@ export default async function CustomerDetailPage({ params }: Props) {
     supabase.from("upsell_opportunities").select("*, assigned_to:profiles!assigned_to(full_name)").eq("customer_id", id).order("status").order("created_at", { ascending: false }),
     supabase.from("customer_notes").select("id, content, is_internal, created_at, author:profiles!author_id(full_name)").eq("customer_id", id).order("created_at", { ascending: false }).limit(20),
     supabase.from("customer_documents").select("id, name, title, doc_type, mime_type, size_bytes, created_at, source, visible_to_customer, uploaded_by:profiles!uploaded_by(full_name)").eq("customer_id", id).order("created_at", { ascending: false }),
-    supabase.from("organizations").select("id, name").order("name"),
   ])
 
   if (!customer) notFound()
@@ -143,7 +140,6 @@ export default async function CustomerDetailPage({ params }: Props) {
   const c          = customer as Record<string, unknown>
   const orgData    = (c.organization as { id: string; name: string } | null)
   const objType    = c.object_type as string | null
-  const orgs: OrgOption[] = (orgList ?? []) as OrgOption[]
 
   // ── Completeness summary ────────────────────────────────────────────────
   const energieGroups = new Map<string, typeof telesonRecords>()
@@ -157,33 +153,6 @@ export default async function CustomerDetailPage({ params }: Props) {
   const docVisible    = (documents ?? []).filter(d => d.visible_to_customer).length
   const fgCount       = (fgFinanzRecords ?? []).length
   const openPotenziale = (upsellRecords ?? []).filter(r => r.status === "open").length
-
-  // ── Key Facts (read-only summary) ───────────────────────────────────────
-  const sortedTeleson = [...(telesonRecords ?? [])].sort((a, b) =>
-    String(b.created_at ?? "").localeCompare(String(a.created_at ?? ""))
-  )
-  const keyMalo  = sortedTeleson.map(r => r.malo).find(Boolean) ?? null
-  const keyStrom = sortedTeleson.find(r => (r.energie ?? "").toLowerCase() === "strom") ?? null
-  const keyGas   = sortedTeleson.find(r => (r.energie ?? "").toLowerCase() === "gas")   ?? null
-  const stromKnr = (keyStrom?.knr as string | null) ?? null
-  const gasKnr   = (keyGas?.knr   as string | null) ?? null
-
-  // ── Stammdaten form initial ─────────────────────────────────────────────
-  const stammdatenInitial = {
-    full_name:        String(c.full_name ?? ""),
-    email:            String(c.email ?? ""),
-    phone:            String(c.phone ?? ""),
-    address:          String(c.address ?? ""),
-    city:             String(c.city ?? ""),
-    postal_code:      String(c.postal_code ?? ""),
-    object_type:      objType === "weg" ? "weg" : "privat",
-    organization_id:  String(c.organization_id ?? ""),
-  }
-
-  const metaFields: [string, unknown][] = [
-    ["Quelle",       c.source],
-    ["Aktualisiert", fmtDate(c.updated_at as string)],
-  ]
 
   const SECTION_STYLE: React.CSSProperties = {
     background: "var(--surface)", border: "1px solid var(--border)",
@@ -319,33 +288,6 @@ export default async function CustomerDetailPage({ params }: Props) {
           )}
         </div>
 
-      </div>
-
-      {/* ── Stammdaten ───────────────────────────────────────────────────── */}
-      <div style={SECTION_STYLE}>
-        <div style={{ ...SECTION_HDR, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <h2 style={{ fontSize: "var(--text-base)", fontWeight: 600 }}>Stammdaten</h2>
-          <div style={{ display: "flex", gap: "var(--space-4)", fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>
-            {metaFields.map(([label, value]) => (
-              <span key={label as string}>{label as string}: <strong style={{ color: "var(--text)", fontWeight: 500 }}>{(value as string) ?? "—"}</strong></span>
-            ))}
-          </div>
-        </div>
-        <div style={{ display: "grid", gridTemplateColumns: "2fr 3fr" }}>
-          <div style={{ borderRight: "1px solid var(--border)" }}>
-            <StammdatenForm customerId={id} initial={stammdatenInitial} orgs={orgs} />
-          </div>
-          <KeyFactsCard
-            uhid={(c.uhid as string | null) ?? null}
-            malo={keyMalo}
-            stromVersorger={(keyStrom?.neuer_versorger as string | null) ?? null}
-            stromNeuAp={keyStrom?.neu_ap}
-            stromKnr={stromKnr}
-            gasVersorger={(keyGas?.neuer_versorger as string | null) ?? null}
-            gasNeuAp={keyGas?.neu_ap}
-            gasKnr={gasKnr}
-          />
-        </div>
       </div>
 
       {/* ── Teleson-Datensätze ────────────────────────────────────────────── */}

@@ -2,7 +2,7 @@ import { redirect }          from "next/navigation"
 import { createClient }      from "@/lib/supabase/server"
 import { createAdminClient } from "@/lib/supabase/admin"
 
-export const metadata = { title: "Ansprechpartner | UtilityHub" }
+export const metadata = { title: "Support | UtilityHub" }
 
 interface Contact {
   id:           string
@@ -29,9 +29,6 @@ export default async function PortalContactsPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/login")
 
-  // Support contacts are universal (FG Finanz + Teleson/UtilityHub team) and not
-  // tied to the customer's own org — load via admin client (RLS bypass).
-  // Only public-facing fields are selected.
   const admin = createAdminClient()
   const { data: allContacts } = await admin
     .from("contacts")
@@ -51,98 +48,114 @@ export default async function PortalContactsPage() {
     }
   }
 
+  const mainContact  = teContacts[0] ?? null
+  const sideContacts = fgContacts
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
 
-      {/* Header */}
       <div>
-        <h1 style={{ fontSize: "var(--text-xl)", fontWeight: 700, marginBottom: "var(--space-2)" }}>Ansprechpartner</h1>
+        <h1 style={{ fontSize: "var(--text-xl)", fontWeight: 700, marginBottom: "var(--space-2)" }}>Support</h1>
         <p style={{ color: "var(--text-muted)", fontSize: "var(--text-sm)", margin: 0 }}>
           Ihre Ansprechpartner für Rückfragen und Termine
         </p>
       </div>
 
-      {/* Two-column layout */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-5)" }}>
-        <ContactColumn title="FG Finanz"             contacts={fgContacts} />
-        <ContactColumn title="Teleson / UtilityHub"  contacts={teContacts} />
-      </div>
+      {/* 2-Spalten-Layout: ~40% links (FG-Finanz), ~60% rechts (Hauptansprechpartner) */}
+      <div style={{ display: "grid", gridTemplateColumns: "2fr 3fr", gap: "var(--space-5)", alignItems: "start" }}>
 
+        {/* Linke Spalte: Tufan + David (FG Finanz) */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)" }}>
+          {sideContacts.length > 0 ? (
+            sideContacts.map(c => <ContactCard key={c.id} contact={c} photoSize={72} />)
+          ) : (
+            <EmptyCard text="Keine FG-Finanz-Ansprechpartner hinterlegt" />
+          )}
+        </div>
+
+        {/* Rechte Spalte: Miguel (Hauptansprechpartner) */}
+        <div>
+          {mainContact ? (
+            <ContactCard contact={mainContact} photoSize={96} featured />
+          ) : (
+            <EmptyCard text="Kein Hauptansprechpartner hinterlegt" />
+          )}
+        </div>
+
+      </div>
     </div>
   )
 }
 
-function ContactColumn({ title, contacts }: { title: string; contacts: Contact[] }) {
+function EmptyCard({ text }: { text: string }) {
   return (
     <div style={{
       background: "var(--surface)", border: "1px solid var(--border)",
-      borderRadius: "var(--radius-lg)", overflow: "hidden",
-      display: "flex", flexDirection: "column",
+      borderRadius: "var(--radius-lg)", padding: "var(--space-6)",
+      color: "var(--text-muted)", fontSize: "var(--text-sm)", textAlign: "center",
     }}>
-      <div style={{
-        padding: "var(--space-4) var(--space-5)",
-        borderBottom: "1px solid var(--border)",
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-      }}>
-        <h2 style={{ fontSize: "var(--text-sm)", fontWeight: 600 }}>{title}</h2>
-        <span style={{
-          fontSize: "10px", fontWeight: 700, color: "var(--text-muted)",
-          background: "rgba(139,148,158,0.1)", border: "1px solid var(--border)",
-          borderRadius: "var(--radius-sm)", padding: "1px 7px",
-        }}>{contacts.length}</span>
-      </div>
-
-      <div style={{ padding: "var(--space-4) var(--space-5)", display: "flex", flexDirection: "column", gap: "var(--space-4)" }}>
-        {contacts.length > 0 ? (
-          contacts.map(c => <ContactCard key={c.id} contact={c} />)
-        ) : (
-          <div style={{ color: "var(--text-muted)", fontSize: "var(--text-sm)", textAlign: "center", padding: "var(--space-6) 0" }}>
-            Noch keine Ansprechpartner hinterlegt
-          </div>
-        )}
-      </div>
+      {text}
     </div>
   )
 }
 
-function ContactCard({ contact }: { contact: Contact }) {
-  const c = contact
+function ContactCard({ contact: c, photoSize = 60, featured = false }: {
+  contact:   Contact
+  photoSize?: number
+  featured?:  boolean
+}) {
   return (
     <div style={{
-      background: "var(--surface-2)", border: "1px solid var(--border)",
-      borderRadius: "var(--radius-md)", padding: "var(--space-4)",
-      display: "flex", flexDirection: "column", gap: "var(--space-3)",
+      background: "var(--surface)", border: `1px solid ${featured ? "rgba(63,185,80,0.3)" : "var(--border)"}`,
+      borderRadius: "var(--radius-lg)",
+      padding: featured ? "var(--space-6)" : "var(--space-5)",
+      display: "flex", flexDirection: "column", gap: "var(--space-4)",
     }}>
-      {/* Header: Foto/Initial + Name + Rolle */}
-      <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
+      {/* Avatar + Name + Rolle */}
+      <div style={{ display: "flex", alignItems: "center", gap: "var(--space-4)" }}>
         {c.photo_url ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={c.photo_url}
             alt=""
             style={{
-              width: "44px", height: "44px", borderRadius: "50%",
-              objectFit: "cover", flexShrink: 0,
-              border: "1px solid var(--border)",
+              width: `${photoSize}px`, height: `${photoSize}px`,
+              borderRadius: "50%", objectFit: "cover", flexShrink: 0,
+              border: "2px solid var(--border)",
             }}
           />
         ) : (
           <div style={{
-            width: "44px", height: "44px", borderRadius: "50%",
-            background: "var(--surface)", border: "1px solid var(--border)",
+            width: `${photoSize}px`, height: `${photoSize}px`,
+            borderRadius: "50%",
+            background: featured ? "rgba(63,185,80,0.15)" : "var(--surface-2)",
+            border: `2px solid ${featured ? "rgba(63,185,80,0.3)" : "var(--border)"}`,
             display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: "var(--text-sm)", fontWeight: 600, color: "var(--text-muted)",
+            fontSize: `${Math.round(photoSize * 0.35)}px`, fontWeight: 700,
+            color: featured ? "#3fb950" : "var(--text-muted)",
             flexShrink: 0,
           }}>
             {c.full_name.split(" ").map(s => s[0]).slice(0, 2).join("").toUpperCase()}
           </div>
         )}
         <div style={{ minWidth: 0 }}>
-          <div style={{ fontWeight: 600, fontSize: "var(--text-sm)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+          {featured && (
+            <div style={{
+              fontSize: "10px", fontWeight: 700, color: "#3fb950",
+              letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "4px",
+            }}>
+              Hauptansprechpartner
+            </div>
+          )}
+          <div style={{
+            fontWeight: 700,
+            fontSize: featured ? "var(--text-lg)" : "var(--text-base)",
+            overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+          }}>
             {c.full_name}
           </div>
           {c.role && (
-            <div style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>
+            <div style={{ fontSize: "var(--text-sm)", color: "var(--text-muted)", marginTop: "2px" }}>
               {c.role}
             </div>
           )}
