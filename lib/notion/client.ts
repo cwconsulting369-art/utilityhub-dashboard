@@ -6,9 +6,9 @@
 const NOTION_VERSION = "2022-06-28"
 const BASE           = "https://api.notion.com/v1"
 
-function headers(): Record<string, string> {
+function headers(token?: string): Record<string, string> {
   return {
-    Authorization:    `Bearer ${process.env.NOTION_API_KEY}`,
+    Authorization:    `Bearer ${token ?? process.env.NOTION_API_KEY}`,
     "Notion-Version": NOTION_VERSION,
     "Content-Type":   "application/json",
   }
@@ -71,8 +71,8 @@ export interface NotionDatabaseInfo {
 }
 
 /** GET /databases/:id — connection test + schema. */
-export async function getDatabaseInfo(dbId: string): Promise<NotionDatabaseInfo> {
-  const res = await fetch(`${BASE}/databases/${dbId}`, { headers: headers() })
+export async function getDatabaseInfo(dbId: string, token?: string): Promise<NotionDatabaseInfo> {
+  const res = await fetch(`${BASE}/databases/${dbId}`, { headers: headers(token) })
   if (!res.ok) {
     const err = await res.json() as { message?: string }
     throw new Error(`Notion ${res.status}: ${err.message ?? JSON.stringify(err)}`)
@@ -137,7 +137,7 @@ export interface NotionPageWithMeta {
  * Like queryAllPages but preserves page ID and last_edited_time.
  * Used by the sync route — queryAllPages discards these fields.
  */
-export async function queryAllPagesWithMeta(dbId: string): Promise<NotionPageWithMeta[]> {
+export async function queryAllPagesWithMeta(dbId: string, token?: string): Promise<NotionPageWithMeta[]> {
   const pages: NotionPageWithMeta[] = []
   let cursor: string | undefined
 
@@ -147,7 +147,7 @@ export async function queryAllPagesWithMeta(dbId: string): Promise<NotionPageWit
 
     const res = await fetch(`${BASE}/databases/${dbId}/query`, {
       method:  "POST",
-      headers: headers(),
+      headers: headers(token),
       body:    JSON.stringify(body),
     })
     if (!res.ok) {

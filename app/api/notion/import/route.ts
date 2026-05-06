@@ -4,18 +4,18 @@ import { createClient } from "@/lib/supabase/server"
 import { getDatabaseInfo, queryAllPagesWithMeta } from "@/lib/notion/client"
 import { syncNotionPages } from "@/lib/notion/sync"
 
-const DB_ID = process.env.NOTION_DATABASE_ID ?? ""
+const DEFAULT_DB_ID = process.env.NOTION_DATABASE_ID ?? ""
 
-/** GET — connection test; returns DB metadata without importing. */
+/** GET — connection test for the default (env) Notion DB. */
 export async function GET() {
-  if (!DB_ID) {
+  if (!DEFAULT_DB_ID) {
     return NextResponse.json(
       { ok: false, error: "NOTION_DATABASE_ID nicht konfiguriert" },
       { status: 500 }
     )
   }
   try {
-    const info = await getDatabaseInfo(DB_ID)
+    const info = await getDatabaseInfo(DEFAULT_DB_ID)
     return NextResponse.json({ ok: true, ...info })
   } catch (e) {
     return NextResponse.json({ ok: false, error: String(e) }, { status: 502 })
@@ -24,13 +24,6 @@ export async function GET() {
 
 /** POST — sync all Notion pages into Supabase via notion_sync_state + match_review_queue. */
 export async function POST(request: NextRequest) {
-  if (!DB_ID) {
-    return NextResponse.json(
-      { error: "NOTION_DATABASE_ID nicht konfiguriert" },
-      { status: 500 }
-    )
-  }
-
   // Auth — must be admin or staff
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -42,14 +35,29 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 })
   }
 
-  // Optional batch-level Hausverwaltung override (set by import UI)
-  const body = await request.json().catch(() => null) as { organization_name?: string } | null
+  const body = await request.json().catch(() => null) as {
+    organization_name?: string
+    custom_db_id?:      string
+    custom_token?:      string
+  } | null
+
   const organizationName = body?.organization_name?.trim() || undefined
+
+  // Custom DB overrides env — allows e.g. Miguel to use his own Notion DB
+  const dbId    = body?.custom_db_id?.trim() || DEFAULT_DB_ID
+  const token   = body?.custom_token?.trim() || undefined  // undefined → falls back to env in client
+
+  if (!dbId) {
+    return NextResponse.json(
+      { error: "Keine Notion-Datenbank-ID konfiguriert und keine eigene angegeben." },
+      { status: 500 }
+    )
+  }
 
   // Get DB title for the batch record
   let dbTitle = "Notion DB"
   try {
-    const info = await getDatabaseInfo(DB_ID)
+    const info = await getDatabaseInfo(dbId, token)
     dbTitle = info.title
   } catch {
     // non-fatal — continue with fallback title
@@ -58,7 +66,7 @@ export async function POST(request: NextRequest) {
   // Fetch all pages with metadata (ID + last_edited_time + props)
   let pages: Awaited<ReturnType<typeof queryAllPagesWithMeta>>
   try {
-    pages = await queryAllPagesWithMeta(DB_ID)
+    pages = await queryAllPagesWithMeta(dbId, token)
   } catch (e) {
     return NextResponse.json(
       { error: "Notion-Daten konnten nicht gelesen werden: " + String(e) },
