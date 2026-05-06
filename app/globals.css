@@ -108,9 +108,20 @@ p{max-width:70ch}
 /* Form focus ring — amber */
 .contact-input:focus{outline:2px solid var(--accent)!important;outline-offset:2px;border-color:var(--accent)!important}
 
+/* Portal table row hover */
+.portal-table tbody tr{transition:background 120ms ease}
+.portal-table tbody tr:hover{background:rgba(255,255,255,0.025)}
+
+/* Portal nav link hover — ink underlay */
+.portal-nav-link{transition:color 150ms ease,background 150ms ease,transform 150ms cubic-bezier(0.16,1,0.3,1)}
+@media(hover:hover) and (pointer:fine){
+  .portal-nav-link:not([data-active="true"]):hover{background:rgba(255,255,255,0.04);transform:translateX(2px)}
+}
+
 /* Reduce-motion — suppress transforms, keep opacity */
 @media(prefers-reduced-motion:reduce){
   *{transition:none!important;animation:none!important}
   .btn-primary:hover,.btn-whatsapp:hover,.btn-ghost:hover{transform:none!important}
   .card-lift:hover{transform:none!important}
+  .portal-nav-link:hover{transform:none!important}
 }
