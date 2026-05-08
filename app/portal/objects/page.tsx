@@ -110,7 +110,6 @@ export default async function PortalObjectsPage() {
         </h1>
         <p style={{ color: "var(--text-muted)", fontSize: "var(--text-sm)", margin: 0 }}>
           {rows.length} {rows.length === 1 ? "Objekt" : "Objekte"} Ihrer Hausverwaltung
-          {org?.name && <span> · {org.name}</span>}
         </p>
       </div>
 
@@ -165,7 +164,7 @@ export default async function PortalObjectsPage() {
                               <path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21V12h6v9"/>
                             </svg>
                           </div>
-                          <span style={{ fontWeight: 500, color: "var(--primary-bright)" }}>{getStreet(c.full_name)}</span>
+                          <span style={{ fontWeight: 500, color: "var(--text)" }}>{getStreet(c.full_name)}</span>
                         </a>
                       </td>
 

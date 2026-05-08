@@ -34,9 +34,9 @@
   --surface-off:#1e2a40;
   --border:rgba(255,255,255,0.08);
   --divider:rgba(255,255,255,0.04);
-  --text:#f0f6fc;
-  --text-muted:rgba(200,215,235,0.55);
-  --text-faint:rgba(200,215,235,0.28);
+  --text:#ffffff;
+  --text-muted:rgba(255,255,255,0.5);
+  --text-faint:rgba(255,255,255,0.22);
 
   /* Blue accent */
   --accent:#3a6fd8;

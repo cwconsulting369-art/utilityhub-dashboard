@@ -124,15 +124,22 @@ export default async function PortalDashboardPage({
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
 
-      {/* KPI Cards */}
-      <DashboardKPICards
-        stromCount={stromCount}
-        gasCount={gasCount}
-        orgFgFinanzCount={orgFgFinanzCount}
-        totalObjects={totalObjects}
-        totalLiefer={totalLiefer}
-        allOptimized={allOptimized}
-      />
+      {/* KPI Cards — in Rahmen */}
+      <div style={{
+        background:   "var(--surface)",
+        border:       "1px solid var(--border)",
+        borderRadius: "var(--radius-lg)",
+        padding:      "var(--space-5) var(--space-6)",
+      }}>
+        <DashboardKPICards
+          stromCount={stromCount}
+          gasCount={gasCount}
+          orgFgFinanzCount={orgFgFinanzCount}
+          totalObjects={totalObjects}
+          totalLiefer={totalLiefer}
+          allOptimized={allOptimized}
+        />
+      </div>
 
       {/* Objekte Übersicht */}
       <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", overflow: "hidden" }}>

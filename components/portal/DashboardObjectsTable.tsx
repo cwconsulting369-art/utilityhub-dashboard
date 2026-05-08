@@ -71,7 +71,16 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
 
   return (
     <div style={{ overflowX: "auto" }}>
-      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "var(--text-sm)" }}>
+      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "var(--text-sm)", tableLayout: "fixed" }}>
+          <colgroup>
+            <col style={{ width: "22%" }} />
+            <col style={{ width: "14%" }} />
+            <col style={{ width: "17%" }} />
+            <col style={{ width: "17%" }} />
+            <col style={{ width: "13%" }} />
+            <col style={{ width: "15%" }} />
+            <col style={{ width: "2%" }} />
+          </colgroup>
         <thead>
           <tr style={{ borderBottom: "1px solid var(--border)" }}>
             {["Objekt", "Adresse", "Strom-Tarif", "Gas-Tarif", "Status", "Zählernummer", ""].map(h => (
@@ -82,6 +91,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
                 color:      "var(--text-muted)",
                 fontSize:   "var(--text-xs)",
                 whiteSpace: "nowrap",
+                overflow:   "hidden",
               }}>{h}</th>
             ))}
           </tr>
@@ -116,7 +126,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
                         <path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21V12h6v9"/>
                       </svg>
                     </div>
-                    <span style={{ fontWeight: 600, color: "var(--primary-bright)" }}>
+                    <span style={{ fontWeight: 600, color: "var(--text)" }}>
                       {getStreet(row.full_name)}
                     </span>
                   </a>
