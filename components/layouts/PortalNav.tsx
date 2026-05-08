@@ -11,7 +11,7 @@ import { BackNavButton } from "@/components/portal/BackNavButton"
 interface NavItem {
   href:   string
   label:  string
-  icon:   string
+  icon:   React.ReactNode
   badge?: number
 }
 
@@ -211,9 +211,9 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
             whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.92 }}
             transition={{ duration: 0.12 }}
             title="Benachrichtigungen"
-            style={{ width: "38px", height: "38px", borderRadius: "50%", background: "transparent", border: "1px solid var(--border)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-muted)", flexShrink: 0 }}
+            style={{ width: "44px", height: "44px", borderRadius: "50%", background: "transparent", border: "1px solid var(--border)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-muted)", flexShrink: 0 }}
           >
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
               <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
               <path d="M13.73 21a2 2 0 0 1-3.46 0" />
             </svg>
@@ -224,9 +224,9 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
             whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.92 }}
             transition={{ duration: 0.12 }}
             title="Hilfe"
-            style={{ width: "38px", height: "38px", borderRadius: "50%", background: "transparent", border: "1px solid var(--border)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-muted)", flexShrink: 0 }}
+            style={{ width: "44px", height: "44px", borderRadius: "50%", background: "transparent", border: "1px solid var(--border)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-muted)", flexShrink: 0 }}
           >
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10" />
               <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
               <line x1="12" y1="17" x2="12.01" y2="17" />
@@ -241,8 +241,8 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
               whileTap={{ scale: 0.95 }}
               transition={{ duration: 0.15 }}
               style={{
-                width:          "38px",
-                height:         "38px",
+                width:          "44px",
+                height:         "44px",
                 borderRadius:   "50%",
                 background:     "transparent",
                 border:         "1px solid var(--border)",
@@ -254,7 +254,7 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
                 flexShrink:     0,
               }}
             >
-              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                 <circle cx="12" cy="7" r="4" />
               </svg>
