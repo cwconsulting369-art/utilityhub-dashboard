@@ -88,24 +88,21 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
             width:          "36px",
             height:         "36px",
             borderRadius:   "var(--radius-md)",
-            background:     accentColor,
+            background:     "linear-gradient(135deg, var(--primary-bright) 0%, #2554b8 100%)",
             display:        "flex",
             alignItems:     "center",
             justifyContent: "center",
-            fontWeight:     700,
-            fontSize:       "13px",
             flexShrink:     0,
-            letterSpacing:  "-0.5px",
             color:          "#fff",
-          }}>uh</div>
-          <div>
-            <div style={{ fontSize: "var(--text-sm)", lineHeight: 1.2 }}>
-              <span style={{ fontWeight: 300, letterSpacing: "0.06em" }}>UTILITY</span>
-              <span style={{ fontWeight: 800, letterSpacing: "0.04em" }}>HUB</span>
-            </div>
-            <div style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", marginTop: "2px" }}>
-              {portalType === "app" ? "Internes Portal" : "Kundenportal"}
-            </div>
+            boxShadow:      "0 4px 12px rgba(58,111,216,0.35)",
+          }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M13 2L4.09 13.5H11v8.5L19.91 10.5H13V2Z" />
+            </svg>
+          </div>
+          <div style={{ fontSize: "var(--text-sm)", lineHeight: 1.2 }}>
+            <span style={{ fontWeight: 300, letterSpacing: "0.06em" }}>UTILITY</span>
+            <span style={{ fontWeight: 800, letterSpacing: "0.04em" }}>HUB</span>
           </div>
         </div>
 
