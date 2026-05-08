@@ -159,8 +159,12 @@ export default async function PortalObjectsPage() {
                             width: "36px", height: "36px", borderRadius: "var(--radius-md)",
                             background: "rgba(88,166,255,0.08)", border: "1px solid var(--border)",
                             display: "flex", alignItems: "center", justifyContent: "center",
-                            flexShrink: 0, fontSize: "16px",
-                          }}>🏢</div>
+                            flexShrink: 0, color: "#58a6ff",
+                          }}>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21V12h6v9"/>
+                            </svg>
+                          </div>
                           <span style={{ fontWeight: 500, color: "var(--primary-bright)" }}>{getStreet(c.full_name)}</span>
                         </a>
                       </td>

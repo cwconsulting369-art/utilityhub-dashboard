@@ -51,7 +51,7 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
     router.refresh()
   }
 
-  const accentColor = portalType === "app" ? "var(--primary-bright)" : "#3fb950"
+  const accentColor = "var(--accent)"
 
   if (pathname === "/portal/change-password") {
     return <>{children}</>

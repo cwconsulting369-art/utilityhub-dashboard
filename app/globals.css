@@ -27,35 +27,35 @@
   --ease-spring:cubic-bezier(0.34,1.56,0.64,1);
   --transition:180ms cubic-bezier(0.16,1,0.3,1);
 
-  /* Warm dark palette */
-  --bg:#0d0b09;
-  --surface:#161311;
-  --surface-2:#1e1b17;
-  --surface-off:#241f1a;
-  --border:hsla(35,25%,75%,.1);
-  --divider:hsla(35,25%,75%,.06);
-  --text:#faf8f4;
-  --text-muted:hsla(35,20%,88%,.55);
-  --text-faint:hsla(35,20%,88%,.28);
+  /* Cool navy-blue palette (like dashboard inspo) */
+  --bg:#0b1120;
+  --surface:#111827;
+  --surface-2:#1a2234;
+  --surface-off:#1e2a40;
+  --border:rgba(255,255,255,0.08);
+  --divider:rgba(255,255,255,0.04);
+  --text:#f0f6fc;
+  --text-muted:rgba(200,215,235,0.55);
+  --text-faint:rgba(200,215,235,0.28);
 
-  /* Amber accent */
-  --accent:#f59e0b;
-  --accent-hover:#fbbf24;
-  --accent-dim:rgba(245,158,11,.12);
-  --accent-glow:rgba(245,158,11,.22);
+  /* Blue accent */
+  --accent:#3a6fd8;
+  --accent-hover:#4880e8;
+  --accent-dim:rgba(58,111,216,0.15);
+  --accent-glow:rgba(58,111,216,0.28);
 
-  /* Backwards-compat aliases (existing code uses --primary-bright, --gold etc.) */
-  --primary:#1a0f05;
-  --primary-hover:#261707;
-  --primary-bright:var(--accent);
-  --primary-glow:var(--accent-glow);
-  --gold:var(--accent);
-  --gold-dim:var(--accent-dim);
+  /* Backwards-compat aliases */
+  --primary:#0d1a35;
+  --primary-hover:#152040;
+  --primary-bright:#58a6ff;
+  --primary-glow:rgba(88,166,255,0.25);
+  --gold:#f59e0b;
+  --gold-dim:rgba(245,158,11,0.12);
 
   --success:#3fb950;--error:#f85149;
-  --shadow-md:0 4px 16px rgba(0,0,0,.55);
-  --shadow-lg:0 12px 40px rgba(0,0,0,.65);
-  --shadow-glow:0 0 60px rgba(245,158,11,.18);
+  --shadow-md:0 4px 16px rgba(0,0,0,.6);
+  --shadow-lg:0 12px 40px rgba(0,0,0,.7);
+  --shadow-glow:0 0 60px rgba(58,111,216,0.2);
 }
 
 html{scroll-behavior:smooth;scroll-padding-top:4rem;-webkit-font-smoothing:antialiased}
@@ -79,7 +79,7 @@ p{max-width:70ch}
 
 /* Interactive utilities */
 .card-lift{transition:transform var(--transition),border-color var(--transition),box-shadow var(--transition)}
-.card-lift:hover{transform:translateY(-4px);border-color:rgba(245,158,11,.28);box-shadow:0 12px 40px rgba(0,0,0,.5),0 0 0 1px rgba(245,158,11,.1)}
+.card-lift:hover{transform:translateY(-4px);border-color:rgba(58,111,216,.35);box-shadow:0 12px 40px rgba(0,0,0,.5),0 0 0 1px rgba(58,111,216,.12)}
 .btn-primary{transition:all var(--transition)}
 .btn-primary:hover{filter:brightness(1.1);transform:translateY(-2px);box-shadow:0 8px 32px rgba(245,158,11,.38)!important}
 .btn-primary:active{transform:scale(0.97)!important;filter:brightness(0.95)}

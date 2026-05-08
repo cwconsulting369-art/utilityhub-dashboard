@@ -129,13 +129,13 @@ export function DashboardKPICards({
     >
       <KPICard
         icon={
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="#58a6ff">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#58a6ff">
             <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
           </svg>
         }
         color="#58a6ff"
-        bgColor="rgba(88,166,255,0.15)"
-        borderColor="rgba(88,166,255,0.4)"
+        bgColor="rgba(88,166,255,0.12)"
+        borderColor="rgba(88,166,255,0.35)"
         label="Strom"
         count={stromCount}
         sub="Lieferstellen"
@@ -143,13 +143,13 @@ export function DashboardKPICards({
 
       <KPICard
         icon={
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="#ffa600">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#ffa600">
             <path d="M12 2C6 8 4 12 4 15a8 8 0 0 0 16 0c0-3-2-7-8-13z" />
           </svg>
         }
         color="#ffa600"
-        bgColor="rgba(255,166,0,0.15)"
-        borderColor="rgba(255,166,0,0.4)"
+        bgColor="rgba(255,166,0,0.12)"
+        borderColor="rgba(255,166,0,0.35)"
         label="Gas"
         count={gasCount}
         sub="Lieferstellen"
@@ -157,13 +157,13 @@ export function DashboardKPICards({
 
       <KPICard
         icon={
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#a78bfa">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
           </svg>
         }
         color="#a78bfa"
-        bgColor="rgba(167,139,250,0.15)"
-        borderColor="rgba(167,139,250,0.4)"
+        bgColor="rgba(167,139,250,0.12)"
+        borderColor="rgba(167,139,250,0.35)"
         label="Versicherung"
         count={orgFgFinanzCount}
         sub="Objekte"

@@ -110,8 +110,12 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
                       alignItems:     "center",
                       justifyContent: "center",
                       flexShrink:     0,
-                      fontSize:       "18px",
-                    }}>🏢</div>
+                      color:          "#58a6ff",
+                    }}>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21V12h6v9"/>
+                      </svg>
+                    </div>
                     <span style={{ fontWeight: 600, color: "var(--primary-bright)" }}>
                       {getStreet(row.full_name)}
                     </span>
