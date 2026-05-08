@@ -9,6 +9,7 @@ interface TelesonRecord {
   neu_ap:          number | null
   status:          string | null
   malo:            string | null
+  zaehlernummer:   string | null
   created_at:      string | null
 }
 
@@ -73,7 +74,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
       <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "var(--text-sm)" }}>
         <thead>
           <tr style={{ borderBottom: "1px solid var(--border)" }}>
-            {["Objekt", "Adresse", "Strom-Tarif", "Gas-Tarif", "Status", "Lieferstelle", ""].map(h => (
+            {["Objekt", "Adresse", "Strom-Tarif", "Gas-Tarif", "Status", "Zählernummer", ""].map(h => (
               <th key={h} style={{
                 padding:    "var(--space-3) var(--space-4)",
                 textAlign:  "left",
@@ -90,7 +91,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
             const recs     = row.teleson_records ?? []
             const stromRec = recs.find(r => r.energie?.toLowerCase() === "strom") ?? null
             const gasRec   = recs.find(r => r.energie?.toLowerCase() === "gas")   ?? null
-            const malo     = recs.map(r => r.malo).find(Boolean) ?? null
+            const malo     = recs.map(r => r.zaehlernummer).find(Boolean) ?? null
             const addr     = [row.postal_code, row.city].filter(Boolean).join(" ") || null
             const href     = `/portal/objects/${row.id}`
             const isActive = row.status === "active"
