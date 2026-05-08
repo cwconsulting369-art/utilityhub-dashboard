@@ -97,12 +97,12 @@ function KPICard({
         initial={{ opacity: 0, x: -6 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.15, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        style={{ fontSize: "var(--text-3xl)", fontWeight: 800, color, lineHeight: 1 }}
+        style={{ fontSize: "var(--text-3xl)", fontWeight: 800, color, lineHeight: 1, textAlign: "center" }}
       >
         {count.toLocaleString("de-DE")}
       </motion.div>
 
-      <div style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>{sub}</div>
+      <div style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", textAlign: "center" }}>{sub}</div>
     </motion.div>
   )
 }
