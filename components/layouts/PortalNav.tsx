@@ -6,6 +6,7 @@ import { useState, useRef, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { createClient } from "@/lib/supabase/client"
 import { PortalSidebarUpload } from "./PortalSidebarUpload"
+import { BackNavButton } from "@/components/portal/BackNavButton"
 
 interface NavItem {
   href:   string
@@ -192,7 +193,7 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
         {/* Top header */}
         <div style={{
           display:        "flex",
-          justifyContent: "flex-end",
+          justifyContent: "space-between",
           alignItems:     "center",
           gap:            "var(--space-2)",
           padding:        "var(--space-3) var(--space-8)",
@@ -202,7 +203,9 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
           zIndex:         20,
           background:     "var(--background)",
         }}>
+          <BackNavButton />
 
+          <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
           {/* Bell */}
           <motion.button
             whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.92 }}
@@ -325,6 +328,7 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
                 </motion.div>
               )}
             </AnimatePresence>
+          </div>
           </div>
         </div>
 

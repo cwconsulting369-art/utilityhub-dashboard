@@ -1,10 +1,13 @@
-import { createClient }           from "@/lib/supabase/server"
-import { redirect }               from "next/navigation"
-import { getStreet }              from "@/lib/customers/format"
-import { DashboardKPICards }      from "@/components/portal/DashboardKPICards"
-import { DashboardObjectsTable }  from "@/components/portal/DashboardObjectsTable"
+import { createClient }                from "@/lib/supabase/server"
+import { redirect }                    from "next/navigation"
+import { getStreet }                   from "@/lib/customers/format"
+import { DashboardKPICards }           from "@/components/portal/DashboardKPICards"
+import { DashboardObjectsTable }       from "@/components/portal/DashboardObjectsTable"
+import { PortalContactsSection }       from "@/components/portal/PortalContactsSection"
 
 export const metadata = { title: "Dashboard | UtilityHub" }
+
+const PAGE_SIZE = 10
 
 type ObjRow = {
   id:          string
@@ -24,7 +27,15 @@ type ObjRow = {
   }[] | null
 }
 
-export default async function PortalDashboardPage() {
+export default async function PortalDashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>
+}) {
+  const { page: pageStr } = await searchParams
+  const page   = Math.max(1, parseInt(pageStr ?? "1", 10))
+  const offset = (page - 1) * PAGE_SIZE
+
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/login")
@@ -37,7 +48,6 @@ export default async function PortalDashboardPage() {
 
   const organizationId = profile?.organization_id ?? null
   const customerId     = profile?.customer_id     ?? null
-  const displayName    = profile?.full_name ?? user.email ?? ""
 
   // ── Org-Modus ─────────────────────────────────────────────────────────────
   let orgName: string | null = null
@@ -46,6 +56,7 @@ export default async function PortalDashboardPage() {
   let orgGasCount      = 0
   let orgFgFinanzCount = 0
   let orgObjects: ObjRow[] = []
+  let totalPages = 1
 
   if (organizationId) {
     const [{ data: org }, { data: custs }] = await Promise.all([
@@ -55,6 +66,7 @@ export default async function PortalDashboardPage() {
     orgName        = org?.name ?? null
     const ids      = (custs ?? []).map(c => c.id)
     orgObjectCount = ids.length
+    totalPages     = Math.max(1, Math.ceil(orgObjectCount / PAGE_SIZE))
 
     if (ids.length > 0) {
       const [{ data: tel }, { data: recent }, { count: fgCount }] = await Promise.all([
@@ -66,16 +78,16 @@ export default async function PortalDashboardPage() {
           )
           .eq("organization_id", organizationId)
           .order("created_at", { ascending: false })
-          .limit(10),
+          .range(offset, offset + PAGE_SIZE - 1),
         supabase.from("fg_finanz_records")
           .select("id", { count: "exact", head: true })
           .in("customer_id", ids),
       ])
-      const teleson   = (tel ?? []) as { energie: string | null; customer_id: string }[]
-      orgStromCount   = teleson.filter(r => r.energie?.toLowerCase() === "strom").length
-      orgGasCount     = teleson.filter(r => r.energie?.toLowerCase() === "gas").length
+      const teleson    = (tel ?? []) as { energie: string | null; customer_id: string }[]
+      orgStromCount    = teleson.filter(r => r.energie?.toLowerCase() === "strom").length
+      orgGasCount      = teleson.filter(r => r.energie?.toLowerCase() === "gas").length
       orgFgFinanzCount = fgCount ?? 0
-      orgObjects      = (recent ?? []) as unknown as ObjRow[]
+      orgObjects       = (recent ?? []) as unknown as ObjRow[]
     }
   }
 
@@ -107,13 +119,12 @@ export default async function PortalDashboardPage() {
   const totalObjects = isOrg ? orgObjectCount   : (singleObjects.length > 0 ? 1 : 0)
   const totalLiefer  = stromCount + gasCount
   const objects      = isOrg ? orgObjects       : singleObjects
-  const orgLabel     = isOrg ? (orgName ?? "Ihre Hausverwaltung") : (singleName ? getStreet(singleName) : "Ihr Objekt")
   const allOptimized = totalLiefer > 0
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
 
-      {/* KPI Cards — animated client component */}
+      {/* KPI Cards */}
       <DashboardKPICards
         stromCount={stromCount}
         gasCount={gasCount}
@@ -138,11 +149,10 @@ export default async function PortalDashboardPage() {
           </a>
         </div>
 
-        {/* Animated table — client component */}
         <DashboardObjectsTable objects={objects as Parameters<typeof DashboardObjectsTable>[0]["objects"]} />
 
         {/* Pagination */}
-        {objects.length >= 10 && (
+        {totalPages > 1 && (
           <div style={{
             padding:        "var(--space-4)",
             borderTop:      "1px solid var(--border)",
@@ -151,29 +161,42 @@ export default async function PortalDashboardPage() {
             alignItems:     "center",
             gap:            "var(--space-2)",
           }}>
-            <button style={{
-              width: "32px", height: "32px", borderRadius: "var(--radius-md)",
-              background: "transparent", border: "1px solid var(--border)",
-              color: "var(--text-muted)", cursor: "pointer", fontSize: "var(--text-sm)",
-            }}>‹</button>
-            <button style={{
-              width: "32px", height: "32px", borderRadius: "var(--radius-md)",
-              background: "var(--primary-bright)", border: "none",
-              color: "#fff", cursor: "pointer", fontWeight: 700, fontSize: "var(--text-sm)",
-            }}>1</button>
-            <button style={{
-              width: "32px", height: "32px", borderRadius: "var(--radius-md)",
-              background: "transparent", border: "1px solid var(--border)",
-              color: "var(--text-muted)", cursor: "pointer", fontSize: "var(--text-sm)",
-            }}>2</button>
-            <button style={{
-              width: "32px", height: "32px", borderRadius: "var(--radius-md)",
-              background: "transparent", border: "1px solid var(--border)",
-              color: "var(--text-muted)", cursor: "pointer", fontSize: "var(--text-sm)",
-            }}>›</button>
+            {page > 1 && (
+              <a href={`?page=${page - 1}`} style={{
+                width: "32px", height: "32px", borderRadius: "var(--radius-md)",
+                background: "transparent", border: "1px solid var(--border)",
+                color: "var(--text-muted)", cursor: "pointer", fontSize: "var(--text-sm)",
+                display: "flex", alignItems: "center", justifyContent: "center", textDecoration: "none",
+              }}>‹</a>
+            )}
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
+              <a key={p} href={`?page=${p}`} style={{
+                width: "32px", height: "32px", borderRadius: "var(--radius-md)",
+                background: p === page ? "var(--primary-bright)" : "transparent",
+                border: p === page ? "none" : "1px solid var(--border)",
+                color: p === page ? "#fff" : "var(--text-muted)",
+                fontWeight: p === page ? 700 : 400,
+                fontSize: "var(--text-sm)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                textDecoration: "none",
+              }}>{p}</a>
+            ))}
+
+            {page < totalPages && (
+              <a href={`?page=${page + 1}`} style={{
+                width: "32px", height: "32px", borderRadius: "var(--radius-md)",
+                background: "transparent", border: "1px solid var(--border)",
+                color: "var(--text-muted)", cursor: "pointer", fontSize: "var(--text-sm)",
+                display: "flex", alignItems: "center", justifyContent: "center", textDecoration: "none",
+              }}>›</a>
+            )}
           </div>
         )}
       </div>
+
+      {/* Ansprechpartner */}
+      <PortalContactsSection />
 
     </div>
   )

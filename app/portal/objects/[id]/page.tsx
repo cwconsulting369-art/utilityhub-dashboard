@@ -177,12 +177,6 @@ export default async function PortalObjectDetailPage({ params }: Props) {
           <StatusBadge status={customer.status as string} />
         </div>
 
-        {/* Address row */}
-        {((c.address_display as string | null) || (c.city as string | null) || (c.postal_code as string | null)) && (
-          <div style={{ fontSize: "var(--text-sm)", color: "var(--text-muted)", marginTop: "var(--space-3)" }}>
-            {(c.address_display as string) ?? [c.address, c.postal_code, c.city].filter(Boolean).join(", ")}
-          </div>
-        )}
       </div>
 
       {/* ── Aktuelle Daten ───────────────────────────────────────────────── */}

@@ -154,7 +154,13 @@ export default async function PortalObjectsPage() {
 
                       {/* Objekt */}
                       <td style={{ padding: 0 }}>
-                        <a href={detailHref} style={{ ...cellLinkBase, whiteSpace: "nowrap" }}>
+                        <a href={detailHref} style={{ ...cellLinkBase, whiteSpace: "nowrap", display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
+                          <div style={{
+                            width: "36px", height: "36px", borderRadius: "var(--radius-md)",
+                            background: "rgba(88,166,255,0.08)", border: "1px solid var(--border)",
+                            display: "flex", alignItems: "center", justifyContent: "center",
+                            flexShrink: 0, fontSize: "16px",
+                          }}>🏢</div>
                           <span style={{ fontWeight: 500, color: "var(--primary-bright)" }}>{getStreet(c.full_name)}</span>
                         </a>
                       </td>
