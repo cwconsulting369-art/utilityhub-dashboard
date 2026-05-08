@@ -132,9 +132,9 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
                     display:      "flex",
                     alignItems:   "center",
                     gap:          "var(--space-3)",
-                    padding:      "var(--space-2) var(--space-3)",
+                    padding:      "var(--space-3) var(--space-4)",
                     borderRadius: "var(--radius-md)",
-                    fontSize:     "var(--text-sm)",
+                    fontSize:     "var(--text-base)",
                     fontWeight:   isActive ? 600 : 400,
                     color:        isActive ? "#fff" : "var(--text-muted)",
                     background:   isActive ? accentColor : "transparent",
@@ -155,7 +155,7 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
                       transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                     />
                   )}
-                  <span style={{ fontSize: "1rem", lineHeight: 1, position: "relative", zIndex: 1 }}>{item.icon}</span>
+                  <span style={{ fontSize: "1.25rem", lineHeight: 1, position: "relative", zIndex: 1 }}>{item.icon}</span>
                   <span style={{ flex: 1, position: "relative", zIndex: 1 }}>{item.label}</span>
                   {item.badge != null && item.badge > 0 && (
                     <motion.span

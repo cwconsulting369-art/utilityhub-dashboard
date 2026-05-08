@@ -57,25 +57,25 @@ export function PortalSidebarUpload() {
           style={{
             border: `2px dashed ${dragOver ? "var(--primary-bright)" : "rgba(63,185,80,0.4)"}`,
             borderRadius: "var(--radius-lg)",
-            padding: "var(--space-6) var(--space-4)",
+            padding: "var(--space-8) var(--space-4)",
             textAlign: "center",
             cursor: "pointer",
             color: dragOver ? "var(--primary-bright)" : "var(--text-muted)",
             background: dragOver ? "rgba(56,139,253,0.06)" : "rgba(63,185,80,0.04)",
             transition: "all 0.15s",
-            display: "flex", flexDirection: "column", alignItems: "center", gap: "var(--space-2)",
+            display: "flex", flexDirection: "column", alignItems: "center", gap: "var(--space-3)",
           }}
         >
           {/* Cloud-Upload-Icon */}
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={dragOver ? "var(--primary-bright)" : "#3fb950"} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke={dragOver ? "var(--primary-bright)" : "#3fb950"} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="16 16 12 12 8 16" />
             <line x1="12" y1="12" x2="12" y2="21" />
             <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" />
           </svg>
-          <div style={{ fontSize: "var(--text-xs)", fontWeight: 500, lineHeight: 1.5 }}>
+          <div style={{ fontSize: "var(--text-sm)", fontWeight: 500, lineHeight: 1.5 }}>
             Dateien hierher ziehen
           </div>
-          <div style={{ fontSize: "11px", color: "#3fb950", fontWeight: 600 }}>
+          <div style={{ fontSize: "var(--text-xs)", color: "#3fb950", fontWeight: 600 }}>
             oder klicken
           </div>
         </div>
