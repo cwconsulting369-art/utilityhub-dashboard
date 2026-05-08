@@ -86,6 +86,10 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
         }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/logo.png" alt="UtilityHub" style={{ height: "36px", width: "auto", objectFit: "contain" }} />
+          <div style={{ fontSize: "var(--text-sm)", lineHeight: 1.2 }}>
+            <span style={{ fontWeight: 300, letterSpacing: "0.06em" }}>UTILITY</span>
+            <span style={{ fontWeight: 800, letterSpacing: "0.04em" }}>HUB</span>
+          </div>
         </div>
 
         {/* Nav */}
