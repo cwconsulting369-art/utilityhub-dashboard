@@ -70,7 +70,20 @@ export default function LoginPage() {
       return
     }
 
-    router.push("/app/dashboard")
+    const { data: { user } } = await supabase.auth.getUser()
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user!.id)
+      .single()
+
+    if (profile?.role === "customer") {
+      router.push("/portal/dashboard")
+    } else if (profile?.role === "admin" || profile?.role === "staff") {
+      router.push("/app/dashboard")
+    } else {
+      router.push("/unauthorized")
+    }
     router.refresh()
   }
 

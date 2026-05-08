@@ -20,6 +20,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     .single()
 
   if (profile?.role === "customer") redirect("/portal/dashboard")
+  if (!profile || (profile.role !== "admin" && profile.role !== "staff")) redirect("/unauthorized")
 
   // Eingang badge: documents not yet assigned to a target customer/Hauptordner
   const admin = createAdminClient()
