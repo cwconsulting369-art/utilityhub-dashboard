@@ -56,7 +56,7 @@ function KPICard({
       }}
     >
       {/* Icon + Label */}
-      <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "var(--space-3)" }}>
         <div style={{ color: "#58a6ff", flexShrink: 0 }}>
           {icon}
         </div>
