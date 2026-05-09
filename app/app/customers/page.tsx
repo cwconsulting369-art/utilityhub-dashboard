@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server"
 import { CustomersTable } from "./CustomersTable"
 
+export const dynamic = "force-dynamic"
 export const metadata = { title: "Kunden | UtilityHub" }
 
 const PAGE_SIZE = 25

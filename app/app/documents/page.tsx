@@ -3,6 +3,8 @@ import { createClient }        from "@/lib/supabase/server"
 import { formatBytes, DOCUMENTS_BUCKET } from "@/lib/documents/storage"
 import { redirect }            from "next/navigation"
 import { revalidatePath }      from "next/cache"
+
+export const dynamic = "force-dynamic"
 import { DeleteDocButton }     from "./delete-button"
 
 export const metadata = { title: "Dokumente | UtilityHub" }

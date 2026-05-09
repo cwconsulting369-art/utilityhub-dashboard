@@ -1,6 +1,9 @@
 import { createClient } from "@/lib/supabase/server"
 import { UploadForm } from "./UploadForm"
 import { NotionImportButton } from "./NotionImportButton"
+import { DeleteAllButton } from "./DeleteAllButton"
+
+export const dynamic = "force-dynamic"
 
 export const metadata = { title: "Imports | UtilityHub" }
 
@@ -145,6 +148,25 @@ export default async function ImportsPage() {
           <UploadForm orgs={orgs} />
         </div>
 
+      </div>
+
+      {/* ── Danger Zone ────────────────────────────────────────────────────── */}
+      <div style={{
+        background: "var(--surface)", border: "1px solid rgba(248,81,73,0.25)",
+        borderRadius: "var(--radius-lg)", padding: "var(--space-5) var(--space-6)",
+        display: "flex", alignItems: "center", justifyContent: "space-between", gap: "var(--space-6)",
+      }}>
+        <div>
+          <div style={{ fontSize: "var(--text-sm)", fontWeight: 600, color: "#f85149", marginBottom: "var(--space-1)" }}>
+            Danger Zone
+          </div>
+          <p style={{ margin: 0, fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>
+            Löscht alle Kunden, Teleson-Daten, Import-Batches und Portal-Accounts (Hausverwaltungs-Logins). Organisationen bleiben erhalten.
+          </p>
+        </div>
+        <div style={{ flexShrink: 0 }}>
+          <DeleteAllButton />
+        </div>
       </div>
 
       {/* ── Import history ─────────────────────────────────────────────────── */}
