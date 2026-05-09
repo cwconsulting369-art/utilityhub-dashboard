@@ -110,29 +110,26 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
               <HoverRow key={row.id} href={href} isLast={idx === objects.length - 1}>
                 <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
                   <a href={href} style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", textDecoration: "none", color: "inherit" }}>
-                    <div style={{
-                      width:          "40px",
-                      height:         "40px",
-                      borderRadius:   "var(--radius-md)",
-                      background:     "rgba(88,166,255,0.08)",
-                      border:         "1px solid var(--border)",
-                      display:        "flex",
-                      alignItems:     "center",
-                      justifyContent: "center",
-                      flexShrink:     0,
-                      color:          "#58a6ff",
-                    }}>
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21V12h6v9"/>
-                      </svg>
-                    </div>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src="/building-placeholder.jpg"
+                      alt="Gebäude"
+                      style={{
+                        width:        "44px",
+                        height:       "44px",
+                        borderRadius: "var(--radius-md)",
+                        objectFit:    "cover",
+                        flexShrink:   0,
+                        border:       "1px solid var(--border)",
+                      }}
+                    />
                     <span style={{ fontWeight: 600, color: "#ffffff" }}>
                       {getStreet(row.full_name)}
                     </span>
                   </a>
                 </td>
 
-                <td style={{ padding: "var(--space-3) var(--space-4)", color: "var(--text-muted)", fontSize: "var(--text-xs)", whiteSpace: "nowrap" }}>
+                <td style={{ padding: "var(--space-3) var(--space-4)", color: "rgba(255,255,255,0.75)", fontSize: "var(--text-xs)", whiteSpace: "nowrap" }}>
                   {addr ? (
                     <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.4 }}>
                       {row.postal_code && <span>{row.postal_code}</span>}
@@ -172,16 +169,16 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
                     display:        "inline-flex",
                     alignItems:     "center",
                     gap:            "5px",
-                    background:     isActive ? "rgba(88,166,255,0.12)" : "rgba(139,148,158,0.12)",
-                    color:          isActive ? "#58a6ff" : "var(--text-muted)",
-                    border:         `1px solid ${isActive ? "rgba(88,166,255,0.3)" : "var(--border)"}`,
+                    background:     isActive ? "rgba(63,185,80,0.12)" : "rgba(139,148,158,0.12)",
+                    color:          isActive ? "#3fb950" : "var(--text-muted)",
+                    border:         `1px solid ${isActive ? "rgba(63,185,80,0.3)" : "var(--border)"}`,
                     borderRadius:   "999px",
                     padding:        "2px 10px",
                     fontSize:       "var(--text-xs)",
                     fontWeight:     600,
                   }}>
                     {isActive && (
-                      <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#58a6ff", flexShrink: 0 }} />
+                      <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#3fb950", flexShrink: 0 }} />
                     )}
                     {isActive ? "Aktiv" : row.status}
                   </span>
