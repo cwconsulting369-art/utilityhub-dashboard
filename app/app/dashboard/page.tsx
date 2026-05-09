@@ -3,6 +3,7 @@ import { getStreet }    from "@/lib/customers/format"
 import {
   FadeInRow,
   FadeInLink,
+  KPICardLink,
   SlideInLeft,
   CoverageBar,
 } from "./DashboardAnimations"
@@ -205,68 +206,56 @@ export default async function AppDashboardPage() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
 
-      {/* ── KPI Grid (1fr 1fr 1fr 2fr) ──────────────────────────────────────── */}
-      <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", overflow: "hidden" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 2fr" }}>
-          {kpis.slice(0, 3).map((kpi, idx) => (
-            <FadeInLink key={kpi.label} href={kpi.href} index={idx} style={{
-              padding: "var(--space-6) var(--space-4)",
-              display: "flex", flexDirection: "column", alignItems: "center", gap: "var(--space-3)",
-              textDecoration: "none", color: "inherit",
-              borderRight: "1px solid var(--border)",
-            }}>
-              <div style={{
-                width: "40px", height: "40px", borderRadius: "var(--radius-md)",
-                background: kpi.bgColor, border: `1px solid ${kpi.borderColor}`,
-                display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
-              }}>
-                {kpi.icon}
-              </div>
-              <div style={{ fontSize: "var(--text-2xl)", fontWeight: 700, lineHeight: 1, color: kpi.color }}>
-                {kpi.value.toLocaleString("de-DE")}
-              </div>
-              <div style={{ fontSize: "var(--text-xs)", color: "rgba(255,255,255,0.85)", textAlign: "center" }}>{kpi.label}</div>
-            </FadeInLink>
-          ))}
+      {/* ── KPI Grid (1fr 1fr 1fr 2fr) — separate cards wie Kundenportal ────── */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 2fr", gap: "var(--space-5)", alignItems: "stretch" }}>
+        {kpis.slice(0, 3).map((kpi, idx) => (
+          <KPICardLink key={kpi.label} href={kpi.href} index={idx}>
+            <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
+              <div style={{ color: kpi.color, flexShrink: 0 }}>{kpi.icon}</div>
+              <span style={{ fontSize: "var(--text-sm)", color: "var(--text)", fontWeight: 500 }}>{kpi.label}</span>
+            </div>
+            <div style={{ fontSize: "var(--text-3xl)", fontWeight: 800, color: "var(--text)", lineHeight: 1, textAlign: "center" }}>
+              {kpi.value.toLocaleString("de-DE")}
+            </div>
+            <div style={{ fontSize: "var(--text-xs)", color: "var(--text)", textAlign: "center", opacity: 0.7 }}>
+              Lieferstellen
+            </div>
+          </KPICardLink>
+        ))}
 
-          {/* Wide summary card */}
-          <FadeInLink href="/app/customers" index={3} style={{
-            padding: "var(--space-5) var(--space-6)",
-            display: "flex", flexDirection: "column", gap: "var(--space-4)",
-            textDecoration: "none", color: "inherit",
-          }}>
-            <div style={{ display: "flex", alignItems: "baseline", gap: "var(--space-3)", flexWrap: "wrap" }}>
-              <span style={{ fontSize: "var(--text-3xl)", fontWeight: 800, lineHeight: 1 }}>
-                {total.toLocaleString("de-DE")}
+        {/* Wide summary card */}
+        <KPICardLink href="/app/customers" index={3} style={{ gap: "var(--space-4)" }}>
+          <div style={{ display: "flex", alignItems: "baseline", gap: "var(--space-3)", flexWrap: "wrap" }}>
+            <span style={{ fontSize: "var(--text-3xl)", fontWeight: 800, lineHeight: 1 }}>
+              {total.toLocaleString("de-DE")}
+            </span>
+            <span style={{ fontSize: "var(--text-sm)", color: "var(--text)", opacity: 0.7 }}>Objekte</span>
+            <span style={{ color: "var(--border)" }}>|</span>
+            <span style={{ fontSize: "var(--text-3xl)", fontWeight: 800, lineHeight: 1 }}>
+              {(totalLieferstellen ?? 0).toLocaleString("de-DE")}
+            </span>
+            <span style={{ fontSize: "var(--text-sm)", color: "var(--text)", opacity: 0.7 }}>Lieferstellen</span>
+          </div>
+          <div style={{ display: "flex", gap: "var(--space-5)", flexWrap: "wrap" }}>
+            <span style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>
+              <span style={{ color: "#a78bfa", fontWeight: 600 }}>{fgFinanzCount ?? 0}</span> FG-Finanz
+            </span>
+            <span style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>
+              <span style={{ color: openPot > 0 ? "#ffa600" : "#58a6ff", fontWeight: 600 }}>{openPot}</span> Potenziale offen
+            </span>
+          </div>
+          <div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+              <span style={{ fontSize: "var(--text-xs)", color: "var(--text)", opacity: 0.7 }}>Datenabdeckung (Energie)</span>
+              <span style={{ fontSize: "var(--text-xs)", fontWeight: 700, color: telesonCovPct >= 80 ? "#3fb950" : "#ffa600" }}>
+                {telesonCovPct}%
               </span>
-              <span style={{ fontSize: "var(--text-sm)", color: "var(--text)", opacity: 0.7 }}>Objekte</span>
-              <span style={{ color: "var(--border)" }}>|</span>
-              <span style={{ fontSize: "var(--text-3xl)", fontWeight: 800, lineHeight: 1 }}>
-                {(totalLieferstellen ?? 0).toLocaleString("de-DE")}
-              </span>
-              <span style={{ fontSize: "var(--text-sm)", color: "var(--text)", opacity: 0.7 }}>Lieferstellen</span>
             </div>
-            <div style={{ display: "flex", gap: "var(--space-5)", flexWrap: "wrap" }}>
-              <span style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>
-                <span style={{ color: "#a78bfa", fontWeight: 600 }}>{fgFinanzCount ?? 0}</span> FG-Finanz
-              </span>
-              <span style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>
-                <span style={{ color: openPot > 0 ? "#ffa600" : "#58a6ff", fontWeight: 600 }}>{openPot}</span> Potenziale offen
-              </span>
+            <div style={{ height: "5px", background: "var(--border)", borderRadius: "3px", overflow: "hidden" }}>
+              <CoverageBar pct={telesonCovPct} color={telesonCovPct >= 80 ? "#3fb950" : "#ffa600"} />
             </div>
-            <div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
-                <span style={{ fontSize: "var(--text-xs)", color: "var(--text)", opacity: 0.7 }}>Datenabdeckung (Energie)</span>
-                <span style={{ fontSize: "var(--text-xs)", fontWeight: 700, color: telesonCovPct >= 80 ? "#3fb950" : "#ffa600" }}>
-                  {telesonCovPct}%
-                </span>
-              </div>
-              <div style={{ height: "5px", background: "var(--border)", borderRadius: "3px", overflow: "hidden" }}>
-                <CoverageBar pct={telesonCovPct} color={telesonCovPct >= 80 ? "#3fb950" : "#ffa600"} />
-              </div>
-            </div>
-          </FadeInLink>
-        </div>
+          </div>
+        </KPICardLink>
       </div>
 
       {/* ── Content: 1/3 sidebar + 2/3 objects ──────────────────────────────── */}

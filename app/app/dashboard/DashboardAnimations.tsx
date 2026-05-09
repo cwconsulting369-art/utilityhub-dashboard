@@ -77,6 +77,43 @@ export function SlideInLeft({ children, style, delay = 0 }: {
   )
 }
 
+export function KPICardLink({ children, href, index = 0, style }: {
+  children: ReactNode
+  href:     string
+  index?:   number
+  style?:   CSSProperties
+}) {
+  return (
+    <motion.a
+      href={href}
+      initial={FADE_IN_INITIAL}
+      animate={FADE_IN_ANIMATE}
+      transition={{ ...TRANSITION, delay: index * 0.08 }}
+      whileHover={{
+        scale: 1.018,
+        borderColor: "rgba(88,166,255,0.4)",
+        boxShadow: "0 0 0 1px rgba(88,166,255,0.2), 0 8px 24px rgba(0,0,0,0.35)",
+        transition: { duration: 0.18, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
+      }}
+      style={{
+        background:     "var(--surface)",
+        border:         "1px solid var(--border)",
+        borderRadius:   "var(--radius-lg)",
+        padding:        "var(--space-5) var(--space-6)",
+        display:        "flex",
+        flexDirection:  "column",
+        gap:            "var(--space-3)",
+        willChange:     "transform",
+        textDecoration: "none",
+        color:          "inherit",
+        ...style,
+      }}
+    >
+      {children}
+    </motion.a>
+  )
+}
+
 export function CoverageBar({ pct, color }: { pct: number; color: string }) {
   return (
     <motion.div
