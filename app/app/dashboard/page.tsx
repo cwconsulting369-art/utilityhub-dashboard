@@ -203,49 +203,17 @@ export default async function AppDashboardPage() {
   }
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-8)" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
 
-      {/* ── Overview panel (1/3) ────────────────────────────────────────────── */}
+      {/* ── KPI Grid (1fr 1fr 1fr 2fr) ──────────────────────────────────────── */}
       <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", overflow: "hidden" }}>
-
-        {/* Greeting + stats */}
-        <div style={{
-          padding: "var(--space-5) var(--space-6)",
-          borderBottom: "1px solid var(--border)",
-          display: "flex", justifyContent: "space-between", alignItems: "center",
-        }}>
-          <div>
-            <h1 style={{ fontSize: "var(--text-xl)", fontWeight: 700, marginBottom: "var(--space-1)" }}>{greeting}</h1>
-            <p style={{ color: "var(--text-muted)", fontSize: "var(--text-sm)", margin: 0 }}>Internes Data Hub Portal — Übersicht</p>
-          </div>
-          <div style={{ display: "flex", gap: "var(--space-3)" }}>
-            <a href="/app/customers" style={{
-              background: "rgba(255,255,255,0.04)", border: "1px solid var(--border)",
-              borderRadius: "var(--radius-md)", padding: "var(--space-3) var(--space-5)",
-              textDecoration: "none", color: "inherit", textAlign: "center",
-            }}>
-              <div style={{ fontSize: "var(--text-xl)", fontWeight: 700, lineHeight: 1 }}>{total.toLocaleString("de-DE")}</div>
-              <div style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", marginTop: "4px" }}>Objekte gesamt</div>
-            </a>
-            <a href="/app/imports" style={{
-              background: "rgba(255,255,255,0.04)", border: "1px solid var(--border)",
-              borderRadius: "var(--radius-md)", padding: "var(--space-3) var(--space-5)",
-              textDecoration: "none", color: "inherit", textAlign: "center",
-            }}>
-              <div style={{ fontSize: "var(--text-xl)", fontWeight: 700, lineHeight: 1 }}>{(totalLieferstellen ?? 0).toLocaleString("de-DE")}</div>
-              <div style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", marginTop: "4px" }}>Lieferstellen</div>
-            </a>
-          </div>
-        </div>
-
-        {/* KPI bar — 5 cards horizontal, centered text */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)" }}>
-          {kpis.map((kpi, idx) => (
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 2fr" }}>
+          {kpis.slice(0, 3).map((kpi, idx) => (
             <FadeInLink key={kpi.label} href={kpi.href} index={idx} style={{
               padding: "var(--space-6) var(--space-4)",
               display: "flex", flexDirection: "column", alignItems: "center", gap: "var(--space-3)",
               textDecoration: "none", color: "inherit",
-              borderRight: idx < kpis.length - 1 ? "1px solid var(--border)" : undefined,
+              borderRight: "1px solid var(--border)",
             }}>
               <div style={{
                 width: "40px", height: "40px", borderRadius: "var(--radius-md)",
@@ -260,109 +228,154 @@ export default async function AppDashboardPage() {
               <div style={{ fontSize: "var(--text-xs)", color: "rgba(255,255,255,0.85)", textAlign: "center" }}>{kpi.label}</div>
             </FadeInLink>
           ))}
+
+          {/* Wide summary card */}
+          <FadeInLink href="/app/customers" index={3} style={{
+            padding: "var(--space-5) var(--space-6)",
+            display: "flex", flexDirection: "column", gap: "var(--space-4)",
+            textDecoration: "none", color: "inherit",
+          }}>
+            <div style={{ display: "flex", alignItems: "baseline", gap: "var(--space-3)", flexWrap: "wrap" }}>
+              <span style={{ fontSize: "var(--text-3xl)", fontWeight: 800, lineHeight: 1 }}>
+                {total.toLocaleString("de-DE")}
+              </span>
+              <span style={{ fontSize: "var(--text-sm)", color: "var(--text)", opacity: 0.7 }}>Objekte</span>
+              <span style={{ color: "var(--border)" }}>|</span>
+              <span style={{ fontSize: "var(--text-3xl)", fontWeight: 800, lineHeight: 1 }}>
+                {(totalLieferstellen ?? 0).toLocaleString("de-DE")}
+              </span>
+              <span style={{ fontSize: "var(--text-sm)", color: "var(--text)", opacity: 0.7 }}>Lieferstellen</span>
+            </div>
+            <div style={{ display: "flex", gap: "var(--space-5)", flexWrap: "wrap" }}>
+              <span style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>
+                <span style={{ color: "#a78bfa", fontWeight: 600 }}>{fgFinanzCount ?? 0}</span> FG-Finanz
+              </span>
+              <span style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>
+                <span style={{ color: openPot > 0 ? "#ffa600" : "#58a6ff", fontWeight: 600 }}>{openPot}</span> Potenziale offen
+              </span>
+            </div>
+            <div>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+                <span style={{ fontSize: "var(--text-xs)", color: "var(--text)", opacity: 0.7 }}>Datenabdeckung (Energie)</span>
+                <span style={{ fontSize: "var(--text-xs)", fontWeight: 700, color: telesonCovPct >= 80 ? "#3fb950" : "#ffa600" }}>
+                  {telesonCovPct}%
+                </span>
+              </div>
+              <div style={{ height: "5px", background: "var(--border)", borderRadius: "3px", overflow: "hidden" }}>
+                <CoverageBar pct={telesonCovPct} color={telesonCovPct >= 80 ? "#3fb950" : "#ffa600"} />
+              </div>
+            </div>
+          </FadeInLink>
         </div>
       </div>
 
-      {/* ── Daten-Abdeckung ─────────────────────────────────────────────────── */}
-      {total > 0 && (
-        <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", padding: "var(--space-5) var(--space-6)" }}>
-          <h2 style={{ fontSize: "var(--text-xs)", fontWeight: 600, color: "var(--text-muted)", marginBottom: "var(--space-4)", letterSpacing: "0.05em", textTransform: "uppercase" }}>
-            Daten-Abdeckung
-          </h2>
-          <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)" }}>
-            {coverageRows.map(row => (
-              <a key={row.label} href={row.href} style={{ textDecoration: "none", color: "inherit" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "6px" }}>
-                  <span style={{ fontSize: "var(--text-sm)", color: "var(--text-muted)" }}>{row.label}</span>
-                  <span style={{ fontSize: "var(--text-sm)", fontWeight: 600, color: row.pct > 0 ? row.color : "var(--text-muted)" }}>
-                    {row.count.toLocaleString("de-DE")}
-                    <span style={{ fontWeight: 400, color: "var(--text-muted)", marginLeft: "6px" }}>
-                      / {total.toLocaleString("de-DE")} ({row.pct}%)
-                    </span>
-                  </span>
-                </div>
-                <div style={{ height: "5px", background: "var(--border)", borderRadius: "3px", overflow: "hidden" }}>
-                  <CoverageBar pct={row.pct} color={row.color} />
-                </div>
-              </a>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* ── Content: 1/3 sidebar + 2/3 objects ──────────────────────────────── */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "var(--space-6)", alignItems: "start" }}>
 
-      {/* ── Letzte Importe ──────────────────────────────────────────────────── */}
-      <SlideInLeft style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", overflow: "hidden" }}>
-        <div style={{ padding: "var(--space-4) var(--space-6)", borderBottom: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <h2 style={{ fontSize: "var(--text-base)", fontWeight: 600 }}>Letzte Importe</h2>
-          <a href="/app/imports" style={{ fontSize: "var(--text-sm)", color: "var(--primary-bright)", textDecoration: "none" }}>Alle Importe →</a>
-        </div>
+        {/* Left sidebar */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
 
-        {batches.length > 0 ? batches.map((batch, idx) => {
-          const summary    = parseBatchSummary(batch)
-          const st         = batchStatusInfo(batch.status)
-          const isNotion   = batch.filename?.startsWith("Notion:") ?? false
-          const batchLabel = isNotion
-            ? (batch.filename?.replace(/^Notion:\s*/, "") ?? "Notion")
-            : (batch.filename ?? "—")
-          const duration   = fmtDuration(batch.created_at, batch.completed_at)
-          const successPct = summary && batch.total_rows > 0
-            ? Math.round(summary.imported / batch.total_rows * 100)
-            : null
-          return (
-            <div key={batch.id} style={{
-              padding: "var(--space-4) var(--space-5) var(--space-4) var(--space-5)",
-              borderBottom: idx < batches.length - 1 ? "1px solid var(--border)" : undefined,
-              borderLeft: `3px solid ${st.color}`,
-              display: "flex", flexDirection: "column", gap: "var(--space-2)",
-            }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", flexWrap: "wrap" }}>
-                <span style={{
-                  background: st.bg, color: st.color, border: `1px solid ${st.color}44`,
-                  borderRadius: "var(--radius-sm)", padding: "1px 8px",
-                  fontSize: "var(--text-xs)", fontWeight: 700, whiteSpace: "nowrap",
-                }}>{st.label}</span>
-                <span style={{
-                  background: isNotion ? "rgba(139,99,255,0.12)" : "rgba(139,148,158,0.12)",
-                  color: isNotion ? "#a78bfa" : "var(--text-muted)",
-                  border: `1px solid ${isNotion ? "rgba(139,99,255,0.25)" : "var(--border)"}`,
-                  borderRadius: "var(--radius-sm)", padding: "1px 7px",
-                  fontSize: "10px", fontWeight: 600, letterSpacing: "0.05em", whiteSpace: "nowrap",
-                }}>{isNotion ? "NOTION" : "DATEI"}</span>
-                <span style={{ fontSize: "var(--text-sm)", color: "var(--text-muted)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "320px" }}>
-                  {batchLabel}
-                </span>
-              </div>
-              {summary && (
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-4)", fontSize: "var(--text-xs)" }}>
-                  <span><span style={{ color: "var(--text-muted)" }}>Gesamt </span><strong>{batch.total_rows.toLocaleString("de-DE")}</strong></span>
-                  <span><span style={{ color: "var(--text-muted)" }}>Verarbeitet </span><strong style={{ color: summary.imported > 0 ? "#3fb950" : undefined }}>{summary.imported.toLocaleString("de-DE")}</strong></span>
-                  {summary.skipped !== null && summary.skipped > 0 && <span><span style={{ color: "var(--text-muted)" }}>Übersprungen </span><strong>{summary.skipped.toLocaleString("de-DE")}</strong></span>}
-                  {summary.queued !== null && summary.queued > 0 && <span><span style={{ color: "var(--text-muted)" }}>In Prüfung </span><strong style={{ color: "#ffa600" }}>{summary.queued.toLocaleString("de-DE")}</strong></span>}
-                  {summary.conflicts !== null && summary.conflicts > 0 && <span><span style={{ color: "var(--text-muted)" }}>Konflikte </span><strong style={{ color: "#f85149" }}>{summary.conflicts.toLocaleString("de-DE")}</strong></span>}
-                  <span><span style={{ color: "var(--text-muted)" }}>Fehler </span><strong style={{ color: summary.errors > 0 ? "#f85149" : undefined }}>{summary.errors.toLocaleString("de-DE")}</strong></span>
-                  {successPct !== null && <span><span style={{ color: "var(--text-muted)" }}>Erfolg </span><strong style={{ color: successPct >= 95 ? "#3fb950" : successPct >= 70 ? "#ffa600" : "#f85149" }}>{successPct}%</strong></span>}
-                </div>
-              )}
-              <div style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", display: "flex", gap: "var(--space-3)" }}>
-                <span>{new Date(batch.created_at).toLocaleString("de-DE", { dateStyle: "short", timeStyle: "short" })}</span>
-                {duration && <span>· Dauer {duration}</span>}
+          {/* Daten-Abdeckung */}
+          {total > 0 && (
+            <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", padding: "var(--space-5) var(--space-6)" }}>
+              <h2 style={{ fontSize: "var(--text-xs)", fontWeight: 600, color: "var(--text-muted)", marginBottom: "var(--space-4)", letterSpacing: "0.05em", textTransform: "uppercase" }}>
+                Daten-Abdeckung
+              </h2>
+              <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)" }}>
+                {coverageRows.map(row => (
+                  <a key={row.label} href={row.href} style={{ textDecoration: "none", color: "inherit" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "6px" }}>
+                      <span style={{ fontSize: "var(--text-sm)", color: "var(--text-muted)" }}>{row.label}</span>
+                      <span style={{ fontSize: "var(--text-sm)", fontWeight: 600, color: row.pct > 0 ? row.color : "var(--text-muted)" }}>
+                        {row.count.toLocaleString("de-DE")}
+                        <span style={{ fontWeight: 400, color: "var(--text-muted)", marginLeft: "6px" }}>
+                          / {total.toLocaleString("de-DE")} ({row.pct}%)
+                        </span>
+                      </span>
+                    </div>
+                    <div style={{ height: "5px", background: "var(--border)", borderRadius: "3px", overflow: "hidden" }}>
+                      <CoverageBar pct={row.pct} color={row.color} />
+                    </div>
+                  </a>
+                ))}
               </div>
             </div>
-          )
-        }) : (
-          <div style={{ padding: "var(--space-8)", textAlign: "center", color: "var(--text-muted)", fontSize: "var(--text-sm)" }}>
-            Noch kein Import vorhanden.{" "}
-            <a href="/app/imports" style={{ color: "var(--primary-bright)" }}>Import starten →</a>
-          </div>
-        )}
-      </SlideInLeft>
+          )}
 
-      {/* ── Zuletzt hinzugefügte Objekte ───────────────────────────────────── */}
-      <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", overflow: "hidden" }}>
-        <div style={{ padding: "var(--space-4) var(--space-6)", borderBottom: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <h2 style={{ fontSize: "var(--text-base)", fontWeight: 600 }}>Zuletzt hinzugefügte Objekte</h2>
-          <a href="/app/customers" style={{ fontSize: "var(--text-sm)", color: "var(--primary-bright)", textDecoration: "none" }}>Alle anzeigen →</a>
+          {/* Letzte Importe */}
+          <SlideInLeft style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", overflow: "hidden" }}>
+            <div style={{ padding: "var(--space-4) var(--space-6)", borderBottom: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <h2 style={{ fontSize: "var(--text-base)", fontWeight: 600 }}>Letzte Importe</h2>
+              <a href="/app/imports" style={{ fontSize: "var(--text-sm)", color: "var(--primary-bright)", textDecoration: "none" }}>Alle →</a>
+            </div>
+            {batches.length > 0 ? batches.map((batch, idx) => {
+              const summary    = parseBatchSummary(batch)
+              const st         = batchStatusInfo(batch.status)
+              const isNotion   = batch.filename?.startsWith("Notion:") ?? false
+              const batchLabel = isNotion
+                ? (batch.filename?.replace(/^Notion:\s*/, "") ?? "Notion")
+                : (batch.filename ?? "—")
+              const duration   = fmtDuration(batch.created_at, batch.completed_at)
+              const successPct = summary && batch.total_rows > 0
+                ? Math.round(summary.imported / batch.total_rows * 100)
+                : null
+              return (
+                <div key={batch.id} style={{
+                  padding: "var(--space-4) var(--space-5) var(--space-4) var(--space-5)",
+                  borderBottom: idx < batches.length - 1 ? "1px solid var(--border)" : undefined,
+                  borderLeft: `3px solid ${st.color}`,
+                  display: "flex", flexDirection: "column", gap: "var(--space-2)",
+                }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", flexWrap: "wrap" }}>
+                    <span style={{
+                      background: st.bg, color: st.color, border: `1px solid ${st.color}44`,
+                      borderRadius: "var(--radius-sm)", padding: "1px 8px",
+                      fontSize: "var(--text-xs)", fontWeight: 700, whiteSpace: "nowrap",
+                    }}>{st.label}</span>
+                    <span style={{
+                      background: isNotion ? "rgba(139,99,255,0.12)" : "rgba(139,148,158,0.12)",
+                      color: isNotion ? "#a78bfa" : "var(--text-muted)",
+                      border: `1px solid ${isNotion ? "rgba(139,99,255,0.25)" : "var(--border)"}`,
+                      borderRadius: "var(--radius-sm)", padding: "1px 7px",
+                      fontSize: "10px", fontWeight: 600, letterSpacing: "0.05em", whiteSpace: "nowrap",
+                    }}>{isNotion ? "NOTION" : "DATEI"}</span>
+                    <span style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "200px" }}>
+                      {batchLabel}
+                    </span>
+                  </div>
+                  {summary && (
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-3)", fontSize: "var(--text-xs)" }}>
+                      <span><span style={{ color: "var(--text-muted)" }}>Gesamt </span><strong>{batch.total_rows.toLocaleString("de-DE")}</strong></span>
+                      <span><span style={{ color: "var(--text-muted)" }}>Ok </span><strong style={{ color: summary.imported > 0 ? "#3fb950" : undefined }}>{summary.imported.toLocaleString("de-DE")}</strong></span>
+                      {summary.skipped !== null && summary.skipped > 0 && <span><span style={{ color: "var(--text-muted)" }}>Skip </span><strong>{summary.skipped.toLocaleString("de-DE")}</strong></span>}
+                      {summary.queued !== null && summary.queued > 0 && <span><span style={{ color: "#ffa600" }}>{summary.queued.toLocaleString("de-DE")} Prüfung</span></span>}
+                      {summary.conflicts !== null && summary.conflicts > 0 && <span><span style={{ color: "#f85149" }}>{summary.conflicts.toLocaleString("de-DE")} Konflikt</span></span>}
+                      <span><span style={{ color: summary.errors > 0 ? "#f85149" : "var(--text-muted)" }}>{summary.errors} Fehler</span></span>
+                      {successPct !== null && <span style={{ color: successPct >= 95 ? "#3fb950" : successPct >= 70 ? "#ffa600" : "#f85149", fontWeight: 700 }}>{successPct}%</span>}
+                    </div>
+                  )}
+                  <div style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", display: "flex", gap: "var(--space-3)" }}>
+                    <span>{new Date(batch.created_at).toLocaleString("de-DE", { dateStyle: "short", timeStyle: "short" })}</span>
+                    {duration && <span>· {duration}</span>}
+                  </div>
+                </div>
+              )
+            }) : (
+              <div style={{ padding: "var(--space-8)", textAlign: "center", color: "var(--text-muted)", fontSize: "var(--text-sm)" }}>
+                Noch kein Import vorhanden.{" "}
+                <a href="/app/imports" style={{ color: "var(--primary-bright)" }}>Import starten →</a>
+              </div>
+            )}
+          </SlideInLeft>
+
         </div>
+
+        {/* Right 2/3: Objects table */}
+        <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", overflow: "hidden" }}>
+          <div style={{ padding: "var(--space-4) var(--space-6)", borderBottom: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <h2 style={{ fontSize: "var(--text-base)", fontWeight: 600 }}>Zuletzt hinzugefügte Objekte</h2>
+            <a href="/app/customers" style={{ fontSize: "var(--text-sm)", color: "var(--primary-bright)", textDecoration: "none" }}>Alle anzeigen →</a>
+          </div>
 
         {recentCustomers && recentCustomers.length > 0 ? (
           <div style={{ overflowX: "auto" }}>
@@ -528,6 +541,7 @@ export default async function AppDashboardPage() {
             <a href="/app/imports" style={{ color: "var(--primary-bright)" }}>Import starten →</a>
           </div>
         )}
+        </div>
       </div>
 
     </div>
