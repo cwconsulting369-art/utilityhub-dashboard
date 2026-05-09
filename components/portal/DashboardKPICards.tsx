@@ -100,7 +100,7 @@ export function DashboardKPICards({
     >
       <KPICard
         icon={
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="#58a6ff">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
             <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
           </svg>
         }
@@ -111,8 +111,8 @@ export function DashboardKPICards({
 
       <KPICard
         icon={
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="#58a6ff">
-            <path d="M12 2C6 8 4 12 4 15a8 8 0 0 0 16 0c0-3-2-7-8-13z" />
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
           </svg>
         }
         label="Gas"
@@ -122,9 +122,9 @@ export function DashboardKPICards({
 
       <KPICard
         icon={
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="#58a6ff">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-            <polygon points="12 8 10.5 12 12 11 13.5 12 12 8" fill="#ffffff" />
+            <polyline points="9 12 11 14 15 10" />
           </svg>
         }
         label="Versicherung"
