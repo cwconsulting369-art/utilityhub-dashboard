@@ -59,12 +59,12 @@ function TarifCell({ records, energie }: { records: TelesonSummary[] | null; ene
   const color  = ENERGIE_COLORS[energie.toLowerCase()] ?? "var(--text-muted)"
   const apText = fmtAp(match.neu_ap)
   return (
-    <div style={{ fontSize: "var(--text-xs)", lineHeight: 1.4, color }}>
+    <div style={{ fontSize: "var(--text-xs)", lineHeight: 1.4 }}>
       {match.neuer_versorger && (
-        <div style={{ fontWeight: 600 }}>{match.neuer_versorger}</div>
+        <div style={{ fontWeight: 600, color: "#ffffff" }}>{match.neuer_versorger}</div>
       )}
       {apText && (
-        <div>{apText}</div>
+        <div style={{ color }}>{apText}</div>
       )}
       {!match.neuer_versorger && !apText && (
         <span style={{ color: "var(--text-muted)" }}>—</span>

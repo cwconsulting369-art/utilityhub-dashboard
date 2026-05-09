@@ -141,7 +141,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
                 <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
                   {stromRec?.neuer_versorger ? (
                     <div style={{ display: "flex", flexDirection: "column", gap: "1px" }}>
-                      <span style={{ fontSize: "var(--text-xs)", fontWeight: 600, color: "#58a6ff" }}>{stromRec.neuer_versorger}</span>
+                      <span style={{ fontSize: "var(--text-xs)", fontWeight: 600, color: "#ffffff" }}>{stromRec.neuer_versorger}</span>
                       {stromRec.neu_ap != null && (
                         <span style={{ fontSize: "10px", color: "#58a6ff", opacity: 0.8 }}>
                           {stromRec.neu_ap.toLocaleString("de-DE")} ct/kWh
@@ -154,7 +154,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
                 <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
                   {gasRec?.neuer_versorger ? (
                     <div style={{ display: "flex", flexDirection: "column", gap: "1px" }}>
-                      <span style={{ fontSize: "var(--text-xs)", fontWeight: 600, color: "#ffa600" }}>{gasRec.neuer_versorger}</span>
+                      <span style={{ fontSize: "var(--text-xs)", fontWeight: 600, color: "#ffffff" }}>{gasRec.neuer_versorger}</span>
                       {gasRec.neu_ap != null && (
                         <span style={{ fontSize: "10px", color: "#ffa600", opacity: 0.8 }}>
                           {gasRec.neu_ap.toLocaleString("de-DE")} ct/kWh

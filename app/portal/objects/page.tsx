@@ -45,9 +45,9 @@ function TarifCell({ rec, color }: { rec: TelesonRec | null; color: string }) {
   const ap = fmtAp(rec.neu_ap)
   if (!rec.neuer_versorger && !ap) return <span style={{ color: "var(--text-muted)", opacity: 0.4 }}>—</span>
   return (
-    <div style={{ fontSize: "var(--text-xs)", lineHeight: 1.4, color }}>
-      {rec.neuer_versorger && <div style={{ fontWeight: 600 }}>{rec.neuer_versorger}</div>}
-      {ap && <div>{ap}</div>}
+    <div style={{ fontSize: "var(--text-xs)", lineHeight: 1.4 }}>
+      {rec.neuer_versorger && <div style={{ fontWeight: 600, color: "#ffffff" }}>{rec.neuer_versorger}</div>}
+      {ap && <div style={{ color }}>{ap}</div>}
     </div>
   )
 }

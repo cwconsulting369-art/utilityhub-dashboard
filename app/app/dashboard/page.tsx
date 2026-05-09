@@ -468,7 +468,7 @@ export default async function AppDashboardPage() {
                       <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
                         {stromRec?.neuer_versorger ? (
                           <div style={{ display: "flex", flexDirection: "column", gap: "1px" }}>
-                            <span style={{ fontSize: "var(--text-xs)", fontWeight: 500, color: "#58a6ff" }}>{stromRec.neuer_versorger}</span>
+                            <span style={{ fontSize: "var(--text-xs)", fontWeight: 500, color: "#ffffff" }}>{stromRec.neuer_versorger}</span>
                             {stromRec.neu_ap != null && (
                               <span style={{ fontSize: "var(--text-xs)", color: "#58a6ff" }}>
                                 {stromRec.neu_ap.toLocaleString("de-DE")} ct/kWh
@@ -482,7 +482,7 @@ export default async function AppDashboardPage() {
                       <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
                         {gasRec?.neuer_versorger ? (
                           <div style={{ display: "flex", flexDirection: "column", gap: "1px" }}>
-                            <span style={{ fontSize: "var(--text-xs)", fontWeight: 500, color: "#ffa600" }}>{gasRec.neuer_versorger}</span>
+                            <span style={{ fontSize: "var(--text-xs)", fontWeight: 500, color: "#ffffff" }}>{gasRec.neuer_versorger}</span>
                             {gasRec.neu_ap != null && (
                               <span style={{ fontSize: "var(--text-xs)", color: "#ffa600" }}>
                                 {gasRec.neu_ap.toLocaleString("de-DE")} ct/kWh
