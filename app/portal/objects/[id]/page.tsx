@@ -162,7 +162,9 @@ export default async function PortalObjectDetailPage({ params }: Props) {
       {/* ── Header ───────────────────────────────────────────────────────── */}
       <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", padding: "var(--space-5) var(--space-6)" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "var(--space-3)" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "var(--space-4)", flexWrap: "wrap" }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/building-placeholder.jpg" alt="Gebäude" style={{ width: "56px", height: "56px", borderRadius: "var(--radius-md)", objectFit: "cover", flexShrink: 0, border: "1px solid var(--border)" }} />
             <h1 style={{ fontSize: "var(--text-xl)", fontWeight: 700, margin: 0 }}>
               {getStreet(customer.full_name as string)}
             </h1>

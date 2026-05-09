@@ -291,8 +291,10 @@ export function CustomersTable({
 
                       {/* Objekt */}
                       <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
-                        <a href={`/app/customers/${c.id}`} style={{ color: "var(--primary-bright)", textDecoration: "none", fontWeight: 500 }}>
-                          {objektLabel}
+                        <a href={`/app/customers/${c.id}`} style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", textDecoration: "none", color: "inherit" }}>
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src="/building-placeholder.jpg" alt="Gebäude" style={{ width: "40px", height: "40px", borderRadius: "var(--radius-md)", objectFit: "cover", flexShrink: 0, border: "1px solid var(--border)" }} />
+                          <span style={{ fontWeight: 600, color: "#ffffff" }}>{objektLabel}</span>
                         </a>
                       </td>
 
