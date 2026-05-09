@@ -94,7 +94,7 @@ export function DashboardKPICards({
       style={{
         display:             "grid",
         gridTemplateColumns: "1fr 1fr 1fr 2fr",
-        gap:                 "var(--space-4)",
+        gap:                 "var(--space-5)",
         alignItems:          "stretch",
       }}
     >
@@ -168,7 +168,7 @@ export function DashboardKPICards({
           <span style={{ fontSize: "var(--text-sm)", color: "var(--text)", opacity: 0.7 }}>Lieferstellen</span>
         </div>
 
-        <div style={{ fontSize: "var(--text-sm)", color: "#3fb950", fontWeight: 600, display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
+        <div style={{ fontSize: "var(--text-sm)", color: "#58a6ff", fontWeight: 600, display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
           <motion.span
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
@@ -196,7 +196,7 @@ export function DashboardKPICards({
               transition={{ delay: 0.6, duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
               style={{
                 height: "100%",
-                background: "linear-gradient(90deg, #3fb950, #58a6ff)",
+                background: "linear-gradient(90deg, #58a6ff, #7c3aed)",
                 borderRadius: "999px",
               }}
             />

@@ -64,7 +64,7 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
     : "U"
 
   const iconBtn: React.CSSProperties = {
-    width: "40px", height: "40px", borderRadius: "50%",
+    width: "46px", height: "46px", borderRadius: "50%",
     background: "transparent", border: "1px solid var(--border)",
     cursor: "pointer", display: "flex", alignItems: "center",
     justifyContent: "center", color: "var(--text-muted)", flexShrink: 0,
@@ -90,10 +90,10 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
         {/* Logo */}
         <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.png" alt="UtilityHub" style={{ height: "32px", width: "auto", objectFit: "contain" }} />
-          <div style={{ fontSize: "var(--text-sm)", lineHeight: 1.2 }}>
+          <img src="/logo.png" alt="UtilityHub" style={{ height: "40px", width: "auto", objectFit: "contain" }} />
+          <div style={{ fontSize: "var(--text-base)", lineHeight: 1.2 }}>
             <span style={{ fontWeight: 300, letterSpacing: "0.06em" }}>UTILITY</span>
-            <span style={{ fontWeight: 800, letterSpacing: "0.04em" }}>HUB</span>
+            <span style={{ fontWeight: 800, letterSpacing: "0.04em", color: "#58a6ff" }}>HUB</span>
           </div>
         </div>
 
@@ -101,7 +101,7 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
         <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
           <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.92 }} transition={{ duration: 0.12 }}
             title="Benachrichtigungen" style={iconBtn}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
               <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
               <path d="M13.73 21a2 2 0 0 1-3.46 0" />
             </svg>
@@ -109,7 +109,7 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
 
           <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.92 }} transition={{ duration: 0.12 }}
             title="Hilfe" style={iconBtn}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10" />
               <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
               <line x1="12" y1="17" x2="12.01" y2="17" />
@@ -124,7 +124,7 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
               transition={{ duration: 0.15 }}
               style={iconBtn}
             >
-              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                 <circle cx="12" cy="7" r="4" />
               </svg>
@@ -179,7 +179,7 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
 
         {/* Sidebar */}
         <aside style={{
-          width:         "240px",
+          width:         "280px",
           flexShrink:    0,
           background:    "var(--surface)",
           borderRight:   "1px solid var(--border)",
@@ -191,7 +191,7 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
           overflowY:     "auto",
         }}>
           {/* Nav */}
-          <nav style={{ flex: 1, padding: "var(--space-4)", display: "flex", flexDirection: "column", gap: 0 }}>
+          <nav style={{ flex: 1, padding: "var(--space-5)", display: "flex", flexDirection: "column", gap: "var(--space-1)" }}>
             {items.map((item) => {
               const isActive = pathname === item.href || pathname.startsWith(item.href + "/")
               return (
@@ -201,7 +201,7 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
                     whileTap={{ scale: 0.97 }}
                     style={{
                       display: "flex", alignItems: "center", gap: "var(--space-3)",
-                      padding: "var(--space-3) var(--space-4)", borderRadius: "var(--radius-md)",
+                      padding: "var(--space-3) var(--space-5)", borderRadius: "var(--radius-md)",
                       fontSize: "var(--text-base)", fontWeight: isActive ? 600 : 400,
                       color: isActive ? "#fff" : "var(--text-muted)",
                       background: isActive ? accentColor : "transparent",
@@ -244,7 +244,7 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
         </aside>
 
         {/* Main content */}
-        <main style={{ flex: 1, overflowY: "auto", maxWidth: "calc(100% - 240px)", display: "flex", flexDirection: "column" }}>
+        <main style={{ flex: 1, overflowY: "auto", maxWidth: "calc(100% - 280px)", display: "flex", flexDirection: "column" }}>
           {/* Back nav strip */}
           <div style={{
             padding: "var(--space-3) var(--space-8)",

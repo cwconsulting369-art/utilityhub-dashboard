@@ -126,7 +126,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
                         <path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21V12h6v9"/>
                       </svg>
                     </div>
-                    <span style={{ fontWeight: 600, color: "var(--text)" }}>
+                    <span style={{ fontWeight: 600, color: "#ffffff" }}>
                       {getStreet(row.full_name)}
                     </span>
                   </a>
@@ -172,16 +172,16 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
                     display:        "inline-flex",
                     alignItems:     "center",
                     gap:            "5px",
-                    background:     isActive ? "rgba(63,185,80,0.12)" : "rgba(139,148,158,0.12)",
-                    color:          isActive ? "#3fb950" : "var(--text-muted)",
-                    border:         `1px solid ${isActive ? "rgba(63,185,80,0.3)" : "var(--border)"}`,
+                    background:     isActive ? "rgba(88,166,255,0.12)" : "rgba(139,148,158,0.12)",
+                    color:          isActive ? "#58a6ff" : "var(--text-muted)",
+                    border:         `1px solid ${isActive ? "rgba(88,166,255,0.3)" : "var(--border)"}`,
                     borderRadius:   "999px",
                     padding:        "2px 10px",
                     fontSize:       "var(--text-xs)",
                     fontWeight:     600,
                   }}>
                     {isActive && (
-                      <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#3fb950", flexShrink: 0 }} />
+                      <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#58a6ff", flexShrink: 0 }} />
                     )}
                     {isActive ? "Aktiv" : row.status}
                   </span>

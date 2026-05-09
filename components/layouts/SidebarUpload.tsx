@@ -84,11 +84,11 @@ export function SidebarUpload() {
 
   const canUpload = !!file && !!customer && !uploading
 
-  const BORDER_COLOR = dragging ? "var(--primary-bright)" : "var(--border)"
+  const BORDER_COLOR = dragging ? "var(--primary-bright)" : "rgba(88,166,255,0.45)"
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-      <div style={{ fontSize: "10px", fontWeight: 700, color: "var(--text-muted)", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: "2px" }}>
+      <div style={{ fontSize: "10px", fontWeight: 700, color: "#58a6ff", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: "2px" }}>
         Schnell-Upload
       </div>
 
@@ -106,13 +106,18 @@ export function SidebarUpload() {
             textAlign: "center",
             cursor: "pointer",
             fontSize: "11px",
-            color: dragging ? "var(--primary-bright)" : "var(--text-muted)",
-            background: dragging ? "rgba(56,139,253,0.06)" : "var(--surface-2)",
+            color: dragging ? "var(--primary-bright)" : "#58a6ff",
+            background: dragging ? "rgba(56,139,253,0.08)" : "rgba(88,166,255,0.05)",
             transition: "all 0.15s",
             lineHeight: 1.4,
           }}
         >
-          <div style={{ fontSize: "18px", marginBottom: "4px" }}>📎</div>
+          <div style={{ fontSize: "18px", marginBottom: "4px" }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ display: "inline-block" }}>
+              <polyline points="16 16 12 12 8 16" /><line x1="12" y1="12" x2="12" y2="21" />
+              <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" />
+            </svg>
+          </div>
           Datei hierher ziehen<br />oder klicken
         </div>
       )}
@@ -190,11 +195,11 @@ export function SidebarUpload() {
       {file && customer && (
         <div style={{
           display: "flex", alignItems: "center", gap: "6px",
-          background: "rgba(63,185,80,0.08)", border: "1px solid rgba(63,185,80,0.3)",
+          background: "rgba(88,166,255,0.08)", border: "1px solid rgba(88,166,255,0.3)",
           borderRadius: "var(--radius-md)", padding: "6px 8px",
           fontSize: "11px",
         }}>
-          <span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", color: "#3fb950", fontWeight: 500 }}>
+          <span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", color: "#58a6ff", fontWeight: 500 }}>
             → {customer.full_name}
           </span>
           <button onClick={() => setCustomer(null)}
@@ -226,7 +231,7 @@ export function SidebarUpload() {
         <div style={{ fontSize: "10px", color: "#f85149", padding: "2px 0" }}>{error}</div>
       )}
       {success && (
-        <div style={{ fontSize: "11px", color: "#3fb950", padding: "2px 0", fontWeight: 500 }}>✓ Hochgeladen</div>
+        <div style={{ fontSize: "11px", color: "#58a6ff", padding: "2px 0", fontWeight: 500 }}>✓ Hochgeladen</div>
       )}
     </div>
   )

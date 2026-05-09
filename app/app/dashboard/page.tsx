@@ -6,6 +6,7 @@ import {
   SlideInLeft,
   CoverageBar,
 } from "./DashboardAnimations"
+export const dynamic  = "force-dynamic"
 export const metadata = { title: "Dashboard | UtilityHub Intern" }
 
 interface BatchErrorLogSummary {
@@ -141,13 +142,40 @@ export default async function AppDashboardPage() {
 
   const greeting = profile?.full_name ? `Guten Tag, ${profile.full_name}` : "Guten Tag"
 
+  const openPot = offenePotenziale ?? 0
   const kpis = [
-    { icon: "⚡", value: stromCount ?? 0,      label: "Strom-Lieferstellen", color: "#58a6ff",           href: "/app/customers?energie=Strom" },
-    { icon: "🔥", value: gasCount ?? 0,        label: "Gas-Lieferstellen",   color: "#ffa600",           href: "/app/customers?energie=Gas"   },
-    { icon: "🏢", value: orgCount ?? 0,         label: "Hausverwaltungen",      color: "var(--text-muted)", href: "/app/customers"               },
-    { icon: "💼", value: fgFinanzCount ?? 0,    label: "FG-Finanz-Verträge",  color: "#a78bfa",           href: "/app/opportunities"           },
-    { icon: "🎯", value: offenePotenziale ?? 0, label: "Offene FG-Potenziale",
-      color: (offenePotenziale ?? 0) > 0 ? "#ffa600" : "#3fb950", href: "/app/opportunities" },
+    {
+      icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="#58a6ff"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>,
+      value: stromCount ?? 0, label: "Strom-Lieferstellen",
+      color: "#58a6ff", bgColor: "rgba(88,166,255,0.1)", borderColor: "rgba(88,166,255,0.3)",
+      href: "/app/customers?energie=Strom",
+    },
+    {
+      icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="#ffa600"><path d="M12 2C6 8 4 12 4 15a8 8 0 0 0 16 0c0-3-2-7-8-13z" /></svg>,
+      value: gasCount ?? 0, label: "Gas-Lieferstellen",
+      color: "#ffa600", bgColor: "rgba(255,166,0,0.1)", borderColor: "rgba(255,166,0,0.3)",
+      href: "/app/customers?energie=Gas",
+    },
+    {
+      icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21V12h6v9"/></svg>,
+      value: orgCount ?? 0, label: "Hausverwaltungen",
+      color: "var(--text-muted)", bgColor: "rgba(139,148,158,0.1)", borderColor: "var(--border)",
+      href: "/app/customers",
+    },
+    {
+      icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>,
+      value: fgFinanzCount ?? 0, label: "FG-Finanz-Verträge",
+      color: "#a78bfa", bgColor: "rgba(167,139,250,0.1)", borderColor: "rgba(167,139,250,0.3)",
+      href: "/app/opportunities",
+    },
+    {
+      icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={openPot > 0 ? "#ffa600" : "#58a6ff"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>,
+      value: openPot, label: "Offene FG-Potenziale",
+      color: openPot > 0 ? "#ffa600" : "#58a6ff",
+      bgColor: openPot > 0 ? "rgba(255,166,0,0.1)" : "rgba(88,166,255,0.1)",
+      borderColor: openPot > 0 ? "rgba(255,166,0,0.3)" : "rgba(88,166,255,0.3)",
+      href: "/app/opportunities",
+    },
   ]
 
   const coverageRows = [
@@ -177,48 +205,62 @@ export default async function AppDashboardPage() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-8)" }}>
 
-      {/* ── Header ─────────────────────────────────────────────────────────── */}
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "var(--space-4)" }}>
-        <div style={{ textAlign: "center" }}>
-          <h1 style={{ fontSize: "var(--text-xl)", fontWeight: 700, marginBottom: "var(--space-2)" }}>{greeting}</h1>
-          <p style={{ color: "var(--text-muted)", fontSize: "var(--text-sm)" }}>Internes Data Hub Portal — Übersicht</p>
-        </div>
-        <div style={{ display: "flex", gap: "var(--space-3)" }}>
-          <a href="/app/customers" style={{
-            background: "var(--surface)", border: "1px solid var(--border)",
-            borderRadius: "var(--radius-lg)", padding: "var(--space-3) var(--space-5)",
-            textDecoration: "none", color: "inherit", textAlign: "center",
-          }}>
-            <div style={{ fontSize: "var(--text-xl)", fontWeight: 700, lineHeight: 1 }}>{total.toLocaleString("de-DE")}</div>
-            <div style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", marginTop: "4px" }}>Objekte gesamt</div>
-          </a>
-          <a href="/app/imports" style={{
-            background: "var(--surface)", border: "1px solid var(--border)",
-            borderRadius: "var(--radius-lg)", padding: "var(--space-3) var(--space-5)",
-            textDecoration: "none", color: "inherit", textAlign: "center",
-          }}>
-            <div style={{ fontSize: "var(--text-xl)", fontWeight: 700, lineHeight: 1 }}>{(totalLieferstellen ?? 0).toLocaleString("de-DE")}</div>
-            <div style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", marginTop: "4px" }}>Lieferstellen</div>
-          </a>
-        </div>
-      </div>
+      {/* ── Overview panel (1/3) ────────────────────────────────────────────── */}
+      <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", overflow: "hidden" }}>
 
-      {/* ── KPI cards ──────────────────────────────────────────────────────── */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "var(--space-4)" }}>
-        {kpis.map((kpi, idx) => (
-          <FadeInLink key={kpi.label} href={kpi.href} index={idx} style={{
-            background: "var(--surface)", border: "1px solid var(--border)",
-            borderRadius: "var(--radius-lg)", padding: "var(--space-5) var(--space-6)",
-            display: "flex", flexDirection: "column", gap: "var(--space-2)",
-            textDecoration: "none", color: "inherit",
-          }}>
-            <div style={{ fontSize: "20px", lineHeight: 1 }}>{kpi.icon}</div>
-            <div style={{ fontSize: "var(--text-2xl)", fontWeight: 700, lineHeight: 1, color: kpi.color }}>
-              {kpi.value.toLocaleString("de-DE")}
-            </div>
-            <div style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>{kpi.label}</div>
-          </FadeInLink>
-        ))}
+        {/* Greeting + stats */}
+        <div style={{
+          padding: "var(--space-5) var(--space-6)",
+          borderBottom: "1px solid var(--border)",
+          display: "flex", justifyContent: "space-between", alignItems: "center",
+        }}>
+          <div>
+            <h1 style={{ fontSize: "var(--text-xl)", fontWeight: 700, marginBottom: "var(--space-1)" }}>{greeting}</h1>
+            <p style={{ color: "var(--text-muted)", fontSize: "var(--text-sm)", margin: 0 }}>Internes Data Hub Portal — Übersicht</p>
+          </div>
+          <div style={{ display: "flex", gap: "var(--space-3)" }}>
+            <a href="/app/customers" style={{
+              background: "rgba(255,255,255,0.04)", border: "1px solid var(--border)",
+              borderRadius: "var(--radius-md)", padding: "var(--space-3) var(--space-5)",
+              textDecoration: "none", color: "inherit", textAlign: "center",
+            }}>
+              <div style={{ fontSize: "var(--text-xl)", fontWeight: 700, lineHeight: 1 }}>{total.toLocaleString("de-DE")}</div>
+              <div style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", marginTop: "4px" }}>Objekte gesamt</div>
+            </a>
+            <a href="/app/imports" style={{
+              background: "rgba(255,255,255,0.04)", border: "1px solid var(--border)",
+              borderRadius: "var(--radius-md)", padding: "var(--space-3) var(--space-5)",
+              textDecoration: "none", color: "inherit", textAlign: "center",
+            }}>
+              <div style={{ fontSize: "var(--text-xl)", fontWeight: 700, lineHeight: 1 }}>{(totalLieferstellen ?? 0).toLocaleString("de-DE")}</div>
+              <div style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", marginTop: "4px" }}>Lieferstellen</div>
+            </a>
+          </div>
+        </div>
+
+        {/* KPI bar — 5 cards horizontal, centered text */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)" }}>
+          {kpis.map((kpi, idx) => (
+            <FadeInLink key={kpi.label} href={kpi.href} index={idx} style={{
+              padding: "var(--space-6) var(--space-4)",
+              display: "flex", flexDirection: "column", alignItems: "center", gap: "var(--space-3)",
+              textDecoration: "none", color: "inherit",
+              borderRight: idx < kpis.length - 1 ? "1px solid var(--border)" : undefined,
+            }}>
+              <div style={{
+                width: "40px", height: "40px", borderRadius: "var(--radius-md)",
+                background: kpi.bgColor, border: `1px solid ${kpi.borderColor}`,
+                display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+              }}>
+                {kpi.icon}
+              </div>
+              <div style={{ fontSize: "var(--text-2xl)", fontWeight: 700, lineHeight: 1, color: kpi.color }}>
+                {kpi.value.toLocaleString("de-DE")}
+              </div>
+              <div style={{ fontSize: "var(--text-xs)", color: "rgba(255,255,255,0.85)", textAlign: "center" }}>{kpi.label}</div>
+            </FadeInLink>
+          ))}
+        </div>
       </div>
 
       {/* ── Daten-Abdeckung ─────────────────────────────────────────────────── */}
@@ -389,12 +431,12 @@ export default async function AppDashboardPage() {
                       {/* Objekt */}
                       <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
                         <a href={`/app/customers/${row.id}`} style={{ textDecoration: "none", color: "inherit" }}>
-                          <span style={{ fontWeight: 500, color: "var(--primary-bright)" }}>{objektLabel}</span>
+                          <span style={{ fontWeight: 500, color: "#ffffff" }}>{objektLabel}</span>
                         </a>
                       </td>
 
                       {/* Adresse */}
-                      <td style={{ padding: "var(--space-3) var(--space-4)", color: "var(--text-muted)", fontSize: "var(--text-xs)", whiteSpace: "nowrap" }}>
+                      <td style={{ padding: "var(--space-3) var(--space-4)", color: "rgba(255,255,255,0.7)", fontSize: "var(--text-xs)", whiteSpace: "nowrap" }}>
                         {(row.postal_code || row.city) ? (
                           <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.3 }}>
                             {row.postal_code && <span>{row.postal_code}</span>}
