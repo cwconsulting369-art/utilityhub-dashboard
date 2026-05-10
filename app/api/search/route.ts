@@ -24,16 +24,24 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 })
   }
 
-  const esc = q.replace(/%/g, "\\%").replace(/_/g, "\\_")
+  const esc      = q.replace(/%/g, "\\%").replace(/_/g, "\\_")
+  const isNumeric = /^\d+$/.test(q)
 
-  const [{ data: customers }, { data: orgs }] = await Promise.all([
+  const baseCustomerQuery = () =>
     supabase
       .from("customers")
       .select("id, uhid, full_name, city, postal_code, address_display, status")
-      .or(`full_name.ilike.%${esc}%,address_display.ilike.%${esc}%,uhid.ilike.%${esc}%`)
       .not("full_name", "ilike", "% (Allgemein)")
       .order("full_name")
-      .limit(5),
+      .limit(5)
+
+  const [{ data: customers }, { data: uhidMatch }, { data: orgs }] = await Promise.all([
+    baseCustomerQuery()
+      .or(`full_name.ilike.%${esc}%,address_display.ilike.%${esc}%`),
+
+    isNumeric
+      ? baseCustomerQuery().eq("uhid", Number(q))
+      : Promise.resolve({ data: [] as unknown[] }),
 
     supabase
       .from("organizations")
@@ -43,12 +51,17 @@ export async function GET(req: NextRequest) {
       .limit(5),
   ])
 
+  const seen     = new Set<string>()
+  const combined = [...(uhidMatch ?? []), ...(customers ?? [])] as typeof customers
+
   const results: SearchResult[] = []
 
-  for (const c of customers ?? []) {
-    const addr = (c.address_display as string | null) || [c.postal_code, c.city].filter(Boolean).join(" ") || null
-    const subtitle = [c.uhid ? `#${c.uhid}` : null, addr].filter(Boolean).join(" · ") || c.status || null
-    results.push({ type: "object", id: c.id, title: c.full_name, subtitle, href: `/app/customers/${c.id}` })
+  for (const c of combined ?? []) {
+    if (seen.has(c!.id)) continue
+    seen.add(c!.id)
+    const addr     = (c!.address_display as string | null) || [c!.postal_code, c!.city].filter(Boolean).join(" ") || null
+    const subtitle = [c!.uhid ? `#${c!.uhid}` : null, addr].filter(Boolean).join(" · ") || c!.status || null
+    results.push({ type: "object", id: c!.id, title: c!.full_name, subtitle, href: `/app/customers/${c!.id}` })
   }
 
   for (const o of orgs ?? []) {
