@@ -2,10 +2,7 @@ import { createClient } from "@/lib/supabase/server"
 import { getStreet }    from "@/lib/customers/format"
 import {
   FadeInRow,
-  FadeInLink,
   KPICardLink,
-  SlideInLeft,
-  CoverageBar,
 } from "./DashboardAnimations"
 export const dynamic  = "force-dynamic"
 export const metadata = { title: "Dashboard | UtilityHub Intern" }
@@ -104,10 +101,7 @@ export default async function AppDashboardPage() {
     { count: gasCount },
     { count: fgFinanzCount },
     { count: offenePotenziale },
-    { data: recentBatches },
     { data: recentCustomers },
-    { data: telesonCustomerIds },
-    { data: fgFinanzCustomerIds },
   ] = await Promise.all([
     supabase.from("profiles").select("full_name, role").eq("id", user?.id ?? "").single(),
     supabase.from("customers").select("*", { count: "exact", head: true }),
@@ -117,10 +111,6 @@ export default async function AppDashboardPage() {
     supabase.from("teleson_records").select("*", { count: "exact", head: true }).ilike("energie", "gas"),
     supabase.from("fg_finanz_records").select("*", { count: "exact", head: true }),
     supabase.from("upsell_opportunities").select("*", { count: "exact", head: true }).eq("status", "open"),
-    supabase.from("import_batches")
-      .select("id, source, filename, total_rows, processed_rows, error_rows, status, created_at, completed_at, error_log")
-      .order("created_at", { ascending: false })
-      .limit(1),
     supabase.from("customers")
       .select(
         "id, full_name, status, object_type, created_at, city, postal_code, " +
@@ -130,16 +120,9 @@ export default async function AppDashboardPage() {
       .not("full_name", "ilike", "% (Allgemein)")
       .order("created_at", { ascending: false })
       .limit(8),
-    supabase.from("teleson_records").select("customer_id"),
-    supabase.from("fg_finanz_records").select("customer_id"),
   ])
 
-  // ── Coverage metrics ──────────────────────────────────────────────────────
-  const objectsWithTeleson  = new Set(telesonCustomerIds?.map(r => r.customer_id)  ?? []).size
-  const objectsWithFgFinanz = new Set(fgFinanzCustomerIds?.map(r => r.customer_id) ?? []).size
   const total = objectCount ?? 0
-  const telesonCovPct  = total > 0 ? Math.round(objectsWithTeleson  / total * 100) : 0
-  const fgFinanzCovPct = total > 0 ? Math.round(objectsWithFgFinanz / total * 100) : 0
 
   const greeting = profile?.full_name ? `Guten Tag, ${profile.full_name}` : "Guten Tag"
 
@@ -179,13 +162,6 @@ export default async function AppDashboardPage() {
       href: "/app/opportunities",
     },
   ]
-
-  const coverageRows = [
-    { label: "Objekte mit Energiedaten (Teleson)", count: objectsWithTeleson,  pct: telesonCovPct,  color: "#58a6ff", href: "/app/customers"    },
-    { label: "Objekte mit FG-Finanz-Bezug",        count: objectsWithFgFinanz, pct: fgFinanzCovPct, color: "#a78bfa", href: "/app/opportunities" },
-  ]
-
-  const batches = (recentBatches ?? []) as BatchRow[]
 
   type RecentRow = {
     id: string; full_name: string; status: string
@@ -245,116 +221,7 @@ export default async function AppDashboardPage() {
               <span style={{ color: openPot > 0 ? "#ffa600" : "#58a6ff", fontWeight: 600 }}>{openPot}</span> Potenziale offen
             </span>
           </div>
-          <div>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
-              <span style={{ fontSize: "var(--text-xs)", color: "var(--text)", opacity: 0.7 }}>Datenabdeckung (Energie)</span>
-              <span style={{ fontSize: "var(--text-xs)", fontWeight: 700, color: telesonCovPct >= 80 ? "#3fb950" : "#ffa600" }}>
-                {telesonCovPct}%
-              </span>
-            </div>
-            <div style={{ height: "5px", background: "var(--border)", borderRadius: "3px", overflow: "hidden" }}>
-              <CoverageBar pct={telesonCovPct} color={telesonCovPct >= 80 ? "#3fb950" : "#ffa600"} />
-            </div>
-          </div>
         </KPICardLink>
-      </div>
-
-      {/* ── Mitte: Daten-Abdeckung + Letzte Importe ─────────────────────────── */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-6)", alignItems: "start" }}>
-
-        {/* Daten-Abdeckung */}
-        {total > 0 ? (
-          <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", padding: "var(--space-5) var(--space-6)" }}>
-            <h2 style={{ fontSize: "var(--text-xs)", fontWeight: 600, color: "var(--text-muted)", marginBottom: "var(--space-4)", letterSpacing: "0.05em", textTransform: "uppercase" }}>
-              Daten-Abdeckung
-            </h2>
-            <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)" }}>
-              {coverageRows.map(row => (
-                <a key={row.label} href={row.href} style={{ textDecoration: "none", color: "inherit" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "6px" }}>
-                    <span style={{ fontSize: "var(--text-sm)", color: "var(--text-muted)" }}>{row.label}</span>
-                    <span style={{ fontSize: "var(--text-sm)", fontWeight: 600, color: row.pct > 0 ? row.color : "var(--text-muted)" }}>
-                      {row.count.toLocaleString("de-DE")}
-                      <span style={{ fontWeight: 400, color: "var(--text-muted)", marginLeft: "6px" }}>
-                        / {total.toLocaleString("de-DE")} ({row.pct}%)
-                      </span>
-                    </span>
-                  </div>
-                  <div style={{ height: "5px", background: "var(--border)", borderRadius: "3px", overflow: "hidden" }}>
-                    <CoverageBar pct={row.pct} color={row.color} />
-                  </div>
-                </a>
-              ))}
-            </div>
-          </div>
-        ) : <div />}
-
-        {/* Letzte Importe */}
-        <SlideInLeft style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", overflow: "hidden" }}>
-          <div style={{ padding: "var(--space-4) var(--space-6)", borderBottom: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <h2 style={{ fontSize: "var(--text-base)", fontWeight: 600 }}>Letzte Importe</h2>
-            <a href="/app/imports" style={{ fontSize: "var(--text-sm)", color: "var(--primary-bright)", textDecoration: "none" }}>Alle →</a>
-          </div>
-          {batches.length > 0 ? batches.map((batch, idx) => {
-            const summary    = parseBatchSummary(batch)
-            const st         = batchStatusInfo(batch.status)
-            const isNotion   = batch.filename?.startsWith("Notion:") ?? false
-            const batchLabel = isNotion
-              ? (batch.filename?.replace(/^Notion:\s*/, "") ?? "Notion")
-              : (batch.filename ?? "—")
-            const duration   = fmtDuration(batch.created_at, batch.completed_at)
-            const successPct = summary && batch.total_rows > 0
-              ? Math.round(summary.imported / batch.total_rows * 100)
-              : null
-            return (
-              <div key={batch.id} style={{
-                padding: "var(--space-4) var(--space-5) var(--space-4) var(--space-5)",
-                borderBottom: idx < batches.length - 1 ? "1px solid var(--border)" : undefined,
-                borderLeft: `3px solid ${st.color}`,
-                display: "flex", flexDirection: "column", gap: "var(--space-2)",
-              }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", flexWrap: "wrap" }}>
-                  <span style={{
-                    background: st.bg, color: st.color, border: `1px solid ${st.color}44`,
-                    borderRadius: "var(--radius-sm)", padding: "1px 8px",
-                    fontSize: "var(--text-xs)", fontWeight: 700, whiteSpace: "nowrap",
-                  }}>{st.label}</span>
-                  <span style={{
-                    background: isNotion ? "rgba(139,99,255,0.12)" : "rgba(139,148,158,0.12)",
-                    color: isNotion ? "#a78bfa" : "var(--text-muted)",
-                    border: `1px solid ${isNotion ? "rgba(139,99,255,0.25)" : "var(--border)"}`,
-                    borderRadius: "var(--radius-sm)", padding: "1px 7px",
-                    fontSize: "10px", fontWeight: 600, letterSpacing: "0.05em", whiteSpace: "nowrap",
-                  }}>{isNotion ? "NOTION" : "DATEI"}</span>
-                  <span style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "200px" }}>
-                    {batchLabel}
-                  </span>
-                </div>
-                {summary && (
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-3)", fontSize: "var(--text-xs)" }}>
-                    <span><span style={{ color: "var(--text-muted)" }}>Gesamt </span><strong>{batch.total_rows.toLocaleString("de-DE")}</strong></span>
-                    <span><span style={{ color: "var(--text-muted)" }}>Ok </span><strong style={{ color: summary.imported > 0 ? "#3fb950" : undefined }}>{summary.imported.toLocaleString("de-DE")}</strong></span>
-                    {summary.skipped !== null && summary.skipped > 0 && <span><span style={{ color: "var(--text-muted)" }}>Skip </span><strong>{summary.skipped.toLocaleString("de-DE")}</strong></span>}
-                    {summary.queued !== null && summary.queued > 0 && <span><span style={{ color: "#ffa600" }}>{summary.queued.toLocaleString("de-DE")} Prüfung</span></span>}
-                    {summary.conflicts !== null && summary.conflicts > 0 && <span><span style={{ color: "#f85149" }}>{summary.conflicts.toLocaleString("de-DE")} Konflikt</span></span>}
-                    <span><span style={{ color: summary.errors > 0 ? "#f85149" : "var(--text-muted)" }}>{summary.errors} Fehler</span></span>
-                    {successPct !== null && <span style={{ color: successPct >= 95 ? "#3fb950" : successPct >= 70 ? "#ffa600" : "#f85149", fontWeight: 700 }}>{successPct}%</span>}
-                  </div>
-                )}
-                <div style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", display: "flex", gap: "var(--space-3)" }}>
-                  <span>{new Date(batch.created_at).toLocaleString("de-DE", { dateStyle: "short", timeStyle: "short" })}</span>
-                  {duration && <span>· {duration}</span>}
-                </div>
-              </div>
-            )
-          }) : (
-            <div style={{ padding: "var(--space-8)", textAlign: "center", color: "var(--text-muted)", fontSize: "var(--text-sm)" }}>
-              Noch kein Import vorhanden.{" "}
-              <a href="/app/imports" style={{ color: "var(--primary-bright)" }}>Import starten →</a>
-            </div>
-          )}
-        </SlideInLeft>
-
       </div>
 
       {/* ── Zuletzt hinzugefügte Objekte ─────────────────────────────────────── */}
