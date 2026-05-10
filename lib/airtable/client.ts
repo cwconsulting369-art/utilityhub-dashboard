@@ -47,22 +47,24 @@ export async function fetchAllRecords(opts: FetchOptions): Promise<AirtableRecor
   return all
 }
 
-/** Test connection — returns table name and column count. */
+/** Test connection — fetches one record to verify PAT + base + table access. */
 export async function testConnection(opts: FetchOptions): Promise<{ title: string; propertyCount: number }> {
   const { pat, baseId, tableId } = opts
 
-  const metaRes = await fetch(`https://api.airtable.com/v0/meta/bases/${baseId}/tables`, {
+  const url = new URL(`https://api.airtable.com/v0/${baseId}/${encodeURIComponent(tableId)}`)
+  url.searchParams.set("pageSize", "1")
+
+  const res = await fetch(url.toString(), {
     headers: { Authorization: `Bearer ${pat}` },
   })
 
-  if (!metaRes.ok) {
-    const body = await metaRes.text()
-    throw new Error(`Airtable Meta API ${metaRes.status}: ${body}`)
+  if (!res.ok) {
+    const body = await res.text()
+    throw new Error(`Airtable API ${res.status}: ${body}`)
   }
 
-  const meta = await metaRes.json() as { tables: { id: string; name: string; fields: unknown[] }[] }
-  const table = meta.tables.find(t => t.id === tableId || t.name === tableId)
-  if (!table) throw new Error(`Tabelle "${tableId}" nicht gefunden`)
+  const json = await res.json() as { records: { fields: Record<string, unknown> }[] }
+  const propertyCount = json.records[0] ? Object.keys(json.records[0].fields).length : 0
 
-  return { title: table.name, propertyCount: table.fields.length }
+  return { title: tableId, propertyCount }
 }
