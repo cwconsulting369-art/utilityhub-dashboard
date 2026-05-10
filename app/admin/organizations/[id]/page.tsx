@@ -83,7 +83,7 @@ export default async function OrgDetailPage({ params }: Props) {
 
       {/* Breadcrumb */}
       <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", fontSize: "var(--text-sm)", color: "var(--text-muted)" }}>
-        <a href="/app/organizations" style={{ color: "var(--text-muted)", textDecoration: "none" }}>Hausverwaltungen</a>
+        <a href="/admin/organizations" style={{ color: "var(--text-muted)", textDecoration: "none" }}>Hausverwaltungen</a>
         <span>›</span>
         <span style={{ color: "var(--text)" }}>{org.name}</span>
       </div>

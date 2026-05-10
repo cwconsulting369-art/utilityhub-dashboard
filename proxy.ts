@@ -6,7 +6,7 @@ export async function proxy(request: NextRequest) {
   const { supabaseResponse, user } = await updateSession(request)
   const { pathname } = request.nextUrl
 
-  const isAppRoute            = pathname.startsWith("/app")
+  const isAppRoute            = pathname.startsWith("/admin")
   const isPortalRoute         = pathname.startsWith("/portal")
   const isLoginPage           = pathname === "/login"
   const isChangePasswordPage  = pathname === "/portal/change-password"
@@ -16,10 +16,10 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", request.url))
   }
 
-  // Authenticated on login page → /app/dashboard
+  // Authenticated on login page → /admin/dashboard
   // (layout handles customer → /portal redirect)
   if (user && isLoginPage) {
-    return NextResponse.redirect(new URL("/app/dashboard", request.url))
+    return NextResponse.redirect(new URL("/admin/dashboard", request.url))
   }
 
   // Forced password change for customer accounts on first login.

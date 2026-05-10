@@ -98,7 +98,7 @@ export default async function ContactsPage({ searchParams }: SearchProps) {
         </button>
         {(q || orgId) && (
           <a
-            href="/app/contacts"
+            href="/admin/contacts"
             style={{
               background: "var(--surface-2)", border: "1px solid var(--border)",
               borderRadius: "var(--radius-md)", padding: "var(--space-2) var(--space-4)",

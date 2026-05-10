@@ -31,7 +31,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   const inboxCount = unassignedCount ?? 0
 
   const navItems = [
-    { href: "/app/dashboard",    label: "Dashboard",     icon: "⊞"  },
+    { href: "/admin/dashboard",    label: "Dashboard",     icon: "⊞"  },
     { href: "/app/customers",    label: "Objekte",        icon: "🏠" },
     { href: "/app/contacts",     label: "Kontakte",       icon: "👥" },
     { href: "/app/opportunities",label: "FG Finanz",      icon: "💼" },
@@ -52,7 +52,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           email: user.email ?? "",
           role:  profile?.role ?? "staff",
         }}
-        portalType="app"
+        portalType="admin"
         sidebarBottom={<SidebarUpload />}
       >
         {children}

@@ -201,7 +201,7 @@ export default async function AppDashboardPage() {
         ))}
 
         {/* Wide summary card */}
-        <KPICardLink href="/app/customers" index={3} style={{ gap: "var(--space-4)" }}>
+        <KPICardLink href="/admin/customers" index={3} style={{ gap: "var(--space-4)" }}>
           <div style={{ display: "flex", alignItems: "baseline", gap: "var(--space-3)", flexWrap: "wrap" }}>
             <span style={{ fontSize: "var(--text-3xl)", fontWeight: 800, lineHeight: 1 }}>
               {total.toLocaleString("de-DE")}
@@ -228,7 +228,7 @@ export default async function AppDashboardPage() {
       <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", overflow: "hidden" }}>
         <div style={{ padding: "var(--space-4) var(--space-6)", borderBottom: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <h2 style={{ fontSize: "var(--text-base)", fontWeight: 600 }}>Zuletzt hinzugefügte Objekte</h2>
-          <a href="/app/customers" style={{ fontSize: "var(--text-sm)", color: "var(--primary-bright)", textDecoration: "none" }}>Alle anzeigen →</a>
+          <a href="/admin/customers" style={{ fontSize: "var(--text-sm)", color: "var(--primary-bright)", textDecoration: "none" }}>Alle anzeigen →</a>
         </div>
 
         {recentCustomers && recentCustomers.length > 0 ? (
@@ -394,7 +394,7 @@ export default async function AppDashboardPage() {
         ) : (
           <div style={{ padding: "var(--space-10)", textAlign: "center", color: "var(--text-muted)", fontSize: "var(--text-sm)" }}>
             Noch keine Objekte vorhanden.{" "}
-            <a href="/app/imports" style={{ color: "var(--primary-bright)" }}>Import starten →</a>
+            <a href="/admin/imports" style={{ color: "var(--primary-bright)" }}>Import starten →</a>
           </div>
         )}
         </div>

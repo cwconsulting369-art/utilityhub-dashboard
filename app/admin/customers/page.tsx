@@ -156,7 +156,7 @@ export default async function CustomersPage({ searchParams }: Props) {
             href="/api/export/documents"
             style={{ background: "var(--surface-2)", border: "1px solid var(--border)", padding: "var(--space-2) var(--space-4)", borderRadius: "var(--radius-md)", fontSize: "var(--text-sm)", color: "var(--text-muted)", textDecoration: "none", whiteSpace: "nowrap" }}
           >↓ Dokumente CSV</a>
-          <a href="/app/imports" style={{ background: "var(--primary-bright)", color: "#fff", padding: "var(--space-2) var(--space-5)", borderRadius: "var(--radius-md)", fontSize: "var(--text-sm)", fontWeight: 600, textDecoration: "none" }}>
+          <a href="/admin/imports" style={{ background: "var(--primary-bright)", color: "#fff", padding: "var(--space-2) var(--space-5)", borderRadius: "var(--radius-md)", fontSize: "var(--text-sm)", fontWeight: 600, textDecoration: "none" }}>
             + Import
           </a>
         </div>

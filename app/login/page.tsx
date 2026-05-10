@@ -80,7 +80,7 @@ export default function LoginPage() {
     if (profile?.role === "customer") {
       router.push("/portal/dashboard")
     } else if (profile?.role === "admin" || profile?.role === "staff") {
-      router.push("/app/dashboard")
+      router.push("/admin/dashboard")
     } else {
       router.push("/unauthorized")
     }

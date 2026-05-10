@@ -169,7 +169,7 @@ export default async function CustomerDetailPage({ params }: Props) {
       {/* ── Breadcrumb ───────────────────────────────────────────────────── */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "var(--text-sm)" }}>
         <div style={{ color: "var(--text-muted)" }}>
-          <a href="/app/customers" style={{ color: "var(--primary-bright)", textDecoration: "none" }}>Objekte</a>
+          <a href="/admin/customers" style={{ color: "var(--primary-bright)", textDecoration: "none" }}>Objekte</a>
           {" / "}
           {getStreet(customer.full_name)}
         </div>

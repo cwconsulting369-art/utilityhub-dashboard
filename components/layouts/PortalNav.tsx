@@ -23,7 +23,7 @@ interface PortalNavProps {
     email: string
     role:  string
   }
-  portalType:     "app" | "portal"
+  portalType:     "admin" | "portal"
   children:       React.ReactNode
   sidebarBottom?: React.ReactNode
 }
@@ -161,7 +161,7 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
                     <div style={{ fontSize: "10px", color: "var(--text-muted)" }}>{user.email}</div>
                   </div>
                   <a
-                    href={portalType === "app" ? "/app/settings" : "/portal/settings"}
+                    href={portalType === "admin" ? "/admin/settings" : "/portal/settings"}
                     style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", padding: "var(--space-2) var(--space-4)", fontSize: "var(--text-sm)", color: "var(--text)", textDecoration: "none", transition: "background 120ms ease" }}
                     onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.04)")}
                     onMouseLeave={e => (e.currentTarget.style.background = "transparent")}

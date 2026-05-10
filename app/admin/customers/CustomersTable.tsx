@@ -257,7 +257,7 @@ export function CustomersTable({
         </div>
 
         {hasFilter && (
-          <a href="/app/customers" style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", textDecoration: "underline" }}>
+          <a href="/admin/customers" style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", textDecoration: "underline" }}>
             Zurücksetzen
           </a>
         )}
@@ -379,8 +379,8 @@ export function CustomersTable({
         ) : (
           <div style={{ padding: "var(--space-12)", textAlign: "center", color: "var(--text-muted)", fontSize: "var(--text-sm)" }}>
             {hasFilter
-              ? <><span>Keine Treffer. </span><a href="/app/customers" style={{ color: "var(--primary-bright)" }}>Filter zurücksetzen</a></>
-              : <><span>Noch keine Objekte vorhanden. </span><a href="/app/imports" style={{ color: "var(--primary-bright)" }}>Teleson-Import starten →</a></>
+              ? <><span>Keine Treffer. </span><a href="/admin/customers" style={{ color: "var(--primary-bright)" }}>Filter zurücksetzen</a></>
+              : <><span>Noch keine Objekte vorhanden. </span><a href="/admin/imports" style={{ color: "var(--primary-bright)" }}>Teleson-Import starten →</a></>
             }
           </div>
         )}

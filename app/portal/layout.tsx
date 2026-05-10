@@ -17,7 +17,7 @@ export default async function PortalLayout({ children }: { children: React.React
     .single()
 
   // Staff and admins belong in /app, not /portal
-  if (profile?.role === "admin" || profile?.role === "staff") redirect("/app/dashboard")
+  if (profile?.role === "admin" || profile?.role === "staff") redirect("/admin/dashboard")
 
   const navItems = [
     {

@@ -81,7 +81,7 @@ export default async function OrganizationsPage({ searchParams }: Props) {
           Suchen
         </button>
         {q && (
-          <a href="/app/organizations" style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", textDecoration: "underline" }}>
+          <a href="/admin/organizations" style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", textDecoration: "underline" }}>
             Zurücksetzen
           </a>
         )}
@@ -163,7 +163,7 @@ export default async function OrganizationsPage({ searchParams }: Props) {
         ) : (
           <div style={{ padding: "var(--space-12)", textAlign: "center", color: "var(--text-muted)", fontSize: "var(--text-sm)" }}>
             {q
-              ? <><span>Keine Treffer. </span><a href="/app/organizations" style={{ color: "var(--primary-bright)" }}>Zurücksetzen</a></>
+              ? <><span>Keine Treffer. </span><a href="/admin/organizations" style={{ color: "var(--primary-bright)" }}>Zurücksetzen</a></>
               : <span>Noch keine Hausverwaltungen vorhanden. Beim nächsten Import eine Spalte „Hausverwaltung" ergänzen.</span>
             }
           </div>
