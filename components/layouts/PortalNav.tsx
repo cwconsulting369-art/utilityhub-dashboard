@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { createClient } from "@/lib/supabase/client"
 import { PortalSidebarUpload } from "./PortalSidebarUpload"
 import { BackNavButton } from "@/components/portal/BackNavButton"
+import GlobalSearch from "@/components/search/GlobalSearch"
 
 interface NavItem {
   href:   string
@@ -96,6 +97,9 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
             <span style={{ fontWeight: 800, letterSpacing: "0.04em", color: "#58a6ff" }}>HUB</span>
           </div>
         </div>
+
+        {/* Center: Global Search (app only) */}
+        {portalType === "app" && <GlobalSearch />}
 
         {/* Right icons */}
         <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
