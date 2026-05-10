@@ -111,7 +111,7 @@ export default async function OrganizationsPage({ searchParams }: Props) {
                     <tr key={org.id} style={{ borderBottom: "1px solid var(--border)" }}>
                       <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
                         <a
-                          href={`/app/organizations/${org.id}`}
+                          href={`/admin/organizations/${org.id}`}
                           style={{ color: "var(--primary-bright)", textDecoration: "none", fontWeight: 500 }}
                         >
                           {org.name}
@@ -142,7 +142,7 @@ export default async function OrganizationsPage({ searchParams }: Props) {
                         {objCount > 0
                           ? (
                             <a
-                              href={`/app/customers?orgId=${org.id}`}
+                              href={`/admin/customers?orgId=${org.id}`}
                               style={{ color: "var(--primary-bright)", textDecoration: "none", fontWeight: 600 }}
                             >
                               {objCount}

@@ -55,8 +55,8 @@ export async function updateCustomerStammdaten(
 
   if (error) return { error: "Speichern fehlgeschlagen: " + error.message }
 
-  revalidatePath(`/app/customers/${customerId}`)
-  revalidatePath("/app/customers")
+  revalidatePath(`/admin/customers/${customerId}`)
+  revalidatePath("/admin/customers")
   return {}
 }
 
@@ -79,8 +79,8 @@ export async function updateCustomerStatus(
 
   if (error) return { error: "Status konnte nicht gespeichert werden: " + error.message }
 
-  revalidatePath(`/app/customers/${customerId}`)
-  revalidatePath("/app/customers")
+  revalidatePath(`/admin/customers/${customerId}`)
+  revalidatePath("/admin/customers")
   return {}
 }
 
@@ -103,6 +103,6 @@ export async function addCustomerNote(customerId: string, content: string): Prom
 
   if (error) return { error: "Speichern fehlgeschlagen: " + error.message }
 
-  revalidatePath(`/app/customers/${customerId}`)
+  revalidatePath(`/admin/customers/${customerId}`)
   return {}
 }

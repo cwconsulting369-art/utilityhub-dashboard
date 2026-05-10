@@ -173,7 +173,7 @@ export default async function CustomerDetailPage({ params }: Props) {
           {" / "}
           {getStreet(customer.full_name)}
         </div>
-        <a href={`/app/customers/${id}/print`} target="_blank" rel="noreferrer" style={{
+        <a href={`/admin/customers/${id}/print`} target="_blank" rel="noreferrer" style={{
           color: "var(--text-muted)", textDecoration: "none", fontSize: "var(--text-xs)",
           border: "1px solid var(--border)", borderRadius: "var(--radius-md)", padding: "3px 10px",
         }}>

@@ -61,11 +61,11 @@ export async function GET(req: NextRequest) {
     seen.add(c!.id)
     const addr     = (c!.address_display as string | null) || [c!.postal_code, c!.city].filter(Boolean).join(" ") || null
     const subtitle = [c!.uhid ? `#${c!.uhid}` : null, addr].filter(Boolean).join(" · ") || c!.status || null
-    results.push({ type: "object", id: c!.id, title: c!.full_name, subtitle, href: `/app/customers/${c!.id}` })
+    results.push({ type: "object", id: c!.id, title: c!.full_name, subtitle, href: `/admin/customers/${c!.id}` })
   }
 
   for (const o of orgs ?? []) {
-    results.push({ type: "org", id: o.id, title: o.name, subtitle: o.type ?? null, href: `/app/organizations/${o.id}` })
+    results.push({ type: "org", id: o.id, title: o.name, subtitle: o.type ?? null, href: `/admin/organizations/${o.id}` })
   }
 
   return NextResponse.json(results)

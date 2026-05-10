@@ -32,15 +32,15 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
   const navItems = [
     { href: "/admin/dashboard",    label: "Dashboard",     icon: "⊞"  },
-    { href: "/app/customers",    label: "Objekte",        icon: "🏠" },
-    { href: "/app/contacts",     label: "Kontakte",       icon: "👥" },
-    { href: "/app/opportunities",label: "FG Finanz",      icon: "💼" },
-    { href: "/app/incentives",   label: "Incentives",     icon: "🎁" },
-    { href: "/app/imports",      label: "Imports",        icon: "📥" },
-    { href: "/app/documents",    label: "Dokumente",      icon: "📁", badge: inboxCount },
-    { href: "/app/roadmap",       label: "Roadmap",        icon: "🗺"  },
-    { href: "/app/settings",     label: "Einstellungen",  icon: "⚙"  },
-    { href: "/app/support",      label: "Support",        icon: "💬" },
+    { href: "/admin/customers",    label: "Objekte",        icon: "🏠" },
+    { href: "/admin/contacts",     label: "Kontakte",       icon: "👥" },
+    { href: "/admin/opportunities",label: "FG Finanz",      icon: "💼" },
+    { href: "/admin/incentives",   label: "Incentives",     icon: "🎁" },
+    { href: "/admin/imports",      label: "Imports",        icon: "📥" },
+    { href: "/admin/documents",    label: "Dokumente",      icon: "📁", badge: inboxCount },
+    { href: "/admin/roadmap",       label: "Roadmap",        icon: "🗺"  },
+    { href: "/admin/settings",     label: "Einstellungen",  icon: "⚙"  },
+    { href: "/admin/support",      label: "Support",        icon: "💬" },
   ]
 
   return (

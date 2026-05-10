@@ -73,7 +73,7 @@ async function assignDocument(formData: FormData) {
   await admin.from("customer_documents")
     .update({ customer_id: customerId, assigned: true })
     .eq("id", docId)
-  revalidatePath("/app/documents")
+  revalidatePath("/admin/documents")
 }
 
 // ── Server action: delete (storage + DB) ───────────────────────────────────
@@ -100,7 +100,7 @@ async function deleteDocument(formData: FormData) {
     await admin.storage.from(DOCUMENTS_BUCKET).remove([doc.storage_path])
   }
   await admin.from("customer_documents").delete().eq("id", docId)
-  revalidatePath("/app/documents")
+  revalidatePath("/admin/documents")
 }
 
 // ── Section header (icon + title + count pill) ─────────────────────────────

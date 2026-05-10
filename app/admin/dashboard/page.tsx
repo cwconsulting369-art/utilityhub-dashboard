@@ -133,25 +133,25 @@ export default async function AppDashboardPage() {
       icon: <svg width="18" height="18" viewBox="0 0 24 24" {...iconStyle}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>,
       value: stromCount ?? 0, label: "Strom-Lieferstellen",
       color: "#58a6ff", bgColor: "rgba(88,166,255,0.1)", borderColor: "rgba(88,166,255,0.3)",
-      href: "/app/customers?energie=Strom",
+      href: "/admin/customers?energie=Strom",
     },
     {
       icon: <svg width="18" height="18" viewBox="0 0 24 24" {...iconStyle}><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" /></svg>,
       value: gasCount ?? 0, label: "Gas-Lieferstellen",
       color: "#ffa600", bgColor: "rgba(255,166,0,0.1)", borderColor: "rgba(255,166,0,0.3)",
-      href: "/app/customers?energie=Gas",
+      href: "/admin/customers?energie=Gas",
     },
     {
       icon: <svg width="18" height="18" viewBox="0 0 24 24" {...iconStyle}><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21V12h6v9"/></svg>,
       value: orgCount ?? 0, label: "Hausverwaltungen",
       color: "var(--text-muted)", bgColor: "rgba(139,148,158,0.1)", borderColor: "var(--border)",
-      href: "/app/customers",
+      href: "/admin/customers",
     },
     {
       icon: <svg width="18" height="18" viewBox="0 0 24 24" {...iconStyle}><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>,
       value: fgFinanzCount ?? 0, label: "FG-Finanz-Verträge",
       color: "#a78bfa", bgColor: "rgba(167,139,250,0.1)", borderColor: "rgba(167,139,250,0.3)",
-      href: "/app/opportunities",
+      href: "/admin/opportunities",
     },
     {
       icon: <svg width="18" height="18" viewBox="0 0 24 24" {...iconStyle}><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>,
@@ -159,7 +159,7 @@ export default async function AppDashboardPage() {
       color: openPot > 0 ? "#ffa600" : "#58a6ff",
       bgColor: openPot > 0 ? "rgba(255,166,0,0.1)" : "rgba(88,166,255,0.1)",
       borderColor: openPot > 0 ? "rgba(255,166,0,0.3)" : "rgba(88,166,255,0.3)",
-      href: "/app/opportunities",
+      href: "/admin/opportunities",
     },
   ]
 
@@ -297,7 +297,7 @@ export default async function AppDashboardPage() {
                     >
                       {/* Objekt */}
                       <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
-                        <a href={`/app/customers/${row.id}`} style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", textDecoration: "none", color: "inherit" }}>
+                        <a href={`/admin/customers/${row.id}`} style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", textDecoration: "none", color: "inherit" }}>
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img src="/building-placeholder.jpg" alt="Gebäude" style={{ width: "40px", height: "40px", borderRadius: "var(--radius-md)", objectFit: "cover", flexShrink: 0, border: "1px solid var(--border)" }} />
                           <span style={{ fontWeight: 600, color: "#ffffff" }}>{objektLabel}</span>

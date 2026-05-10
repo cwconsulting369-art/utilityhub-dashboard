@@ -47,31 +47,31 @@ export async function GET() {
     {
       id:    "profile",
       label: "Profil vervollständigen",
-      href:  "/app/settings",
+      href:  "/admin/settings",
       done:  !!profile.full_name?.trim(),
     },
     {
       id:    "first_object",
       label: "Erste Immobilie erfassen",
-      href:  "/app/customers",
+      href:  "/admin/customers",
       done:  (customerCount ?? 0) > 0,
     },
     {
       id:    "first_document",
       label: "Dokument hochladen",
-      href:  "/app/documents",
+      href:  "/admin/documents",
       done:  (documentCount ?? 0) > 0,
     },
     {
       id:    "first_import",
       label: "Import durchführen",
-      href:  "/app/imports",
+      href:  "/admin/imports",
       done:  (importCount ?? 0) > 0,
     },
     {
       id:    "invite_team",
       label: "Team-Mitglied einladen",
-      href:  "/app/settings",
+      href:  "/admin/settings",
       done:  (staffCount ?? 0) > 1,
     },
   ]

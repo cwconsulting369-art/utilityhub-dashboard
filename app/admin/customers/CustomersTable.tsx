@@ -150,7 +150,7 @@ function pageUrl(p: UrlParams): string {
   if (p.objectType) params.set("objectType", p.objectType)
   if (p.page && p.page > 1) params.set("page", String(p.page))
   const qs = params.toString()
-  return `/app/customers${qs ? `?${qs}` : ""}`
+  return `/admin/customers${qs ? `?${qs}` : ""}`
 }
 
 const SELECT_STYLE: React.CSSProperties = {
@@ -291,7 +291,7 @@ export function CustomersTable({
 
                       {/* Objekt */}
                       <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
-                        <a href={`/app/customers/${c.id}`} style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", textDecoration: "none", color: "inherit" }}>
+                        <a href={`/admin/customers/${c.id}`} style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", textDecoration: "none", color: "inherit" }}>
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img src="/building-placeholder.jpg" alt="Gebäude" style={{ width: "40px", height: "40px", borderRadius: "var(--radius-md)", objectFit: "cover", flexShrink: 0, border: "1px solid var(--border)" }} />
                           <span style={{ fontWeight: 600, color: "#ffffff" }}>{objektLabel}</span>

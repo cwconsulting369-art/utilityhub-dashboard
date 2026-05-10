@@ -146,7 +146,7 @@ export default async function OpportunitiesPage() {
                       <td style={{ padding: "var(--space-3) var(--space-4)" }}>
                         {o.customer?.id ? (
                           <a
-                            href={`/app/customers/${o.customer.id}`}
+                            href={`/admin/customers/${o.customer.id}`}
                             style={{ color: "var(--text)", textDecoration: "none", fontWeight: 500 }}
                           >
                             {o.customer.full_name ?? "—"}

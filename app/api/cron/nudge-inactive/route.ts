@@ -80,11 +80,11 @@ export async function GET(req: NextRequest) {
   ])
 
   const steps = [
-    { label: "Profil vervollständigen",  href: "/app/settings",   done: false },
-    { label: "Erste Immobilie erfassen", href: "/app/customers",  done: (customerCount ?? 0) > 0 },
-    { label: "Dokument hochladen",       href: "/app/documents",  done: (documentCount ?? 0) > 0 },
-    { label: "Import durchführen",       href: "/app/imports",    done: (importCount ?? 0) > 0 },
-    { label: "Team-Mitglied einladen",   href: "/app/settings",   done: (staffCount ?? 0) > 1 },
+    { label: "Profil vervollständigen",  href: "/admin/settings",   done: false },
+    { label: "Erste Immobilie erfassen", href: "/admin/customers",  done: (customerCount ?? 0) > 0 },
+    { label: "Dokument hochladen",       href: "/admin/documents",  done: (documentCount ?? 0) > 0 },
+    { label: "Import durchführen",       href: "/admin/imports",    done: (importCount ?? 0) > 0 },
+    { label: "Team-Mitglied einladen",   href: "/admin/settings",   done: (staffCount ?? 0) > 1 },
   ]
 
   const openSteps = steps.filter(s => !s.done)
@@ -131,7 +131,7 @@ export async function GET(req: NextRequest) {
           <div style="background:#161b22;border:1px solid #30363d;border-radius:8px;padding:16px 20px;margin-bottom:24px;line-height:2">
             ${stepList}
           </div>
-          <a href="${appUrl}/app/dashboard"
+          <a href="${appUrl}/admin/dashboard"
              style="display:inline-block;background:#1f6feb;color:#fff;text-decoration:none;padding:10px 22px;border-radius:8px;font-weight:600">
             Jetzt Setup abschließen →
           </a>

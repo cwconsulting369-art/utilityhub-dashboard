@@ -113,7 +113,7 @@ export default async function OrgDetailPage({ params }: Props) {
           </p>
         </div>
         <a
-          href={`/app/customers?orgId=${org.id}`}
+          href={`/admin/customers?orgId=${org.id}`}
           style={{
             background: "var(--surface-2)", border: "1px solid var(--border)",
             padding: "var(--space-2) var(--space-4)",
@@ -170,7 +170,7 @@ export default async function OrgDetailPage({ params }: Props) {
                     return (
                       <tr key={obj.id} style={{ borderBottom: "1px solid var(--border)" }}>
                         <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
-                          <a href={`/app/customers/${obj.id}`} style={{ color: "var(--primary-bright)", textDecoration: "none", fontWeight: 500 }}>
+                          <a href={`/admin/customers/${obj.id}`} style={{ color: "var(--primary-bright)", textDecoration: "none", fontWeight: 500 }}>
                             {obj.full_name}
                           </a>
                         </td>
