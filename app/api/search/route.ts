@@ -29,8 +29,9 @@ export async function GET(req: NextRequest) {
   const [{ data: customers }, { data: orgs }] = await Promise.all([
     supabase
       .from("customers")
-      .select("id, full_name, city, postal_code, status")
-      .ilike("full_name", `%${esc}%`)
+      .select("id, uhid, full_name, city, postal_code, address_display, status")
+      .or(`full_name.ilike.%${esc}%,address_display.ilike.%${esc}%,uhid.ilike.%${esc}%`)
+      .not("full_name", "ilike", "% (Allgemein)")
       .order("full_name")
       .limit(5),
 
@@ -45,7 +46,8 @@ export async function GET(req: NextRequest) {
   const results: SearchResult[] = []
 
   for (const c of customers ?? []) {
-    const subtitle = [c.postal_code, c.city].filter(Boolean).join(" ") || c.status || null
+    const addr = (c.address_display as string | null) || [c.postal_code, c.city].filter(Boolean).join(" ") || null
+    const subtitle = [c.uhid ? `#${c.uhid}` : null, addr].filter(Boolean).join(" · ") || c.status || null
     results.push({ type: "object", id: c.id, title: c.full_name, subtitle, href: `/app/customers/${c.id}` })
   }
 
