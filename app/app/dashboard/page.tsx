@@ -119,7 +119,7 @@ export default async function AppDashboardPage() {
       )
       .not("full_name", "ilike", "% (Allgemein)")
       .order("created_at", { ascending: false })
-      .limit(8),
+      .limit(5),
   ])
 
   const total = objectCount ?? 0
