@@ -87,8 +87,8 @@ export function SidebarUpload() {
   const BORDER_COLOR = dragging ? "var(--primary-bright)" : "rgba(88,166,255,0.45)"
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-      <div style={{ fontSize: "10px", fontWeight: 700, color: "#58a6ff", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: "2px" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+      <div style={{ fontSize: "11px", fontWeight: 700, color: "#58a6ff", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: "2px" }}>
         Schnell-Upload
       </div>
 
@@ -101,24 +101,28 @@ export function SidebarUpload() {
           onClick={() => fileRef.current?.click()}
           style={{
             border: `2px dashed ${BORDER_COLOR}`,
-            borderRadius: "var(--radius-md)",
-            padding: "10px 8px",
+            borderRadius: "var(--radius-lg)",
+            padding: "32px 16px",
             textAlign: "center",
             cursor: "pointer",
-            fontSize: "11px",
             color: dragging ? "var(--primary-bright)" : "#58a6ff",
-            background: dragging ? "rgba(56,139,253,0.08)" : "rgba(88,166,255,0.05)",
+            background: dragging ? "rgba(56,139,253,0.08)" : "rgba(88,166,255,0.04)",
             transition: "all 0.15s",
-            lineHeight: 1.4,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "10px",
           }}
         >
-          <div style={{ fontSize: "18px", marginBottom: "4px" }}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ display: "inline-block" }}>
-              <polyline points="16 16 12 12 8 16" /><line x1="12" y1="12" x2="12" y2="21" />
-              <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" />
-            </svg>
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="16 16 12 12 8 16" />
+            <line x1="12" y1="12" x2="12" y2="21" />
+            <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" />
+          </svg>
+          <div style={{ lineHeight: 1.5 }}>
+            <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>Dateien hierher ziehen</div>
+            <div style={{ fontSize: "12px", color: "#58a6ff", fontWeight: 500 }}>oder klicken</div>
           </div>
-          Datei hierher ziehen<br />oder klicken
         </div>
       )}
       <input ref={fileRef} type="file" style={{ display: "none" }} onChange={e => { const f = e.target.files?.[0]; if (f) pickFile(f) }} />

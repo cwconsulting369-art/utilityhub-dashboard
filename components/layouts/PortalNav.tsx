@@ -90,8 +90,14 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
       }}>
         {/* Logo */}
         <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.png" alt="UtilityHub" style={{ height: "40px", width: "auto", objectFit: "contain" }} />
+          <div style={{
+            width: "36px", height: "36px",
+            borderRadius: "var(--radius-md)",
+            background: "var(--accent)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontWeight: 800, fontSize: "13px", letterSpacing: "-0.5px",
+            color: "#fff", flexShrink: 0,
+          }}>UH</div>
           <div style={{ fontSize: "var(--text-base)", lineHeight: 1.2 }}>
             <span style={{ fontWeight: 300, letterSpacing: "0.06em" }}>UTILITY</span>
             <span style={{ fontWeight: 800, letterSpacing: "0.04em", color: "#58a6ff" }}>HUB</span>
@@ -195,11 +201,11 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
           overflowY:     "auto",
         }}>
           {/* Nav */}
-          <nav style={{ flex: 1, padding: "var(--space-5)", display: "flex", flexDirection: "column", gap: "var(--space-1)" }}>
+          <nav style={{ padding: "var(--space-4) var(--space-5)", display: "flex", flexDirection: "column", gap: "var(--space-1)" }}>
             {items.map((item) => {
               const isActive = pathname === item.href || pathname.startsWith(item.href + "/")
               return (
-                <Link key={item.href} href={item.href} style={{ textDecoration: "none", position: "relative", flex: 1, display: "flex", alignItems: "center" }}>
+                <Link key={item.href} href={item.href} style={{ textDecoration: "none", position: "relative", display: "flex", alignItems: "center" }}>
                   <motion.div
                     whileHover={!isActive ? { backgroundColor: "rgba(255,255,255,0.04)", x: 2, transition: { duration: 0.15, ease: [0.16, 1, 0.3, 1] } } : {}}
                     whileTap={{ scale: 0.97 }}
@@ -239,6 +245,9 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
               {sidebarBottom}
             </div>
           )}
+
+          {/* Spacer pushes nothing — upload follows nav directly */}
+          <div style={{ flex: 1 }} />
 
           {portalType === "portal" && (
             <div style={{ padding: "var(--space-4)", borderTop: "1px solid var(--border)" }}>
