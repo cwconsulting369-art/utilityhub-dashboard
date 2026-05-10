@@ -167,7 +167,7 @@ export function mapRow(raw: Record<string, unknown>) {
     "Bestandshalter", "Hausverwaltung / Organisation"
   )
 
-  const wegRaw  = str("WEG", "Weg", "weg", "Vertriebsweg", "Kanal")
+  const wegRaw  = str("WEG", "Weg", "weg", "Objekt", "Vertriebsweg", "Kanal")
   const wegAddr = parseWegAddress(wegRaw)
 
   return {
@@ -176,7 +176,7 @@ export function mapRow(raw: Record<string, unknown>) {
       // WEG is used as fallback customer name for Notion imports (no dedicated Name column)
       full_name: str(
         "Name", "Kundenname", "Kunde", "Vollständiger Name", "Vor- und Nachname",
-        "Firmenname", "Firma", "Unternehmensname", "WEG"
+        "Firmenname", "Firma", "Unternehmensname", "WEG", "Objekt"
       ) ?? splitName ?? "Unbekannt",
       email: str(
         "E-Mail", "Email", "email", "E-mail", "E-Mail-Adresse", "Mailadresse", "Mail"
@@ -216,12 +216,12 @@ export function mapRow(raw: Record<string, unknown>) {
       malo,
       knr,
       grund_info:        str(
-        "Grund / Info", "Grund Info", "Grund", "Info", "Anmerkung", "Grund-Info",
+        "Grund / Info", "Grund Info", "Grund/Info", "Grund", "Info", "Anmerkung", "Grund-Info",
         "Bemerkung", "Hinweis", "Notiz"
       ),
       belieferungsdatum: date(
         "Belieferungsdatum", "Lieferdatum", "Lieferbeginn",
-        "Belieferung ab", "Lieferbeginn Datum", "Belieferungs-Datum"
+        "Belieferungstermin", "Belieferung ab", "Lieferbeginn Datum", "Belieferungs-Datum"
       ),
       alt_ap_ct_kwh:     num(
         "Alt AP ct/kWh", "Alt AP", "AP alt", "Arbeitspreis alt",
