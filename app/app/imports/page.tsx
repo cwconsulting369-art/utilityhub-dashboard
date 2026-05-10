@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server"
 import { UploadForm } from "./UploadForm"
 import { NotionImportButton } from "./NotionImportButton"
+import { AirtableImportButton } from "./AirtableImportButton"
 import { DeleteAllButton } from "./DeleteAllButton"
 
 export const dynamic = "force-dynamic"
@@ -104,7 +105,7 @@ export default async function ImportsPage() {
       </div>
 
       {/* ── Import actions ─────────────────────────────────────────────────── */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-4)" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "var(--space-4)" }}>
 
         {/* Notion */}
         <div style={{
@@ -125,6 +126,27 @@ export default async function ImportsPage() {
             Liest direkt aus der verknüpften Notion-Datenbank. Bestehende Objekte (KNR / MALO / WEG) werden nicht dupliziert.
           </p>
           <NotionImportButton orgs={orgs} />
+        </div>
+
+        {/* Airtable */}
+        <div style={{
+          background: "var(--surface)", border: "1px solid var(--border)",
+          borderRadius: "var(--radius-lg)", padding: "var(--space-6)",
+        }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", marginBottom: "var(--space-1)" }}>
+            <span style={{
+              background: "rgba(255,166,0,0.12)", color: "#ffa600",
+              border: "1px solid rgba(255,166,0,0.25)", borderRadius: "var(--radius-sm)",
+              padding: "1px 7px", fontSize: "10px", fontWeight: 600, letterSpacing: "0.05em",
+            }}>AIRTABLE</span>
+            <h2 style={{ fontSize: "var(--text-base)", fontWeight: 600, margin: 0 }}>
+              Airtable-Sync
+            </h2>
+          </div>
+          <p style={{ color: "var(--text-muted)", fontSize: "var(--text-xs)", margin: "0 0 var(--space-4)" }}>
+            Liest direkt aus einer Airtable-Base. Bestehende Objekte (KNR / MALO / WEG) werden nicht dupliziert.
+          </p>
+          <AirtableImportButton orgs={orgs} />
         </div>
 
         {/* File upload */}
