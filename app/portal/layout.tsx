@@ -65,6 +65,7 @@ export default async function PortalLayout({ children }: { children: React.React
         role:  "customer",
       }}
       portalType="portal"
+      searchApiPath="/api/portal/search"
     >
       {children}
     </PortalNav>

@@ -15,7 +15,13 @@ const TYPE_ICONS: Record<string, string> = {
   org:    "🏢",
 }
 
-export default function GlobalSearch() {
+export default function GlobalSearch({
+  apiPath    = "/api/search",
+  placeholder = "Objekt oder Hausverwaltung suchen…",
+}: {
+  apiPath?:     string
+  placeholder?: string
+}) {
   const router = useRouter()
 
   const [open,    setOpen]    = useState(false)
@@ -57,7 +63,7 @@ export default function GlobalSearch() {
     if (q.length < 2) { setResults([]); setLoading(false); return }
     setLoading(true)
     try {
-      const res  = await fetch(`/api/search?q=${encodeURIComponent(q)}`)
+      const res  = await fetch(`${apiPath}?q=${encodeURIComponent(q)}`)
       const data = await res.json() as SearchResult[]
       setResults(Array.isArray(data) ? data : [])
       setCursor(-1)
@@ -208,7 +214,7 @@ export default function GlobalSearch() {
                   value={query}
                   onChange={handleInputChange}
                   onKeyDown={handleKeyDown}
-                  placeholder="Objekt oder Hausverwaltung suchen…"
+                  placeholder={placeholder}
                   style={{
                     flex:        1,
                     height:      "56px",

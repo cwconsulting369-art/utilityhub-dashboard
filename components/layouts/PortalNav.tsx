@@ -26,11 +26,12 @@ interface PortalNavProps {
   portalType:     "admin" | "portal"
   children:       React.ReactNode
   sidebarBottom?: React.ReactNode
+  searchApiPath?: string
 }
 
 const HEADER_H = "60px"
 
-export default function PortalNav({ items, user, portalType, children, sidebarBottom }: PortalNavProps) {
+export default function PortalNav({ items, user, portalType, children, sidebarBottom, searchApiPath }: PortalNavProps) {
   const pathname = usePathname()
   const router   = useRouter()
 
@@ -105,7 +106,10 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
         </div>
 
         {/* Center: Global Search */}
-        <GlobalSearch />
+        <GlobalSearch
+          apiPath={searchApiPath}
+          placeholder={portalType === "portal" ? "Objekt suchen…" : "Objekt oder Hausverwaltung suchen…"}
+        />
 
         {/* Right icons */}
         <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
