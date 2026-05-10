@@ -98,8 +98,8 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
           </div>
         </div>
 
-        {/* Center: Global Search (app only) */}
-        {portalType === "app" && <GlobalSearch />}
+        {/* Center: Global Search */}
+        <GlobalSearch />
 
         {/* Right icons */}
         <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
