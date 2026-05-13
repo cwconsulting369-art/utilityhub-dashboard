@@ -29,7 +29,7 @@ interface PortalNavProps {
   searchApiPath?: string
 }
 
-const HEADER_H = "60px"
+const HEADER_H = "72px"
 
 export default function PortalNav({ items, user, portalType, children, sidebarBottom, searchApiPath }: PortalNavProps) {
   const pathname = usePathname()
@@ -92,14 +92,14 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
         {/* Logo */}
         <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
           <div style={{
-            width: "36px", height: "36px",
+            width: "42px", height: "42px",
             borderRadius: "var(--radius-md)",
             background: "linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%)",
             display: "flex", alignItems: "center", justifyContent: "center",
-            fontWeight: 800, fontSize: "13px", letterSpacing: "-0.5px",
+            fontWeight: 800, fontSize: "15px", letterSpacing: "-0.5px",
             color: "#fff", flexShrink: 0,
           }}>UH</div>
-          <div style={{ fontSize: "var(--text-base)", lineHeight: 1.2 }}>
+          <div style={{ fontSize: "var(--text-lg)", lineHeight: 1.2 }}>
             <span style={{ fontWeight: 300, letterSpacing: "0.06em" }}>UTILITY</span>
             <span style={{ fontWeight: 800, letterSpacing: "0.04em", color: "#3b82f6" }}>HUB</span>
           </div>
@@ -247,7 +247,7 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
                         transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                       />
                     )}
-                    <span style={{ fontSize: "1.25rem", lineHeight: 1, position: "relative", zIndex: 1 }}>{item.icon}</span>
+                    <span style={{ fontSize: "1.25rem", lineHeight: 1, position: "relative", zIndex: 1, color: "var(--text-muted)", filter: "grayscale(1) brightness(1.5)" }}>{item.icon}</span>
                     <span style={{ flex: 1, position: "relative", zIndex: 1 }}>{item.label}</span>
                     {item.badge != null && item.badge > 0 && (
                       <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", bounce: 0.4 }}

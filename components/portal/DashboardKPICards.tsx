@@ -97,12 +97,12 @@ function KPICard({
         initial={{ opacity: 0, x: -6 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.15, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        style={{ fontSize: "var(--text-3xl)", fontWeight: 800, color, lineHeight: 1 }}
+        style={{ fontSize: "var(--text-3xl)", fontWeight: 800, color, lineHeight: 1, textAlign: "center" }}
       >
         {count.toLocaleString("de-DE")}
       </motion.div>
 
-      <div style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>{sub}</div>
+      <div style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", textAlign: "center" }}>{sub}</div>
     </motion.div>
   )
 }
@@ -133,7 +133,7 @@ export function DashboardKPICards({
             <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
           </svg>
         }
-        color="#58a6ff"
+        color="var(--text-bright)"
         bgColor="rgba(88,166,255,0.10)"
         borderColor="rgba(88,166,255,0.25)"
         label="Strom"
@@ -147,7 +147,7 @@ export function DashboardKPICards({
             <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
           </svg>
         }
-        color="#f59e0b"
+        color="var(--text-bright)"
         bgColor="rgba(245,158,11,0.10)"
         borderColor="rgba(245,158,11,0.25)"
         label="Gas"
@@ -161,7 +161,7 @@ export function DashboardKPICards({
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
           </svg>
         }
-        color="#8b5cf6"
+        color="var(--text-bright)"
         bgColor="rgba(139,92,246,0.10)"
         borderColor="rgba(139,92,246,0.25)"
         label="Versicherung"

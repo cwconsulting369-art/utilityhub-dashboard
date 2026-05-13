@@ -168,7 +168,8 @@ export default async function AppDashboardPage() {
       ),
       value: stromCount ?? 0,
       label: "Strom-Lieferstellen",
-      color: "#58a6ff",
+      sub: "Lieferstellen",
+      color: "var(--text-bright)",
       href: "/admin/customers?energie=Strom",
     },
     {
@@ -181,7 +182,8 @@ export default async function AppDashboardPage() {
       ),
       value: gasCount ?? 0,
       label: "Gas-Lieferstellen",
-      color: "#f59e0b",
+      sub: "Lieferstellen",
+      color: "var(--text-bright)",
       href: "/admin/customers?energie=Gas",
     },
     {
@@ -194,7 +196,8 @@ export default async function AppDashboardPage() {
       ),
       value: orgCount ?? 0,
       label: "Hausverwaltungen",
-      color: "var(--text-muted)",
+      sub: "Verwaltungen",
+      color: "var(--text-bright)",
       href: "/admin/customers",
     },
     {
@@ -260,7 +263,7 @@ export default async function AppDashboardPage() {
               {kpi.value.toLocaleString("de-DE")}
             </div>
             <div style={{ fontSize: "var(--text-xs)", color: "var(--text)", textAlign: "center", opacity: 0.7 }}>
-              Lieferstellen
+              {kpi.sub}
             </div>
           </KPICardLink>
         ))}
@@ -334,8 +337,8 @@ export default async function AppDashboardPage() {
                     { label: "Malo",                align: "left"  as const },
                     { label: "Zählernummer",        align: "left"  as const },
                     { label: "KNR",                 align: "left"  as const },
-                    { label: "⚡ Strom-Tarif",       align: "left"  as const },
-                    { label: "🔥 Gas-Tarif",         align: "left"  as const },
+                    { label: "Strom-Tarif",       align: "left"  as const },
+                    { label: "Gas-Tarif",         align: "left"  as const },
                     { label: "Lieferstelle Status", align: "left"  as const },
                     { label: "Typ",                 align: "left"  as const },
                     { label: "Status",              align: "right" as const },

@@ -100,17 +100,21 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
                 <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
                   <a href={href} style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", textDecoration: "none", color: "inherit" }}>
                     <div style={{
-                      width:          "40px",
-                      height:         "40px",
+                      width:          "36px",
+                      height:         "36px",
                       borderRadius:   "var(--radius-md)",
-                      background:     "rgba(88,166,255,0.08)",
+                      background:     "var(--surface-2)",
                       border:         "1px solid var(--border)",
                       display:        "flex",
                       alignItems:     "center",
                       justifyContent: "center",
                       flexShrink:     0,
-                      fontSize:       "18px",
-                    }}>🏢</div>
+                      color:          "var(--text-muted)",
+                    }}>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M3 21h18" /><path d="M5 21V7l7-4 7 4v14" /><path d="M9 21v-9h6v9" />
+                      </svg>
+                    </div>
                     <span style={{ fontWeight: 600, color: "var(--primary-bright)" }}>
                       {getStreet(row.full_name)}
                     </span>
