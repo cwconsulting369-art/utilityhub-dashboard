@@ -22,7 +22,7 @@ export default async function PortalLayout({ children }: { children: React.React
   const navItems = [
     { href: "/portal/dashboard", label: "Dashboard", icon: "⊞"  },
     { href: "/portal/objects",   label: "Objekte",   icon: "🏢" },
-    { href: "/portal/contracts", label: "Verträge",  icon: "📋" },
+    { href: "/portal/fg-finanz", label: "FG Finanz",  icon: "💼" },
     { href: "/portal/contacts",  label: "Support",   icon: "🎧" },
   ]
 

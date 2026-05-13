@@ -1,4 +1,4 @@
-import { redirect }     from "next/navigation"
+import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 
 export const metadata = { title: "Support | UtilityHub" }
@@ -6,13 +6,15 @@ export const metadata = { title: "Support | UtilityHub" }
 const WA_MSG = encodeURIComponent("Guten Tag, ich habe eine Frage zu meinem Vertrag bei UtilityHub.")
 
 const FG_CONTACTS = [
-  { name: "David Wohlgemuth", role: "FG Finanz",           phone: "+49 176 61004856",  wa: `https://wa.me/4917661004856?text=${WA_MSG}`,  avatar: "/avatar-david.png" },
-  { name: "Tufan Icli",       role: "FG Finanz",           phone: "+49 176 57363064",  wa: `https://wa.me/4917657363064?text=${WA_MSG}`,  avatar: null },
+  { name: "David Wohlgemuth", role: "FG Finanz", phone: "+49 176 61004856", wa: `https://wa.me/4917661004856?text=${WA_MSG}`, avatar: "/avatar-david.png" },
+  { name: "Tufan Icli", role: "FG Finanz", phone: "+49 176 57363064", wa: `https://wa.me/4917657363064?text=${WA_MSG}`, avatar: null },
 ]
 
 const TE_CONTACTS = [
-  { name: "Miguel Cieslar",   role: "Teleson / UtilityHub", phone: "+49 1512 5213451", wa: `https://wa.me/4915125213451?text=${WA_MSG}`, avatar: "/avatar-miguel.png" },
+  { name: "Miguel Cieslar", role: "Teleson / UtilityHub", phone: "+49 1512 5213451", wa: `https://wa.me/4915125213451?text=${WA_MSG}`, avatar: "/avatar-miguel.png" },
 ]
+
+/* ─────────────────────────────────────────────── */
 
 export default async function PortalContactsPage() {
   const supabase = await createClient()
@@ -20,139 +22,339 @@ export default async function PortalContactsPage() {
   if (!user) redirect("/login")
 
   return (
-    <div style={{
-      display: "flex", flexDirection: "column", gap: "var(--space-4)",
-      height: "calc(100dvh - 60px - var(--space-8) - var(--space-8))",
-    }}>
+    <div style={pageWrapper}>
+      {/* Ambient background orbs */}
+      <div style={ambientBg} aria-hidden="true" />
 
-      <div style={{ flexShrink: 0 }}>
-        <h1 style={{ fontSize: "var(--text-xl)", fontWeight: 700, marginBottom: "var(--space-1)" }}>Support</h1>
-        <p style={{ color: "var(--text-muted)", fontSize: "var(--text-sm)", margin: 0 }}>
-          Ihre Ansprechpartner für Rückfragen und Termine
-        </p>
-      </div>
+      {/* Header */}
+      <header style={headerSection}>
+        <h1 style={pageTitle}>Support</h1>
+        <p style={pageSubtitle}>Ihre Ansprechpartner f&uuml;r R&uuml;ckfragen und Termine</p>
+        <div style={headerDivider} />
+      </header>
 
-      {/* 50/50 grid — füllt verbleibende Höhe */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-4)", alignItems: "stretch", flex: 1, minHeight: 0, transform: "scale(0.95)", transformOrigin: "top center" }}>
+      {/* ── FG Finanz Section ── */}
+      <section style={section}>
+        <SectionHeader label="FG Finanz" />
+        <div style={cardGrid}>
+          {FG_CONTACTS.map(c => (
+            <GlassContactCard key={c.name} contact={c} />
+          ))}
+        </div>
+      </section>
 
-        {/* Links: FG Finanz */}
-        <div style={{
-          background: "var(--surface)", border: "1px solid var(--border)",
-          borderRadius: "var(--radius-lg)", overflow: "hidden",
-          display: "flex", flexDirection: "column",
-        }}>
-          <div style={{
-            padding: "var(--space-3) var(--space-4)",
-            borderBottom: "1px solid var(--border)",
-          }}>
-            <h2 style={{ fontSize: "var(--text-base)", fontWeight: 700 }}>FG Finanz</h2>
-          </div>
-          <div style={{ padding: "var(--space-4)", display: "flex", flexDirection: "column", gap: "var(--space-3)", flex: 1 }}>
-            {FG_CONTACTS.map(c => (
-              <ContactCard key={c.name} contact={c} accentColor="#a78bfa" accentBg="rgba(167,139,250,0.12)" />
-            ))}
+      {/* ── Teleson Section ── */}
+      <section style={section}>
+        <SectionHeader label="Teleson / UtilityHub" />
+        <div style={cardGrid}>
+          {TE_CONTACTS.map(c => (
+            <GlassContactCard key={c.name} contact={c} />
+          ))}
+        </div>
+      </section>
+    </div>
+  )
+}
 
+/* ─── Sub-components ─── */
+
+function SectionHeader({ label }: { label: string }) {
+  return (
+    <div style={sectionHeaderWrapper}>
+      <span style={sectionLabel}>{label}</span>
+    </div>
+  )
+}
+
+function GlassContactCard({
+  contact: c,
+}: {
+  contact: { name: string; role: string; phone: string; wa: string; avatar: string | null }
+}) {
+  const initials = c.name.split(" ").map(s => s[0]).slice(0, 2).join("").toUpperCase()
+
+  return (
+    <div style={glassCard}>
+      {/* Horizontal layout: avatar left, info right */}
+      <div style={cardInner}>
+        {/* Avatar with gradient ring */}
+        <div style={avatarRing}>
+          <div style={avatarInner}>
+            {c.avatar ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={c.avatar} alt={c.name} style={avatarImg} />
+            ) : (
+              <span style={avatarFallback}>{initials}</span>
+            )}
           </div>
         </div>
 
-        {/* Rechts: Teleson / UtilityHub — volle Höhe */}
-        <div style={{
-          background: "var(--surface)", border: "1px solid rgba(63,185,80,0.3)",
-          borderRadius: "var(--radius-lg)", overflow: "hidden",
-          display: "flex", flexDirection: "column",
-        }}>
-          <div style={{
-            padding: "var(--space-3) var(--space-4)",
-            borderBottom: "1px solid var(--border)",
-          }}>
-            <h2 style={{ fontSize: "var(--text-base)", fontWeight: 700 }}>Teleson / UtilityHub</h2>
+        {/* Info column */}
+        <div style={infoColumn}>
+          <div style={nameRow}>{c.name}</div>
+          <div style={roleRow}>{c.role}</div>
+          <div style={phoneRow}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.77 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17v-.08z" />
+            </svg>
+            {c.phone}
           </div>
-          <div style={{ padding: "var(--space-4)", flex: 1, display: "flex", flexDirection: "column" }}>
-            {TE_CONTACTS.map(c => (
-              <ContactCard key={c.name} contact={c} accentColor="#3fb950" accentBg="rgba(63,185,80,0.12)" featured stretch />
-            ))}
+
+          {/* Action buttons */}
+          <div style={buttonRow}>
+            {/* WhatsApp button — outline style, NOT green */}
+            <a
+              href={c.wa}
+              target="_blank"
+              rel="noreferrer"
+              style={btnWhatsApp}
+              onMouseEnter={e => {
+                const t = e.currentTarget
+                t.style.background = "rgba(59, 130, 246, 0.1)"
+                t.style.borderColor = "var(--accent)"
+              }}
+              onMouseLeave={e => {
+                const t = e.currentTarget
+                t.style.background = "transparent"
+                t.style.borderColor = "rgba(59, 130, 246, 0.3)"
+              }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+              </svg>
+              WhatsApp
+            </a>
+
+            {/* Call button */}
+            <a
+              href={`tel:${c.phone}`}
+              style={btnCall}
+              onMouseEnter={e => {
+                const t = e.currentTarget
+                t.style.background = "rgba(59, 130, 246, 0.1)"
+                t.style.borderColor = "var(--accent)"
+              }}
+              onMouseLeave={e => {
+                const t = e.currentTarget
+                t.style.background = "transparent"
+                t.style.borderColor = "rgba(59, 130, 246, 0.3)"
+              }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.77 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17v-.08z" />
+              </svg>
+              Anrufen
+            </a>
           </div>
         </div>
-
       </div>
     </div>
   )
 }
 
-function ContactCard({
-  contact: c,
-  accentColor,
-  accentBg,
-  featured = false,
-  stretch  = false,
-}: {
-  contact:     { name: string; role: string; phone: string; wa: string; avatar: string | null }
-  accentColor: string
-  accentBg:    string
-  featured?:   boolean
-  stretch?:    boolean
-}) {
-  const initials = c.name.split(" ").map(s => s[0]).slice(0, 2).join("").toUpperCase()
+/* ─── Styles ─── */
 
-  return (
-    <div style={{
-      background:    featured ? accentBg : "var(--surface-2)",
-      border:        `1px solid ${featured ? accentColor + "44" : "var(--border)"}`,
-      borderRadius:  "var(--radius-md)",
-      padding:       "var(--space-4)",
-      display:       "flex",
-      flexDirection: "column",
-      alignItems:    "center",
-      gap:           "var(--space-2)",
-      flex:          stretch ? 1 : undefined,
-      justifyContent: stretch ? "center" : undefined,
-    }}>
-      {/* Avatar zentriert */}
-      <div style={{
-        width: "72px", height: "72px", borderRadius: "50%", flexShrink: 0,
-        background: accentBg,
-        border: `2px solid ${accentColor}55`,
-        display: "flex", alignItems: "center", justifyContent: "center",
-        fontSize: "20px", fontWeight: 700, color: accentColor,
-        overflow: "hidden",
-      }}>
-        {c.avatar
-          // eslint-disable-next-line @next/next/no-img-element
-          ? <img src={c.avatar} alt={c.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-          : initials
-        }
-      </div>
+const pageWrapper: React.CSSProperties = {
+  position: "relative",
+  padding: "var(--space-6)",
+  display: "flex",
+  flexDirection: "column",
+  gap: "var(--space-6)",
+  minHeight: "100%",
+  overflow: "hidden",
+}
 
-      {/* Name + Rolle zentriert */}
-      <div style={{ textAlign: "center" }}>
-        <div style={{ fontWeight: 700, fontSize: "var(--text-sm)" }}>{c.name}</div>
-        <div style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", marginTop: "2px" }}>{c.role}</div>
-      </div>
+const ambientBg: React.CSSProperties = {
+  position: "absolute",
+  inset: 0,
+  zIndex: 0,
+  pointerEvents: "none",
+  background: `
+    radial-gradient(ellipse 600px 400px at 80% 20%, rgba(59, 130, 246, 0.04) 0%, transparent 70%),
+    radial-gradient(ellipse 500px 300px at 10% 80%, rgba(139, 92, 246, 0.03) 0%, transparent 70%)
+  `,
+}
 
-      {/* Telefon zentriert */}
-      <a href={`tel:${c.phone}`} style={{
-        fontSize: "var(--text-sm)", color: "var(--text-muted)",
-        textDecoration: "none", display: "flex", alignItems: "center", gap: "var(--space-2)",
-      }}>
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.77 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17v-.08z"/>
-        </svg>
-        {c.phone}
-      </a>
+/* Header */
+const headerSection: React.CSSProperties = {
+  position: "relative",
+  zIndex: 1,
+}
 
-      {/* WhatsApp Button — volle Breite */}
-      <a href={c.wa} target="_blank" rel="noreferrer" style={{
-        display: "flex", alignItems: "center", justifyContent: "center", gap: "var(--space-2)",
-        background: "#25D366", color: "#fff",
-        borderRadius: "var(--radius-md)", padding: "var(--space-2) var(--space-4)",
-        fontSize: "var(--text-sm)", fontWeight: 600, textDecoration: "none",
-        width: "100%",
-      }}>
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
-        </svg>
-        WhatsApp schreiben
-      </a>
-    </div>
-  )
+const pageTitle: React.CSSProperties = {
+  fontSize: "var(--text-2xl)",
+  fontWeight: 700,
+  color: "var(--text-bright)",
+  margin: 0,
+  letterSpacing: "-0.02em",
+}
+
+const pageSubtitle: React.CSSProperties = {
+  fontSize: "var(--text-sm)",
+  color: "var(--text-muted)",
+  margin: "var(--space-1) 0 0 0",
+}
+
+const headerDivider: React.CSSProperties = {
+  width: "100%",
+  height: "1px",
+  background: "var(--border)",
+  marginTop: "var(--space-4)",
+}
+
+/* Section */
+const section: React.CSSProperties = {
+  position: "relative",
+  zIndex: 1,
+  display: "flex",
+  flexDirection: "column",
+  gap: "var(--space-3)",
+}
+
+const sectionHeaderWrapper: React.CSSProperties = {
+  display: "flex",
+  alignItems: "center",
+  gap: "var(--space-2)",
+}
+
+const sectionLabel: React.CSSProperties = {
+  fontSize: "var(--text-xs)",
+  fontWeight: 600,
+  textTransform: "uppercase",
+  letterSpacing: "0.08em",
+  color: "var(--accent)",
+  padding: "4px 10px",
+  borderRadius: "var(--radius-sm)",
+  background: "rgba(59, 130, 246, 0.08)",
+  border: "1px solid rgba(59, 130, 246, 0.15)",
+}
+
+/* Card Grid */
+const cardGrid: React.CSSProperties = {
+  display: "grid",
+  gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
+  gap: "var(--space-4)",
+}
+
+/* Glass Card */
+const glassCard: React.CSSProperties = {
+  background: "rgba(255, 255, 255, 0.03)",
+  backdropFilter: "blur(20px)",
+  WebkitBackdropFilter: "blur(20px)",
+  border: "1px solid rgba(255, 255, 255, 0.06)",
+  borderRadius: "var(--radius-lg)",
+  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.04)",
+  padding: "var(--space-5)",
+  transition: "transform 0.25s ease, box-shadow 0.25s ease",
+  cursor: "default",
+}
+
+const cardInner: React.CSSProperties = {
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "flex-start",
+  gap: "var(--space-4)",
+}
+
+/* Avatar with gradient ring */
+const avatarRing: React.CSSProperties = {
+  width: "68px",
+  height: "68px",
+  borderRadius: "50%",
+  flexShrink: 0,
+  padding: "2px",
+  background: "linear-gradient(135deg, var(--accent), #60a5fa)",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+}
+
+const avatarInner: React.CSSProperties = {
+  width: "100%",
+  height: "100%",
+  borderRadius: "50%",
+  background: "var(--surface-2)",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  overflow: "hidden",
+}
+
+const avatarImg: React.CSSProperties = {
+  width: "100%",
+  height: "100%",
+  objectFit: "cover",
+  borderRadius: "50%",
+}
+
+const avatarFallback: React.CSSProperties = {
+  fontSize: "18px",
+  fontWeight: 700,
+  color: "var(--text-bright)",
+  letterSpacing: "0.02em",
+}
+
+/* Info column */
+const infoColumn: React.CSSProperties = {
+  display: "flex",
+  flexDirection: "column",
+  gap: "3px",
+  flex: 1,
+  minWidth: 0,
+  paddingTop: "2px",
+}
+
+const nameRow: React.CSSProperties = {
+  fontWeight: 600,
+  fontSize: "var(--text-sm)",
+  color: "var(--text)",
+  lineHeight: 1.3,
+}
+
+const roleRow: React.CSSProperties = {
+  fontSize: "var(--text-xs)",
+  color: "var(--text-muted)",
+  lineHeight: 1.4,
+}
+
+const phoneRow: React.CSSProperties = {
+  fontSize: "var(--text-xs)",
+  color: "var(--text-muted)",
+  display: "flex",
+  alignItems: "center",
+  gap: "6px",
+  lineHeight: 1.4,
+}
+
+/* Buttons */
+const buttonRow: React.CSSProperties = {
+  display: "flex",
+  gap: "var(--space-2)",
+  marginTop: "var(--space-2)",
+}
+
+const btnBase: React.CSSProperties = {
+  display: "inline-flex",
+  alignItems: "center",
+  justifyContent: "center",
+  gap: "6px",
+  background: "transparent",
+  border: "1px solid rgba(59, 130, 246, 0.3)",
+  color: "var(--accent)",
+  borderRadius: "var(--radius-md)",
+  padding: "8px 16px",
+  fontSize: "var(--text-xs)",
+  fontWeight: 600,
+  textDecoration: "none",
+  cursor: "pointer",
+  transition: "background 0.2s ease, border-color 0.2s ease",
+  flex: 1,
+}
+
+const btnWhatsApp: React.CSSProperties = {
+  ...btnBase,
+}
+
+const btnCall: React.CSSProperties = {
+  ...btnBase,
 }
