@@ -21,16 +21,17 @@ interface NavItem {
 }
 
 interface PortalNavProps {
-  items:          NavItem[]
+  items:           NavItem[]
   user: {
     name:   string
     email:  string
     avatar?: string
     role?:   string
   }
-  portalType:     "admin" | "portal"
-  sidebarBottom?: React.ReactNode
-  children:       React.ReactNode
+  portalType:      "admin" | "portal"
+  sidebarBottom?:  React.ReactNode
+  searchApiPath?:  string
+  children:        React.ReactNode
 }
 
 /* ------------------------------------------------------------------ */
