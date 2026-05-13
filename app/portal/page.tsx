@@ -14,12 +14,15 @@ type ObjRow = {
   object_type: string | null
   city:        string | null
   postal_code: string | null
+  created_at:  string
+  customer_identities: { system: string; external_id: string }[] | null
   teleson_records: {
     energie:         string | null
     neuer_versorger: string | null
     neu_ap:          number | null
     status:          string | null
     malo:            string | null
+    zaehlernummer:   string | null
     created_at:      string | null
   }[] | null
 }
@@ -61,8 +64,9 @@ export default async function PortalDashboardPage() {
         supabase.from("teleson_records").select("energie, malo, customer_id").in("customer_id", ids),
         supabase.from("customers")
           .select(
-            "id, full_name, status, object_type, city, postal_code, " +
-            "teleson_records(energie, neuer_versorger, neu_ap, status, malo, created_at)"
+            "id, full_name, status, object_type, city, postal_code, created_at, " +
+            "customer_identities(system, external_id), " +
+            "teleson_records(energie, neuer_versorger, neu_ap, status, malo, zaehlernummer, created_at)"
           )
           .eq("organization_id", organizationId)
           .order("created_at", { ascending: false })
@@ -90,7 +94,7 @@ export default async function PortalDashboardPage() {
       supabase.from("customers").select("full_name").eq("id", customerId).single(),
       supabase.from("teleson_records").select("energie").eq("customer_id", customerId),
       supabase.from("customers")
-        .select("id, full_name, status, object_type, city, postal_code, teleson_records(energie, neuer_versorger, neu_ap, status, malo, created_at)")
+        .select("id, full_name, status, object_type, city, postal_code, created_at, customer_identities(system, external_id), teleson_records(energie, neuer_versorger, neu_ap, status, malo, zaehlernummer, created_at)")
         .eq("id", customerId)
         .limit(1),
     ])

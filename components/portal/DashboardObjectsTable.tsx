@@ -9,17 +9,42 @@ interface TelesonRecord {
   neu_ap:          number | null
   status:          string | null
   malo:            string | null
+  zaehlernummer:   string | null
   created_at:      string | null
 }
 
+interface CustomerIdentity {
+  system:      string
+  external_id: string
+}
+
 interface ObjectRow {
-  id:              string
-  full_name:       string
-  status:          string
-  object_type:     string | null
-  city:            string | null
-  postal_code:     string | null
-  teleson_records: TelesonRecord[] | null
+  id:                  string
+  full_name:           string
+  status:              string
+  object_type:         string | null
+  city:                string | null
+  postal_code:         string | null
+  created_at:          string
+  teleson_records:     TelesonRecord[] | null
+  customer_identities: CustomerIdentity[] | null
+}
+
+const CUSTOMER_STATUS_COLOR: Record<string, string> = {
+  active:   "#3fb950",
+  inactive: "var(--text-muted)",
+  blocked:  "#f85149",
+  pending:  "#ffa600",
+}
+
+const CUSTOMER_STATUS_LABEL: Record<string, string> = {
+  active: "Aktiv", inactive: "Inaktiv", blocked: "Gesperrt", pending: "Ausstehend",
+}
+
+const monoMuted: React.CSSProperties = {
+  fontFamily: "ui-monospace, SFMono-Regular, monospace",
+  fontSize: "var(--text-xs)",
+  color: "var(--text-muted)",
 }
 
 const tableContainer = {
@@ -30,24 +55,28 @@ const tableContainer = {
 }
 
 const rowVariant = {
-  hidden: { opacity: 0, x: -8 },
+  hidden: { opacity: 0, y: 12 },
   show: {
     opacity: 1,
-    x: 0,
-    transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
+    y: 0,
+    transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
   },
 }
 
-function HoverRow({ children, href, isLast }: { children: React.ReactNode; href: string; isLast: boolean }) {
+function FadeInRow({ children, index = 0, style, onMouseEnter, onMouseLeave }: {
+  children: React.ReactNode
+  index?: number
+  style?: React.CSSProperties
+  onMouseEnter?: React.MouseEventHandler<HTMLTableRowElement>
+  onMouseLeave?: React.MouseEventHandler<HTMLTableRowElement>
+}) {
   return (
     <motion.tr
       variants={rowVariant}
-      whileHover={{ backgroundColor: "rgba(255,255,255,0.03)" }}
-      transition={{ duration: 0.12 }}
-      style={{
-        borderBottom: !isLast ? "1px solid var(--border)" : undefined,
-        cursor: "pointer",
-      }}
+      transition={{ delay: index * 0.05 }}
+      style={style}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
     >
       {children}
     </motion.tr>
@@ -55,31 +84,31 @@ function HoverRow({ children, href, isLast }: { children: React.ReactNode; href:
 }
 
 export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
+  const now = new Date()
+  const dash = <span style={{ color: "var(--text-muted)", opacity: 0.4 }}>—</span>
+
   if (objects.length === 0) {
     return (
-      <motion.div
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        style={{ padding: "var(--space-10)", textAlign: "center", color: "var(--text-muted)", fontSize: "var(--text-sm)" }}
-      >
-        Keine Objekte vorhanden.
-      </motion.div>
+      <div style={{ padding: "var(--space-10)", textAlign: "center", color: "var(--text-muted)", fontSize: "var(--text-sm)" }}>
+        Noch keine Objekte vorhanden.
+      </div>
     )
   }
 
   return (
     <div style={{ overflowX: "auto" }}>
-      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "var(--text-sm)" }}>
+      <table style={{ width: "100%", borderCollapse: "separate", borderSpacing: 0, fontSize: "var(--text-sm)" }}>
         <thead>
-          <tr style={{ borderBottom: "1px solid var(--border)" }}>
-            {["Objekt", "Adresse", "Strom-Tarif", "Gas-Tarif", "Status", "Lieferstelle", ""].map(h => (
+          <tr style={{ borderBottom: "1px solid var(--border-subtle)", background: "rgba(255,255,255,0.015)" }}>
+            {["Objekt", "Adresse", "Malo", "Zählernummer", "KNR", "Strom-Tarif", "Gas-Tarif", "Lieferstelle Status", "Typ", "Status"].map(h => (
               <th key={h} style={{
-                padding:    "var(--space-3) var(--space-4)",
-                textAlign:  "left",
+                padding: "var(--space-3) var(--space-4)",
+                textAlign: "left",
                 fontWeight: 500,
-                color:      "var(--text-muted)",
-                fontSize:   "var(--text-xs)",
+                color: "var(--text-muted)",
+                fontSize: "var(--text-xs)",
+                textTransform: "uppercase",
+                letterSpacing: "0.04em",
                 whiteSpace: "nowrap",
               }}>{h}</th>
             ))}
@@ -87,109 +116,127 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
         </thead>
         <motion.tbody variants={tableContainer} initial="hidden" animate="show">
           {objects.map((row, idx) => {
-            const recs     = row.teleson_records ?? []
-            const stromRec = recs.find(r => r.energie?.toLowerCase() === "strom") ?? null
-            const gasRec   = recs.find(r => r.energie?.toLowerCase() === "gas")   ?? null
-            const malo     = recs.map(r => r.malo).find(Boolean) ?? null
-            const addr     = [row.postal_code, row.city].filter(Boolean).join(" ") || null
-            const href     = `/portal/objects/${row.id}`
-            const isActive = row.status === "active"
+            const recs       = row.teleson_records ?? []
+            const stromRec   = recs.find(r => r.energie?.toLowerCase() === "strom") ?? null
+            const gasRec     = recs.find(r => r.energie?.toLowerCase() === "gas") ?? null
+            const malo       = recs.map(r => r.malo).find(Boolean) ?? null
+            const latestRec  = [...recs].sort((a, b) => String(b.created_at ?? "").localeCompare(String(a.created_at ?? "")))[0]
+            const zNrRaw     = latestRec?.zaehlernummer ?? null
+            const zNr        = zNrRaw ? ((zNrRaw.split(":").pop() ?? zNrRaw).trim() || null) : null
+            const knr        = (row.customer_identities ?? []).find(i => i.system !== "weg" && (i.system === "knr" || i.system === "teleson"))?.external_id ?? null
+            const objektLabel = getStreet(row.full_name)
+            const statusColor = CUSTOMER_STATUS_COLOR[row.status] ?? "var(--text-muted)"
+            const statusLabel = CUSTOMER_STATUS_LABEL[row.status] ?? row.status
+            const lieferStatus = stromRec?.status ?? gasRec?.status ?? null
+            const createdMs   = new Date(row.created_at).getTime()
+            const ageMs       = now.getTime() - createdMs
+            const ageDays     = Math.floor(ageMs / (24 * 60 * 60 * 1000))
+            const ageLabel    = ageDays === 0 ? "Heute" : ageDays === 1 ? "Gestern" : `${ageDays}T`
+            const ageColor    = ageDays === 0 ? "#3fb950" : ageDays <= 7 ? "#58a6ff" : ageDays <= 30 ? "#ffa600" : "var(--text-muted)"
 
             return (
-              <HoverRow key={row.id} href={href} isLast={idx === objects.length - 1}>
+              <FadeInRow
+                key={row.id}
+                index={idx}
+                style={{ borderBottom: idx < objects.length - 1 ? "1px solid var(--border-subtle)" : undefined, transition: "background 0.15s ease" }}
+                onMouseEnter={(e: React.MouseEvent<HTMLTableRowElement>) => { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.02)" }}
+                onMouseLeave={(e: React.MouseEvent<HTMLTableRowElement>) => { (e.currentTarget as HTMLElement).style.background = "transparent" }}
+              >
+                {/* Objekt */}
                 <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
-                  <a href={href} style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", textDecoration: "none", color: "inherit" }}>
+                  <a href={`/portal/objects/${row.id}`} style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", textDecoration: "none", color: "inherit" }}>
                     <div style={{
-                      width:          "36px",
-                      height:         "36px",
-                      borderRadius:   "var(--radius-md)",
-                      background:     "var(--surface-2)",
-                      border:         "1px solid var(--border)",
-                      display:        "flex",
-                      alignItems:     "center",
-                      justifyContent: "center",
-                      flexShrink:     0,
-                      color:          "var(--text-muted)",
+                      width: "36px", height: "36px", borderRadius: "var(--radius-md)",
+                      background: "var(--surface-2)", border: "1px solid var(--border)",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      color: "var(--text-muted)", flexShrink: 0,
                     }}>
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M3 21h18" /><path d="M5 21V7l7-4 7 4v14" /><path d="M9 21v-9h6v9" />
                       </svg>
                     </div>
-                    <span style={{ fontWeight: 600, color: "var(--primary-bright)" }}>
-                      {getStreet(row.full_name)}
-                    </span>
+                    <span style={{ fontWeight: 600, color: "var(--text-bright)" }}>{objektLabel}</span>
                   </a>
                 </td>
 
+                {/* Adresse */}
                 <td style={{ padding: "var(--space-3) var(--space-4)", color: "var(--text-muted)", fontSize: "var(--text-xs)", whiteSpace: "nowrap" }}>
-                  {addr ? (
-                    <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.4 }}>
+                  {(row.postal_code || row.city) ? (
+                    <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.3 }}>
                       {row.postal_code && <span>{row.postal_code}</span>}
-                      {row.city        && <span>{row.city}</span>}
+                      {row.city && <span>{row.city}</span>}
                     </div>
-                  ) : <span style={{ opacity: 0.4 }}>—</span>}
+                  ) : dash}
                 </td>
 
+                {/* Malo */}
+                <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
+                  {malo ? <span style={monoMuted}>{malo}</span> : dash}
+                </td>
+
+                {/* Zählernummer */}
+                <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
+                  {zNr ? <span style={monoMuted}>{zNr}</span> : dash}
+                </td>
+
+                {/* KNR */}
+                <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
+                  {knr ? <span style={monoMuted}>{knr}</span> : dash}
+                </td>
+
+                {/* Strom-Tarif */}
                 <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
                   {stromRec?.neuer_versorger ? (
                     <div style={{ display: "flex", flexDirection: "column", gap: "1px" }}>
-                      <span style={{ fontSize: "var(--text-xs)", fontWeight: 600, color: "#58a6ff" }}>{stromRec.neuer_versorger}</span>
+                      <span style={{ fontSize: "var(--text-xs)", fontWeight: 500, color: "var(--text-bright)" }}>{stromRec.neuer_versorger}</span>
                       {stromRec.neu_ap != null && (
-                        <span style={{ fontSize: "10px", color: "#58a6ff", opacity: 0.8 }}>
-                          {stromRec.neu_ap.toLocaleString("de-DE")} ct/kWh
-                        </span>
+                        <span style={{ fontSize: "var(--text-xs)", color: "#58a6ff" }}>{stromRec.neu_ap.toLocaleString("de-DE")} ct/kWh</span>
                       )}
                     </div>
-                  ) : <span style={{ color: "var(--text-muted)", opacity: 0.4 }}>—</span>}
+                  ) : dash}
                 </td>
 
+                {/* Gas-Tarif */}
                 <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
                   {gasRec?.neuer_versorger ? (
                     <div style={{ display: "flex", flexDirection: "column", gap: "1px" }}>
-                      <span style={{ fontSize: "var(--text-xs)", fontWeight: 600, color: "#ffa600" }}>{gasRec.neuer_versorger}</span>
+                      <span style={{ fontSize: "var(--text-xs)", fontWeight: 500, color: "var(--text-bright)" }}>{gasRec.neuer_versorger}</span>
                       {gasRec.neu_ap != null && (
-                        <span style={{ fontSize: "10px", color: "#ffa600", opacity: 0.8 }}>
-                          {gasRec.neu_ap.toLocaleString("de-DE")} ct/kWh
-                        </span>
+                        <span style={{ fontSize: "var(--text-xs)", color: "#f59e0b" }}>{gasRec.neu_ap.toLocaleString("de-DE")} ct/kWh</span>
                       )}
                     </div>
-                  ) : <span style={{ color: "var(--text-muted)", opacity: 0.4 }}>—</span>}
+                  ) : dash}
                 </td>
 
+                {/* Lieferstelle Status */}
+                <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
+                  {lieferStatus ? (
+                    <span style={{
+                      fontSize: "var(--text-xs)", fontWeight: 600,
+                      background: "rgba(139,148,158,0.1)", color: "var(--text-muted)",
+                      border: "1px solid var(--border)", borderRadius: "var(--radius-sm)",
+                      padding: "1px 7px",
+                    }}>{lieferStatus}</span>
+                  ) : dash}
+                </td>
+
+                {/* Typ */}
                 <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
                   <span style={{
-                    display:        "inline-flex",
-                    alignItems:     "center",
-                    gap:            "5px",
-                    background:     isActive ? "rgba(63,185,80,0.12)" : "rgba(139,148,158,0.12)",
-                    color:          isActive ? "#3fb950" : "var(--text-muted)",
-                    border:         `1px solid ${isActive ? "rgba(63,185,80,0.3)" : "var(--border)"}`,
-                    borderRadius:   "999px",
-                    padding:        "2px 10px",
-                    fontSize:       "var(--text-xs)",
-                    fontWeight:     600,
-                  }}>
-                    {isActive && (
-                      <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#3fb950", flexShrink: 0 }} />
-                    )}
-                    {isActive ? "Aktiv" : row.status}
-                  </span>
+                    background: "rgba(139,148,158,0.1)", color: "var(--text-muted)",
+                    border: "1px solid var(--border)", borderRadius: "var(--radius-sm)",
+                    padding: "1px 7px", fontSize: "10px", fontWeight: 600,
+                  }}>{row.object_type === "weg" ? "WEG" : "Privat"}</span>
                 </td>
 
-                <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
-                  {malo ? (
-                    <span style={{ fontFamily: "monospace", fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>
-                      {malo}
-                    </span>
-                  ) : <span style={{ color: "var(--text-muted)", opacity: 0.4 }}>—</span>}
+                {/* Status + Alter */}
+                <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap", textAlign: "right" }}>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "2px", alignItems: "flex-end" }}>
+                    <span style={{ fontSize: "var(--text-xs)", fontWeight: 600, color: statusColor }}>{statusLabel}</span>
+                    <span style={{ fontSize: "10px", fontWeight: 600, color: ageColor }}>{ageLabel}</span>
+                  </div>
                 </td>
-
-                <td style={{ padding: "var(--space-3) var(--space-4)", textAlign: "right" }}>
-                  <a href={href} style={{ color: "var(--text-muted)", textDecoration: "none", fontSize: "var(--text-base)", transition: "color 150ms ease" }}>
-                    ›
-                  </a>
-                </td>
-              </HoverRow>
+              </FadeInRow>
             )
           })}
         </motion.tbody>
