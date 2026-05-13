@@ -1,18 +1,17 @@
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
-import { PortalContactsSection } from "@/components/portal/PortalContactsSection"
 
 export const metadata = { title: "Support | UtilityHub" }
 
 const WA_MSG = encodeURIComponent("Guten Tag, ich habe eine Frage zu meinem Vertrag bei UtilityHub.")
 
 const FG_CONTACTS = [
-  { name: "David Wohlgemuth", role: "FG Finanz", phone: "+49 176 61004856", wa: `https://wa.me/4917661004856?text=${WA_MSG}`, avatar: "/avatar-david.png" },
-  { name: "Tufan Icli", role: "FG Finanz", phone: "+49 176 57363064", wa: `https://wa.me/4917657363064?text=${WA_MSG}`, avatar: null },
+  { name: "David Wohlgemuth", role: "FG Finanz",           phone: "+49 176 61004856",  wa: `https://wa.me/4917661004856?text=${WA_MSG}`,  avatar: null },
+  { name: "Tufan Icli",       role: "FG Finanz",           phone: "+49 176 57363064",  wa: `https://wa.me/4917657363064?text=${WA_MSG}`,  avatar: null },
 ]
 
 const TE_CONTACTS = [
-  { name: "Miguel Cieslar", role: "Teleson / UtilityHub", phone: "+49 1512 5213451", wa: `https://wa.me/4915125213451?text=${WA_MSG}`, avatar: "/avatar-miguel.png" },
+  { name: "Miguel Cieslar",   role: "Teleson / UtilityHub", phone: "+49 1512 5213451", wa: `https://wa.me/4915125213451?text=${WA_MSG}`, avatar: null },
 ]
 
 /* ─────────────────────────────────────────────── */
@@ -21,6 +20,18 @@ export default async function PortalContactsPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/login")
+
+  /* ── fetch contacts from DB ── */
+  let dbContacts: any[] = []
+  try {
+    const { data } = await supabase
+      .from("contacts")
+      .select("id, full_name, role, email, phone, photo_url, calendly_url")
+      .order("full_name")
+    dbContacts = data ?? []
+  } catch {
+    dbContacts = []
+  }
 
   return (
     <div style={pageWrapper}>
@@ -55,7 +66,25 @@ export default async function PortalContactsPage() {
       </section>
 
       {/* ── Dynamische Ansprechpartner aus DB ── */}
-      <PortalContactsSection />
+      {dbContacts.length > 0 && (
+        <section style={section}>
+          <SectionHeader label="Ihre Ansprechpartner" />
+          <div style={cardGrid}>
+            {dbContacts.map(c => (
+              <GlassContactCard
+                key={c.id}
+                contact={{
+                  name:  c.full_name ?? "",
+                  role:  c.role ?? "",
+                  phone: c.phone ?? "",
+                  wa:    c.calendly_url ?? `https://wa.me/${(c.phone ?? "").replace(/\D/g, "")}?text=${WA_MSG}`,
+                  avatar: c.photo_url ?? null,
+                }}
+              />
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   )
 }
@@ -79,13 +108,11 @@ function GlassContactCard({
 
   return (
     <div style={glassCard}>
-      {/* Horizontal layout: avatar left, info right */}
       <div style={cardInner}>
         {/* Avatar with gradient ring */}
         <div style={avatarRing}>
           <div style={avatarInner}>
             {c.avatar ? (
-              // eslint-disable-next-line @next/next/no-img-element
               <img src={c.avatar} alt={c.name} style={avatarImg} />
             ) : (
               <span style={avatarFallback}>{initials}</span>
@@ -97,16 +124,17 @@ function GlassContactCard({
         <div style={infoColumn}>
           <div style={nameRow}>{c.name}</div>
           <div style={roleRow}>{c.role}</div>
-          <div style={phoneRow}>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
-              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.77 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17v-.08z" />
-            </svg>
-            {c.phone}
-          </div>
+          {c.phone && (
+            <div style={phoneRow}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.77 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17v-.08z" />
+              </svg>
+              {c.phone}
+            </div>
+          )}
 
           {/* Action buttons */}
           <div style={buttonRow}>
-            {/* WhatsApp button — outline style, NOT green */}
             <a
               href={c.wa}
               target="_blank"
@@ -129,26 +157,27 @@ function GlassContactCard({
               WhatsApp
             </a>
 
-            {/* Call button */}
-            <a
-              href={`tel:${c.phone}`}
-              style={btnCall}
-              onMouseEnter={e => {
-                const t = e.currentTarget
-                t.style.background = "rgba(59, 130, 246, 0.1)"
-                t.style.borderColor = "var(--accent)"
-              }}
-              onMouseLeave={e => {
-                const t = e.currentTarget
-                t.style.background = "transparent"
-                t.style.borderColor = "rgba(59, 130, 246, 0.3)"
-              }}
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.77 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17v-.08z" />
-              </svg>
-              Anrufen
-            </a>
+            {c.phone && (
+              <a
+                href={`tel:${c.phone}`}
+                style={btnCall}
+                onMouseEnter={e => {
+                  const t = e.currentTarget
+                  t.style.background = "rgba(59, 130, 246, 0.1)"
+                  t.style.borderColor = "var(--accent)"
+                }}
+                onMouseLeave={e => {
+                  const t = e.currentTarget
+                  t.style.background = "transparent"
+                  t.style.borderColor = "rgba(59, 130, 246, 0.3)"
+                }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.77 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17v-.08z" />
+                </svg>
+                Anrufen
+              </a>
+            )}
           </div>
         </div>
       </div>
@@ -179,7 +208,6 @@ const ambientBg: React.CSSProperties = {
   `,
 }
 
-/* Header */
 const headerSection: React.CSSProperties = {
   position: "relative",
   zIndex: 1,
@@ -206,7 +234,6 @@ const headerDivider: React.CSSProperties = {
   marginTop: "var(--space-4)",
 }
 
-/* Section */
 const section: React.CSSProperties = {
   position: "relative",
   zIndex: 1,
@@ -233,14 +260,12 @@ const sectionLabel: React.CSSProperties = {
   border: "1px solid rgba(59, 130, 246, 0.15)",
 }
 
-/* Card Grid */
 const cardGrid: React.CSSProperties = {
   display: "grid",
   gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
   gap: "var(--space-4)",
 }
 
-/* Glass Card */
 const glassCard: React.CSSProperties = {
   background: "rgba(255, 255, 255, 0.03)",
   backdropFilter: "blur(20px)",
@@ -260,7 +285,6 @@ const cardInner: React.CSSProperties = {
   gap: "var(--space-4)",
 }
 
-/* Avatar with gradient ring */
 const avatarRing: React.CSSProperties = {
   width: "68px",
   height: "68px",
@@ -298,7 +322,6 @@ const avatarFallback: React.CSSProperties = {
   letterSpacing: "0.02em",
 }
 
-/* Info column */
 const infoColumn: React.CSSProperties = {
   display: "flex",
   flexDirection: "column",
@@ -330,7 +353,6 @@ const phoneRow: React.CSSProperties = {
   lineHeight: 1.4,
 }
 
-/* Buttons */
 const buttonRow: React.CSSProperties = {
   display: "flex",
   gap: "var(--space-2)",
@@ -355,10 +377,6 @@ const btnBase: React.CSSProperties = {
   flex: 1,
 }
 
-const btnWhatsApp: React.CSSProperties = {
-  ...btnBase,
-}
+const btnWhatsApp: React.CSSProperties = { ...btnBase }
 
-const btnCall: React.CSSProperties = {
-  ...btnBase,
-}
+const btnCall: React.CSSProperties = { ...btnBase }
