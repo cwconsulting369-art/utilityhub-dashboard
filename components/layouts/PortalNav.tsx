@@ -55,8 +55,6 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
     router.refresh()
   }
 
-  const accentColor = "var(--accent)"
-
   if (pathname === "/portal/change-password") {
     return <>{children}</>
   }
@@ -66,7 +64,7 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
     : "U"
 
   const iconBtn: React.CSSProperties = {
-    width: "46px", height: "46px", borderRadius: "50%",
+    width: "40px", height: "40px", borderRadius: "50%",
     background: "transparent", border: "1px solid var(--border)",
     cursor: "pointer", display: "flex", alignItems: "center",
     justifyContent: "center", color: "var(--text-muted)", flexShrink: 0,
@@ -81,7 +79,9 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
         top:            0,
         zIndex:         30,
         height:         HEADER_H,
-        background:     "var(--surface)",
+        background:     "rgba(11,17,32,0.85)",
+        backdropFilter: "blur(16px)",
+        WebkitBackdropFilter: "blur(16px)",
         borderBottom:   "1px solid var(--border)",
         display:        "flex",
         alignItems:     "center",
@@ -94,14 +94,14 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
           <div style={{
             width: "36px", height: "36px",
             borderRadius: "var(--radius-md)",
-            background: "var(--accent)",
+            background: "linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%)",
             display: "flex", alignItems: "center", justifyContent: "center",
             fontWeight: 800, fontSize: "13px", letterSpacing: "-0.5px",
             color: "#fff", flexShrink: 0,
           }}>UH</div>
           <div style={{ fontSize: "var(--text-base)", lineHeight: 1.2 }}>
             <span style={{ fontWeight: 300, letterSpacing: "0.06em" }}>UTILITY</span>
-            <span style={{ fontWeight: 800, letterSpacing: "0.04em", color: "#58a6ff" }}>HUB</span>
+            <span style={{ fontWeight: 800, letterSpacing: "0.04em", color: "#3b82f6" }}>HUB</span>
           </div>
         </div>
 
@@ -113,16 +113,30 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
 
         {/* Right icons */}
         <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
-          <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.92 }} transition={{ duration: 0.12 }}
-            title="Benachrichtigungen" style={iconBtn}>
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.92 }}
+            transition={{ duration: 0.12 }}
+            title="Benachrichtigungen"
+            style={iconBtn}
+            onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)")}
+            onMouseLeave={e => (e.currentTarget.style.borderColor = "var(--border)")}
+          >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
               <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
               <path d="M13.73 21a2 2 0 0 1-3.46 0" />
             </svg>
           </motion.button>
 
-          <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.92 }} transition={{ duration: 0.12 }}
-            title="Hilfe" style={iconBtn}>
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.92 }}
+            transition={{ duration: 0.12 }}
+            title="Hilfe"
+            style={iconBtn}
+            onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)")}
+            onMouseLeave={e => (e.currentTarget.style.borderColor = "var(--border)")}
+          >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10" />
               <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
@@ -134,9 +148,12 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
             <motion.button
               onClick={() => setProfileOpen(o => !o)}
               title={user.name || user.email}
-              whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               transition={{ duration: 0.15 }}
               style={iconBtn}
+              onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)")}
+              onMouseLeave={e => (e.currentTarget.style.borderColor = "var(--border)")}
             >
               <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
@@ -218,14 +235,15 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
                       padding: "var(--space-3) var(--space-5)", borderRadius: "var(--radius-md)",
                       fontSize: "var(--text-base)", fontWeight: isActive ? 600 : 400,
                       color: isActive ? "#fff" : "var(--text-muted)",
-                      background: isActive ? accentColor : "transparent",
+                      background: "transparent",
+                      borderLeft: isActive ? "3px solid #3b82f6" : "3px solid transparent",
                       position: "relative", overflow: "hidden",
                       width: "100%",
                     }}
                   >
                     {isActive && (
                       <motion.div layoutId="nav-active-indicator"
-                        style={{ position: "absolute", inset: 0, borderRadius: "var(--radius-md)", background: accentColor, zIndex: 0 }}
+                        style={{ position: "absolute", inset: 0, borderRadius: "var(--radius-md)", background: "rgba(59,130,246,0.12)", zIndex: 0 }}
                         transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                       />
                     )}
@@ -233,7 +251,7 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
                     <span style={{ flex: 1, position: "relative", zIndex: 1 }}>{item.label}</span>
                     {item.badge != null && item.badge > 0 && (
                       <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", bounce: 0.4 }}
-                        style={{ background: "#f59e0b", color: "#fff", borderRadius: "999px", padding: "1px 7px", fontSize: "10px", fontWeight: 700, minWidth: "18px", textAlign: "center", lineHeight: "14px", position: "relative", zIndex: 1 }}
+                        style={{ background: "#3b82f6", color: "#fff", borderRadius: "999px", padding: "1px 7px", fontSize: "10px", fontWeight: 700, minWidth: "18px", textAlign: "center", lineHeight: "14px", position: "relative", zIndex: 1 }}
                       >
                         {item.badge > 99 ? "99+" : item.badge}
                       </motion.span>

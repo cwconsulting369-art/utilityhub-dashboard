@@ -114,16 +114,23 @@ export default function LoginPage() {
           0%, 100% { transform: translate(0, 0) scale(1); }
           50%       { transform: translate(30px, -20px) scale(0.95); }
         }
+        @keyframes orb-drift-3 {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          50%       { transform: translate(-20px, -30px) scale(1.05); }
+        }
         @keyframes spin {
           to { transform: rotate(360deg); }
         }
         .login-input:focus {
-          border-color: var(--primary-bright) !important;
-          box-shadow: 0 0 0 3px rgba(58,111,216,0.2) !important;
+          border-color: rgba(59,130,246,0.35) !important;
+          box-shadow: 0 0 0 3px rgba(59,130,246,0.10) !important;
+        }
+        .login-btn {
+          background: #3b82f6 !important;
         }
         .login-btn:hover:not(:disabled) {
-          background: var(--primary-hover) !important;
-          box-shadow: 0 4px 20px rgba(58,111,216,0.35) !important;
+          background: #60a5fa !important;
+          box-shadow: 0 4px 20px rgba(59,130,246,0.35) !important;
           transform: translateY(-1px);
         }
         .login-btn:active:not(:disabled) {
@@ -149,13 +156,14 @@ export default function LoginPage() {
         padding: "var(--space-6)",
         position: "relative",
         overflow: "hidden",
+        background: "var(--bg)",
       }}>
-        {/* ambient background orbs */}
+        {/* ambient background orbs — BLUE theme */}
         <div className="orb" style={{
           position: "absolute", top: "15%", left: "10%",
           width: "420px", height: "420px",
           borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(58,111,216,0.12) 0%, transparent 70%)",
+          background: "radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%)",
           pointerEvents: "none",
           animation: "orb-drift-1 14s ease-in-out infinite",
         }} />
@@ -163,9 +171,18 @@ export default function LoginPage() {
           position: "absolute", bottom: "10%", right: "8%",
           width: "320px", height: "320px",
           borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(24,44,89,0.3) 0%, transparent 70%)",
+          background: "radial-gradient(circle, rgba(88,166,255,0.06) 0%, transparent 70%)",
           pointerEvents: "none",
           animation: "orb-drift-2 18s ease-in-out infinite",
+        }} />
+        <div className="orb" style={{
+          position: "absolute", top: "45%", left: "50%",
+          width: "280px", height: "280px",
+          borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(139,92,246,0.04) 0%, transparent 70%)",
+          pointerEvents: "none",
+          transform: "translate(-50%, -50%)",
+          animation: "orb-drift-3 22s ease-in-out infinite",
         }} />
 
         <div className="login-card" style={{ width: "100%", maxWidth: "400px" }}>
@@ -181,10 +198,10 @@ export default function LoginPage() {
               <div style={{
                 width: "40px", height: "40px",
                 borderRadius: "var(--radius-md)",
-                background: "linear-gradient(135deg, var(--primary-bright) 0%, #2554b8 100%)",
+                background: "linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%)",
                 display: "flex", alignItems: "center", justifyContent: "center",
                 color: "#fff",
-                boxShadow: "0 4px 16px rgba(58,111,216,0.4)",
+                boxShadow: "0 4px 16px rgba(59,130,246,0.4)",
               }}>
                 <IconBolt />
               </div>
@@ -212,7 +229,7 @@ export default function LoginPage() {
             border: "1px solid var(--border)",
             borderRadius: "var(--radius-xl)",
             padding: "var(--space-8)",
-            boxShadow: "var(--shadow-lg), 0 0 0 1px rgba(58,111,216,0.06)",
+            boxShadow: "var(--shadow-card)",
           }}>
             <form onSubmit={handleSubmit} style={{
               display: "flex", flexDirection: "column",
@@ -257,8 +274,8 @@ export default function LoginPage() {
                   style={{
                     ...inputBase,
                     ...(emailFocus ? {
-                      borderColor: "var(--primary-bright)",
-                      boxShadow: "0 0 0 3px rgba(58,111,216,0.2)",
+                      borderColor: "rgba(59,130,246,0.35)",
+                      boxShadow: "0 0 0 3px rgba(59,130,246,0.10)",
                     } : {}),
                   }}
                 />
@@ -288,8 +305,8 @@ export default function LoginPage() {
                       ...inputBase,
                       paddingRight: "var(--space-10)",
                       ...(passFocus ? {
-                        borderColor: "var(--primary-bright)",
-                        boxShadow: "0 0 0 3px rgba(58,111,216,0.2)",
+                        borderColor: "rgba(59,130,246,0.35)",
+                        boxShadow: "0 0 0 3px rgba(59,130,246,0.10)",
                       } : {}),
                     }}
                   />
@@ -320,7 +337,7 @@ export default function LoginPage() {
                 disabled={loading}
                 className="login-btn"
                 style={{
-                  background: "linear-gradient(135deg, var(--primary-bright) 0%, #2554b8 100%)",
+                  background: "#3b82f6",
                   color: "#fff",
                   borderRadius: "var(--radius-md)",
                   padding: "var(--space-3) var(--space-6)",

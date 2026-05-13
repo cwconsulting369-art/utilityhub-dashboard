@@ -86,6 +86,35 @@ const CUSTOMER_STATUS_LABEL: Record<string, string> = {
   active: "Aktiv", inactive: "Inaktiv", blocked: "Gesperrt", pending: "Ausstehend",
 }
 
+/* ── Icon helpers ── */
+function IconCircle({
+  children,
+  bgColor,
+  borderColor,
+}: {
+  children: React.ReactNode
+  bgColor: string
+  borderColor: string
+}) {
+  return (
+    <div
+      style={{
+        width: "36px",
+        height: "36px",
+        borderRadius: "50%",
+        background: bgColor,
+        border: `1px solid ${borderColor}`,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flexShrink: 0,
+      }}
+    >
+      {children}
+    </div>
+  )
+}
+
 export default async function AppDashboardPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -127,38 +156,74 @@ export default async function AppDashboardPage() {
   const greeting = profile?.full_name ? `Guten Tag, ${profile.full_name}` : "Guten Tag"
 
   const openPot = offenePotenziale ?? 0
-  const iconStyle = { fill: "none", stroke: "rgba(255,255,255,0.7)", strokeWidth: "1.8", strokeLinecap: "round" as const, strokeLinejoin: "round" as const }
+
   const kpis = [
     {
-      icon: <svg width="18" height="18" viewBox="0 0 24 24" {...iconStyle}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>,
-      value: stromCount ?? 0, label: "Strom-Lieferstellen",
-      color: "#58a6ff", bgColor: "rgba(88,166,255,0.1)", borderColor: "rgba(88,166,255,0.3)",
+      icon: (
+        <IconCircle bgColor="rgba(88,166,255,0.10)" borderColor="rgba(88,166,255,0.25)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#58a6ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+          </svg>
+        </IconCircle>
+      ),
+      value: stromCount ?? 0,
+      label: "Strom-Lieferstellen",
+      color: "#58a6ff",
       href: "/admin/customers?energie=Strom",
     },
     {
-      icon: <svg width="18" height="18" viewBox="0 0 24 24" {...iconStyle}><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" /></svg>,
-      value: gasCount ?? 0, label: "Gas-Lieferstellen",
-      color: "#ffa600", bgColor: "rgba(255,166,0,0.1)", borderColor: "rgba(255,166,0,0.3)",
+      icon: (
+        <IconCircle bgColor="rgba(245,158,11,0.10)" borderColor="rgba(245,158,11,0.25)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
+          </svg>
+        </IconCircle>
+      ),
+      value: gasCount ?? 0,
+      label: "Gas-Lieferstellen",
+      color: "#f59e0b",
       href: "/admin/customers?energie=Gas",
     },
     {
-      icon: <svg width="18" height="18" viewBox="0 0 24 24" {...iconStyle}><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21V12h6v9"/></svg>,
-      value: orgCount ?? 0, label: "Hausverwaltungen",
-      color: "var(--text-muted)", bgColor: "rgba(139,148,158,0.1)", borderColor: "var(--border)",
+      icon: (
+        <IconCircle bgColor="rgba(139,148,158,0.10)" borderColor="rgba(139,148,158,0.20)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21V12h6v9"/>
+          </svg>
+        </IconCircle>
+      ),
+      value: orgCount ?? 0,
+      label: "Hausverwaltungen",
+      color: "var(--text-muted)",
       href: "/admin/customers",
     },
     {
-      icon: <svg width="18" height="18" viewBox="0 0 24 24" {...iconStyle}><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>,
-      value: fgFinanzCount ?? 0, label: "FG-Finanz-Verträge",
-      color: "#a78bfa", bgColor: "rgba(167,139,250,0.1)", borderColor: "rgba(167,139,250,0.3)",
+      icon: (
+        <IconCircle bgColor="rgba(139,92,246,0.10)" borderColor="rgba(139,92,246,0.25)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+          </svg>
+        </IconCircle>
+      ),
+      value: fgFinanzCount ?? 0,
+      label: "FG-Finanz-Verträge",
+      color: "#8b5cf6",
       href: "/admin/opportunities",
     },
     {
-      icon: <svg width="18" height="18" viewBox="0 0 24 24" {...iconStyle}><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>,
-      value: openPot, label: "Offene FG-Potenziale",
-      color: openPot > 0 ? "#ffa600" : "#58a6ff",
-      bgColor: openPot > 0 ? "rgba(255,166,0,0.1)" : "rgba(88,166,255,0.1)",
-      borderColor: openPot > 0 ? "rgba(255,166,0,0.3)" : "rgba(88,166,255,0.3)",
+      icon: (
+        <IconCircle
+          bgColor={openPot > 0 ? "rgba(245,158,11,0.10)" : "rgba(88,166,255,0.10)"}
+          borderColor={openPot > 0 ? "rgba(245,158,11,0.25)" : "rgba(88,166,255,0.25)"}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={openPot > 0 ? "#f59e0b" : "#58a6ff"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/>
+          </svg>
+        </IconCircle>
+      ),
+      value: openPot,
+      label: "Offene FG-Potenziale",
+      color: openPot > 0 ? "#f59e0b" : "#58a6ff",
       href: "/admin/opportunities",
     },
   ]
@@ -183,15 +248,15 @@ export default async function AppDashboardPage() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
 
-      {/* ── KPI Grid (1fr 1fr 1fr 2fr) — separate cards wie Kundenportal ────── */}
+      {/* ── KPI Grid (1fr 1fr 1fr 2fr) ── */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 2fr", gap: "var(--space-5)", alignItems: "stretch" }}>
         {kpis.slice(0, 3).map((kpi, idx) => (
           <KPICardLink key={kpi.label} href={kpi.href} index={idx}>
             <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
-              <div style={{ color: kpi.color, flexShrink: 0 }}>{kpi.icon}</div>
+              {kpi.icon}
               <span style={{ fontSize: "var(--text-sm)", color: "var(--text)", fontWeight: 500 }}>{kpi.label}</span>
             </div>
-            <div style={{ fontSize: "var(--text-3xl)", fontWeight: 800, color: "var(--text)", lineHeight: 1, textAlign: "center" }}>
+            <div style={{ fontSize: "var(--text-3xl)", fontWeight: 800, color: kpi.color, lineHeight: 1, textAlign: "center" }}>
               {kpi.value.toLocaleString("de-DE")}
             </div>
             <div style={{ fontSize: "var(--text-xs)", color: "var(--text)", textAlign: "center", opacity: 0.7 }}>
@@ -200,31 +265,58 @@ export default async function AppDashboardPage() {
           </KPICardLink>
         ))}
 
-        {/* Wide summary card */}
-        <KPICardLink href="/admin/customers" index={3} style={{ gap: "var(--space-4)" }}>
+        {/* Wide summary card with blue left accent bar */}
+        <KPICardLink href="/admin/customers" index={3} style={{
+          gap: "var(--space-4)",
+          borderLeft: "3px solid #3b82f6",
+          borderColor: "rgba(59,130,246,0.10)",
+        }}>
           <div style={{ display: "flex", alignItems: "baseline", gap: "var(--space-3)", flexWrap: "wrap" }}>
-            <span style={{ fontSize: "var(--text-3xl)", fontWeight: 800, lineHeight: 1 }}>
+            <span style={{ fontSize: "var(--text-3xl)", fontWeight: 800, lineHeight: 1, color: "var(--text-bright)" }}>
               {total.toLocaleString("de-DE")}
             </span>
             <span style={{ fontSize: "var(--text-sm)", color: "var(--text)", opacity: 0.7 }}>Objekte</span>
             <span style={{ color: "var(--border)" }}>|</span>
-            <span style={{ fontSize: "var(--text-3xl)", fontWeight: 800, lineHeight: 1 }}>
+            <span style={{ fontSize: "var(--text-3xl)", fontWeight: 800, lineHeight: 1, color: "var(--text-bright)" }}>
               {(totalLieferstellen ?? 0).toLocaleString("de-DE")}
             </span>
             <span style={{ fontSize: "var(--text-sm)", color: "var(--text)", opacity: 0.7 }}>Lieferstellen</span>
           </div>
           <div style={{ display: "flex", gap: "var(--space-5)", flexWrap: "wrap" }}>
             <span style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>
-              <span style={{ color: "#a78bfa", fontWeight: 600 }}>{fgFinanzCount ?? 0}</span> FG-Finanz
+              <span style={{ color: "#8b5cf6", fontWeight: 600 }}>{fgFinanzCount ?? 0}</span> FG-Finanz
             </span>
             <span style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>
-              <span style={{ color: openPot > 0 ? "#ffa600" : "#58a6ff", fontWeight: 600 }}>{openPot}</span> Potenziale offen
+              <span style={{ color: openPot > 0 ? "#f59e0b" : "#58a6ff", fontWeight: 600 }}>{openPot}</span> Potenziale offen
             </span>
+          </div>
+
+          {/* Progress bar */}
+          <div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+              <span style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>
+                Vertragsabdeckung
+              </span>
+              <span style={{ fontSize: "var(--text-xs)", fontWeight: 700, color: "#58a6ff" }}>
+                {total > 0 ? "100%" : "0%"}
+              </span>
+            </div>
+            <div style={{ height: "6px", background: "var(--border)", borderRadius: "999px", overflow: "hidden" }}>
+              <div
+                style={{
+                  width: total > 0 ? "100%" : "0%",
+                  height: "100%",
+                  background: "linear-gradient(90deg, #3b82f6, #60a5fa)",
+                  borderRadius: "999px",
+                  transition: "width 1s ease",
+                }}
+              />
+            </div>
           </div>
         </KPICardLink>
       </div>
 
-      {/* ── Zuletzt hinzugefügte Objekte ─────────────────────────────────────── */}
+      {/* ── Zuletzt hinzugefügte Objekte ── */}
       <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", overflow: "hidden" }}>
         <div style={{ padding: "var(--space-4) var(--space-6)", borderBottom: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <h2 style={{ fontSize: "var(--text-base)", fontWeight: 600 }}>Zuletzt hinzugefügte Objekte</h2>
@@ -282,7 +374,7 @@ export default async function AppDashboardPage() {
                   const ageMs     = now.getTime() - createdMs
                   const ageDays   = Math.floor(ageMs / (24 * 60 * 60 * 1000))
                   const ageLabel  = ageDays === 0 ? "Heute" : ageDays === 1 ? "Gestern" : `${ageDays}T`
-                  const ageColor  = ageDays === 0 ? "#3fb950" : ageDays <= 7 ? "#58a6ff" : ageDays <= 30 ? "#ffa600" : "var(--text-muted)"
+                  const ageColor  = ageDays === 0 ? "#3fb950" : ageDays <= 7 ? "#58a6ff" : ageDays <= 30 ? "#f59e0b" : "var(--text-muted)"
 
                   const monoMuted: React.CSSProperties = {
                     fontFamily: "monospace", fontSize: "var(--text-xs)", color: "var(--text-muted)",
@@ -300,12 +392,12 @@ export default async function AppDashboardPage() {
                         <a href={`/admin/customers/${row.id}`} style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", textDecoration: "none", color: "inherit" }}>
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img src="/building-placeholder.jpg" alt="Gebäude" style={{ width: "40px", height: "40px", borderRadius: "var(--radius-md)", objectFit: "cover", flexShrink: 0, border: "1px solid var(--border)" }} />
-                          <span style={{ fontWeight: 600, color: "#ffffff" }}>{objektLabel}</span>
+                          <span style={{ fontWeight: 600, color: "var(--text-bright)" }}>{objektLabel}</span>
                         </a>
                       </td>
 
                       {/* Adresse */}
-                      <td style={{ padding: "var(--space-3) var(--space-4)", color: "rgba(255,255,255,0.7)", fontSize: "var(--text-xs)", whiteSpace: "nowrap" }}>
+                      <td style={{ padding: "var(--space-3) var(--space-4)", color: "var(--text-muted)", fontSize: "var(--text-xs)", whiteSpace: "nowrap" }}>
                         {(row.postal_code || row.city) ? (
                           <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.3 }}>
                             {row.postal_code && <span>{row.postal_code}</span>}
@@ -333,7 +425,7 @@ export default async function AppDashboardPage() {
                       <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
                         {stromRec?.neuer_versorger ? (
                           <div style={{ display: "flex", flexDirection: "column", gap: "1px" }}>
-                            <span style={{ fontSize: "var(--text-xs)", fontWeight: 500, color: "#ffffff" }}>{stromRec.neuer_versorger}</span>
+                            <span style={{ fontSize: "var(--text-xs)", fontWeight: 500, color: "var(--text-bright)" }}>{stromRec.neuer_versorger}</span>
                             {stromRec.neu_ap != null && (
                               <span style={{ fontSize: "var(--text-xs)", color: "#58a6ff" }}>
                                 {stromRec.neu_ap.toLocaleString("de-DE")} ct/kWh
@@ -347,9 +439,9 @@ export default async function AppDashboardPage() {
                       <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
                         {gasRec?.neuer_versorger ? (
                           <div style={{ display: "flex", flexDirection: "column", gap: "1px" }}>
-                            <span style={{ fontSize: "var(--text-xs)", fontWeight: 500, color: "#ffffff" }}>{gasRec.neuer_versorger}</span>
+                            <span style={{ fontSize: "var(--text-xs)", fontWeight: 500, color: "var(--text-bright)" }}>{gasRec.neuer_versorger}</span>
                             {gasRec.neu_ap != null && (
-                              <span style={{ fontSize: "var(--text-xs)", color: "#ffa600" }}>
+                              <span style={{ fontSize: "var(--text-xs)", color: "#f59e0b" }}>
                                 {gasRec.neu_ap.toLocaleString("de-DE")} ct/kWh
                               </span>
                             )}

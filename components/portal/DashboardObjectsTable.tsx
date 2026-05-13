@@ -9,7 +9,6 @@ interface TelesonRecord {
   neu_ap:          number | null
   status:          string | null
   malo:            string | null
-  zaehlernummer:   string | null
   created_at:      string | null
 }
 
@@ -71,19 +70,10 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
 
   return (
     <div style={{ overflowX: "auto" }}>
-      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "var(--text-sm)", tableLayout: "fixed" }}>
-          <colgroup>
-            <col style={{ width: "22%" }} />
-            <col style={{ width: "14%" }} />
-            <col style={{ width: "17%" }} />
-            <col style={{ width: "17%" }} />
-            <col style={{ width: "13%" }} />
-            <col style={{ width: "15%" }} />
-            <col style={{ width: "2%" }} />
-          </colgroup>
+      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "var(--text-sm)" }}>
         <thead>
           <tr style={{ borderBottom: "1px solid var(--border)" }}>
-            {["Objekt", "Adresse", "Strom-Tarif", "Gas-Tarif", "Status", "Zählernummer", ""].map(h => (
+            {["Objekt", "Adresse", "Strom-Tarif", "Gas-Tarif", "Status", "Lieferstelle", ""].map(h => (
               <th key={h} style={{
                 padding:    "var(--space-3) var(--space-4)",
                 textAlign:  "left",
@@ -91,7 +81,6 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
                 color:      "var(--text-muted)",
                 fontSize:   "var(--text-xs)",
                 whiteSpace: "nowrap",
-                overflow:   "hidden",
               }}>{h}</th>
             ))}
           </tr>
@@ -101,7 +90,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
             const recs     = row.teleson_records ?? []
             const stromRec = recs.find(r => r.energie?.toLowerCase() === "strom") ?? null
             const gasRec   = recs.find(r => r.energie?.toLowerCase() === "gas")   ?? null
-            const malo     = recs.map(r => r.zaehlernummer).find(Boolean) ?? null
+            const malo     = recs.map(r => r.malo).find(Boolean) ?? null
             const addr     = [row.postal_code, row.city].filter(Boolean).join(" ") || null
             const href     = `/portal/objects/${row.id}`
             const isActive = row.status === "active"
@@ -110,26 +99,25 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
               <HoverRow key={row.id} href={href} isLast={idx === objects.length - 1}>
                 <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
                   <a href={href} style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", textDecoration: "none", color: "inherit" }}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src="/building-placeholder.jpg"
-                      alt="Gebäude"
-                      style={{
-                        width:        "44px",
-                        height:       "44px",
-                        borderRadius: "var(--radius-md)",
-                        objectFit:    "cover",
-                        flexShrink:   0,
-                        border:       "1px solid var(--border)",
-                      }}
-                    />
-                    <span style={{ fontWeight: 600, color: "#ffffff" }}>
+                    <div style={{
+                      width:          "40px",
+                      height:         "40px",
+                      borderRadius:   "var(--radius-md)",
+                      background:     "rgba(88,166,255,0.08)",
+                      border:         "1px solid var(--border)",
+                      display:        "flex",
+                      alignItems:     "center",
+                      justifyContent: "center",
+                      flexShrink:     0,
+                      fontSize:       "18px",
+                    }}>🏢</div>
+                    <span style={{ fontWeight: 600, color: "var(--primary-bright)" }}>
                       {getStreet(row.full_name)}
                     </span>
                   </a>
                 </td>
 
-                <td style={{ padding: "var(--space-3) var(--space-4)", color: "rgba(255,255,255,0.75)", fontSize: "var(--text-xs)", whiteSpace: "nowrap" }}>
+                <td style={{ padding: "var(--space-3) var(--space-4)", color: "var(--text-muted)", fontSize: "var(--text-xs)", whiteSpace: "nowrap" }}>
                   {addr ? (
                     <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.4 }}>
                       {row.postal_code && <span>{row.postal_code}</span>}
@@ -141,7 +129,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
                 <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
                   {stromRec?.neuer_versorger ? (
                     <div style={{ display: "flex", flexDirection: "column", gap: "1px" }}>
-                      <span style={{ fontSize: "var(--text-xs)", fontWeight: 600, color: "#ffffff" }}>{stromRec.neuer_versorger}</span>
+                      <span style={{ fontSize: "var(--text-xs)", fontWeight: 600, color: "#58a6ff" }}>{stromRec.neuer_versorger}</span>
                       {stromRec.neu_ap != null && (
                         <span style={{ fontSize: "10px", color: "#58a6ff", opacity: 0.8 }}>
                           {stromRec.neu_ap.toLocaleString("de-DE")} ct/kWh
@@ -154,7 +142,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
                 <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
                   {gasRec?.neuer_versorger ? (
                     <div style={{ display: "flex", flexDirection: "column", gap: "1px" }}>
-                      <span style={{ fontSize: "var(--text-xs)", fontWeight: 600, color: "#ffffff" }}>{gasRec.neuer_versorger}</span>
+                      <span style={{ fontSize: "var(--text-xs)", fontWeight: 600, color: "#ffa600" }}>{gasRec.neuer_versorger}</span>
                       {gasRec.neu_ap != null && (
                         <span style={{ fontSize: "10px", color: "#ffa600", opacity: 0.8 }}>
                           {gasRec.neu_ap.toLocaleString("de-DE")} ct/kWh
