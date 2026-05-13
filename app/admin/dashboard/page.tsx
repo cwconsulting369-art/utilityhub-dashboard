@@ -99,8 +99,8 @@ function IconCircle({
   return (
     <div
       style={{
-        width: "36px",
-        height: "36px",
+        width: "32px",
+        height: "32px",
         borderRadius: "50%",
         background: bgColor,
         border: `1px solid ${borderColor}`,
@@ -153,83 +153,7 @@ export default async function AppDashboardPage() {
 
   const total = objectCount ?? 0
 
-  const greeting = profile?.full_name ? `Guten Tag, ${profile.full_name}` : "Guten Tag"
-
   const openPot = offenePotenziale ?? 0
-
-  const kpis = [
-    {
-      icon: (
-        <IconCircle bgColor="rgba(88,166,255,0.10)" borderColor="rgba(88,166,255,0.25)">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#58a6ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-          </svg>
-        </IconCircle>
-      ),
-      value: stromCount ?? 0,
-      label: "Strom-Lieferstellen",
-      sub: "Lieferstellen",
-      color: "var(--text-bright)",
-      href: "/admin/customers?energie=Strom",
-    },
-    {
-      icon: (
-        <IconCircle bgColor="rgba(245,158,11,0.10)" borderColor="rgba(245,158,11,0.25)">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
-          </svg>
-        </IconCircle>
-      ),
-      value: gasCount ?? 0,
-      label: "Gas-Lieferstellen",
-      sub: "Lieferstellen",
-      color: "var(--text-bright)",
-      href: "/admin/customers?energie=Gas",
-    },
-    {
-      icon: (
-        <IconCircle bgColor="rgba(139,148,158,0.10)" borderColor="rgba(139,148,158,0.20)">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21V12h6v9"/>
-          </svg>
-        </IconCircle>
-      ),
-      value: orgCount ?? 0,
-      label: "Hausverwaltungen",
-      sub: "Verwaltungen",
-      color: "var(--text-bright)",
-      href: "/admin/customers",
-    },
-    {
-      icon: (
-        <IconCircle bgColor="rgba(139,92,246,0.10)" borderColor="rgba(139,92,246,0.25)">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
-          </svg>
-        </IconCircle>
-      ),
-      value: fgFinanzCount ?? 0,
-      label: "FG-Finanz-Verträge",
-      color: "#8b5cf6",
-      href: "/admin/opportunities",
-    },
-    {
-      icon: (
-        <IconCircle
-          bgColor={openPot > 0 ? "rgba(245,158,11,0.10)" : "rgba(88,166,255,0.10)"}
-          borderColor={openPot > 0 ? "rgba(245,158,11,0.25)" : "rgba(88,166,255,0.25)"}
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={openPot > 0 ? "#f59e0b" : "#58a6ff"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/>
-          </svg>
-        </IconCircle>
-      ),
-      value: openPot,
-      label: "Offene FG-Potenziale",
-      color: openPot > 0 ? "#f59e0b" : "#58a6ff",
-      href: "/admin/opportunities",
-    },
-  ]
 
   type RecentRow = {
     id: string; full_name: string; status: string
@@ -248,63 +172,140 @@ export default async function AppDashboardPage() {
     customer_identities: { system: string; external_id: string }[] | null
   }
 
+  const serifNumber: React.CSSProperties = {
+    fontFamily: "var(--font-serif)",
+    fontSize: "28px",
+    fontWeight: 400,
+    color: "var(--text-bright)",
+    lineHeight: 1,
+    textAlign: "center",
+  }
+
+  const serifNumberSmall: React.CSSProperties = {
+    fontFamily: "var(--font-serif)",
+    fontSize: "24px",
+    fontWeight: 400,
+    color: "var(--text-bright)",
+    lineHeight: 1,
+  }
+
+  const kpiSub: React.CSSProperties = {
+    fontSize: "11px",
+    color: "var(--text-faint)",
+    textAlign: "center",
+  }
+
+  const kpiLabel: React.CSSProperties = {
+    fontSize: "13px",
+    color: "var(--text-muted)",
+    fontWeight: 500,
+  }
+
+  const monoMuted: React.CSSProperties = {
+    fontFamily: "var(--font-mono)",
+    fontSize: "11px",
+    color: "var(--text-muted)",
+  }
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
 
       {/* ── KPI Grid (1fr 1fr 1fr 2fr) ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 2fr", gap: "var(--space-5)", alignItems: "stretch" }}>
-        {kpis.slice(0, 3).map((kpi, idx) => (
-          <KPICardLink key={kpi.label} href={kpi.href} index={idx}>
-            <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
-              {kpi.icon}
-              <span style={{ fontSize: "var(--text-sm)", color: "var(--text)", fontWeight: 500 }}>{kpi.label}</span>
-            </div>
-            <div style={{ fontSize: "var(--text-3xl)", fontWeight: 800, color: kpi.color, lineHeight: 1, textAlign: "center" }}>
-              {kpi.value.toLocaleString("de-DE")}
-            </div>
-            <div style={{ fontSize: "var(--text-xs)", color: "var(--text)", textAlign: "center", opacity: 0.7 }}>
-              {kpi.sub}
-            </div>
-          </KPICardLink>
-        ))}
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr 1fr 2fr",
+        gap: "16px",
+        alignItems: "stretch",
+      }}>
+        {/* Card 1 - Strom */}
+        <KPICardLink href="/admin/customers?energie=Strom" index={0}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <IconCircle bgColor="rgba(88,166,255,0.10)" borderColor="rgba(88,166,255,0.20)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#58a6ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+              </svg>
+            </IconCircle>
+            <span style={kpiLabel}>Strom-Lieferstellen</span>
+          </div>
+          <div style={serifNumber}>
+            {(stromCount ?? 0).toLocaleString("de-DE")}
+          </div>
+          <div style={kpiSub}>Lieferstellen</div>
+        </KPICardLink>
 
-        {/* Wide summary card with blue left accent bar */}
-        <KPICardLink href="/admin/customers" index={3} style={{
-          gap: "var(--space-4)",
-          borderLeft: "3px solid #3b82f6",
-          borderColor: "rgba(59,130,246,0.10)",
-        }}>
+        {/* Card 2 - Gas */}
+        <KPICardLink href="/admin/customers?energie=Gas" index={1}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <IconCircle bgColor="rgba(245,158,11,0.10)" borderColor="rgba(245,158,11,0.20)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
+              </svg>
+            </IconCircle>
+            <span style={kpiLabel}>Gas-Lieferstellen</span>
+          </div>
+          <div style={serifNumber}>
+            {(gasCount ?? 0).toLocaleString("de-DE")}
+          </div>
+          <div style={kpiSub}>Lieferstellen</div>
+        </KPICardLink>
+
+        {/* Card 3 - Hausverwaltungen */}
+        <KPICardLink href="/admin/customers" index={2}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <IconCircle bgColor="rgba(255,255,255,0.03)" borderColor="var(--border-subtle)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21V12h6v9"/>
+              </svg>
+            </IconCircle>
+            <span style={kpiLabel}>Hausverwaltungen</span>
+          </div>
+          <div style={serifNumber}>
+            {(orgCount ?? 0).toLocaleString("de-DE")}
+          </div>
+          <div style={kpiSub}>Verwaltungen</div>
+        </KPICardLink>
+
+        {/* Card 4 - Summary (wide) */}
+        <KPICardLink
+          href="/admin/customers"
+          index={3}
+          style={{
+            borderLeft: "2px solid var(--accent)",
+            borderColor: "rgba(59,130,246,0.10)",
+            justifyContent: "center",
+          }}
+        >
+          {/* Top row: Objekte | Lieferstellen */}
           <div style={{ display: "flex", alignItems: "baseline", gap: "var(--space-3)", flexWrap: "wrap" }}>
-            <span style={{ fontSize: "var(--text-3xl)", fontWeight: 800, lineHeight: 1, color: "var(--text-bright)" }}>
+            <span style={serifNumberSmall}>
               {total.toLocaleString("de-DE")}
             </span>
-            <span style={{ fontSize: "var(--text-sm)", color: "var(--text)", opacity: 0.7 }}>Objekte</span>
+            <span style={{ fontSize: "13px", color: "var(--text-muted)" }}>Objekte</span>
             <span style={{ color: "var(--border)" }}>|</span>
-            <span style={{ fontSize: "var(--text-3xl)", fontWeight: 800, lineHeight: 1, color: "var(--text-bright)" }}>
+            <span style={serifNumberSmall}>
               {(totalLieferstellen ?? 0).toLocaleString("de-DE")}
             </span>
-            <span style={{ fontSize: "var(--text-sm)", color: "var(--text)", opacity: 0.7 }}>Lieferstellen</span>
+            <span style={{ fontSize: "13px", color: "var(--text-muted)" }}>Lieferstellen</span>
           </div>
+
+          {/* Second row: FG-Finanz + Potenziale */}
           <div style={{ display: "flex", gap: "var(--space-5)", flexWrap: "wrap" }}>
-            <span style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>
-              <span style={{ color: "#8b5cf6", fontWeight: 600 }}>{fgFinanzCount ?? 0}</span> FG-Finanz
+            <span style={{ fontSize: "11px", color: "var(--text-muted)" }}>
+              <span style={{ color: "#a78bfa", fontWeight: 600 }}>{fgFinanzCount ?? 0}</span>{" "}FG-Finanz
             </span>
-            <span style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>
-              <span style={{ color: openPot > 0 ? "#f59e0b" : "#58a6ff", fontWeight: 600 }}>{openPot}</span> Potenziale offen
+            <span style={{ fontSize: "11px", color: "var(--text-muted)" }}>
+              <span style={{ color: openPot > 0 ? "#f59e0b" : "#58a6ff", fontWeight: 600 }}>{openPot}</span>{" "}Potenziale offen
             </span>
           </div>
 
           {/* Progress bar */}
           <div>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
-              <span style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>
-                Vertragsabdeckung
-              </span>
-              <span style={{ fontSize: "var(--text-xs)", fontWeight: 700, color: "#58a6ff" }}>
-                {total > 0 ? "100%" : "0%"}
-              </span>
-            </div>
-            <div style={{ height: "6px", background: "var(--border)", borderRadius: "999px", overflow: "hidden" }}>
+            <div style={{
+              height: "6px",
+              background: "var(--border-subtle)",
+              borderRadius: "999px",
+              overflow: "hidden",
+            }}>
               <div
                 style={{
                   width: total > 0 ? "100%" : "0%",
@@ -320,35 +321,64 @@ export default async function AppDashboardPage() {
       </div>
 
       {/* ── Zuletzt hinzugefügte Objekte ── */}
-      <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", overflow: "hidden" }}>
-        <div style={{ padding: "var(--space-4) var(--space-6)", borderBottom: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <h2 style={{ fontSize: "var(--text-base)", fontWeight: 600 }}>Zuletzt hinzugefügte Objekte</h2>
-          <a href="/admin/customers" style={{ fontSize: "var(--text-sm)", color: "var(--primary-bright)", textDecoration: "none" }}>Alle anzeigen →</a>
+      <div className="table-container">
+        {/* Header bar */}
+        <div style={{
+          padding: "16px 20px",
+          borderBottom: "1px solid var(--border)",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}>
+          <h2 style={{ fontSize: "16px", fontWeight: 600, color: "var(--text-bright)", margin: 0 }}>
+            Zuletzt hinzugefügte Objekte
+          </h2>
+          <a
+            href="/admin/customers"
+            className="link-muted"
+            style={{
+              fontSize: "13px",
+              color: "var(--text-muted)",
+              textDecoration: "none",
+              transition: "color 150ms ease",
+            }}
+          >
+            Alle anzeigen →
+          </a>
         </div>
 
         {recentCustomers && recentCustomers.length > 0 ? (
           <div style={{ overflowX: "auto" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "var(--text-sm)" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px" }}>
               <thead>
-                <tr style={{ borderBottom: "1px solid var(--border)" }}>
+                <tr style={{ background: "rgba(255,255,255,0.015)", borderBottom: "1px solid var(--border)" }}>
                   {[
                     { label: "Objekt",              align: "left"  as const },
                     { label: "Adresse",             align: "left"  as const },
                     { label: "Malo",                align: "left"  as const },
                     { label: "Zählernummer",        align: "left"  as const },
                     { label: "KNR",                 align: "left"  as const },
-                    { label: "Strom-Tarif",       align: "left"  as const },
-                    { label: "Gas-Tarif",         align: "left"  as const },
+                    { label: "Strom-Tarif",         align: "left"  as const },
+                    { label: "Gas-Tarif",           align: "left"  as const },
                     { label: "Lieferstelle Status", align: "left"  as const },
                     { label: "Typ",                 align: "left"  as const },
                     { label: "Status",              align: "right" as const },
                   ].map(h => (
-                    <th key={h.label} style={{
-                      padding: "var(--space-3) var(--space-4)",
-                      textAlign: h.align, fontWeight: 500,
-                      color: "var(--text-muted)", fontSize: "var(--text-xs)",
-                      whiteSpace: "nowrap",
-                    }}>{h.label}</th>
+                    <th
+                      key={h.label}
+                      style={{
+                        padding: "10px 16px",
+                        textAlign: h.align,
+                        fontWeight: 500,
+                        color: "var(--text-muted)",
+                        fontSize: "11px",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.06em",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {h.label}
+                    </th>
                   ))}
                 </tr>
               </thead>
@@ -379,28 +409,50 @@ export default async function AppDashboardPage() {
                   const ageLabel  = ageDays === 0 ? "Heute" : ageDays === 1 ? "Gestern" : `${ageDays}T`
                   const ageColor  = ageDays === 0 ? "#3fb950" : ageDays <= 7 ? "#58a6ff" : ageDays <= 30 ? "#f59e0b" : "var(--text-muted)"
 
-                  const monoMuted: React.CSSProperties = {
-                    fontFamily: "monospace", fontSize: "var(--text-xs)", color: "var(--text-muted)",
-                  }
-                  const dash = <span style={{ color: "var(--text-muted)", opacity: 0.4 }}>—</span>
+                  const dash = <span style={{ color: "var(--text-faint)" }}>—</span>
 
                   return (
                     <FadeInRow
                       key={row.id}
                       index={idx}
-                      style={{ borderBottom: idx < (recentCustomers?.length ?? 0) - 1 ? "1px solid var(--border)" : undefined }}
+                      style={{
+                        borderBottom: "1px solid var(--border-subtle)",
+                        transition: "background 150ms ease",
+                      }}
                     >
                       {/* Objekt */}
-                      <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
-                        <a href={`/admin/customers/${row.id}`} style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", textDecoration: "none", color: "inherit" }}>
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img src="/building-placeholder.jpg" alt="Gebäude" style={{ width: "40px", height: "40px", borderRadius: "var(--radius-md)", objectFit: "cover", flexShrink: 0, border: "1px solid var(--border)" }} />
+                      <td style={{ padding: "12px 16px", whiteSpace: "nowrap" }}>
+                        <a
+                          href={`/admin/customers/${row.id}`}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "10px",
+                            textDecoration: "none",
+                            color: "inherit",
+                          }}
+                        >
+                          <div style={{
+                            width: "36px",
+                            height: "36px",
+                            borderRadius: "var(--radius-md)",
+                            background: "var(--surface)",
+                            border: "1px solid var(--border-subtle)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            flexShrink: 0,
+                          }}>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21V12h6v9"/>
+                            </svg>
+                          </div>
                           <span style={{ fontWeight: 600, color: "var(--text-bright)" }}>{objektLabel}</span>
                         </a>
                       </td>
 
                       {/* Adresse */}
-                      <td style={{ padding: "var(--space-3) var(--space-4)", color: "var(--text-muted)", fontSize: "var(--text-xs)", whiteSpace: "nowrap" }}>
+                      <td style={{ padding: "12px 16px", color: "var(--text-muted)", fontSize: "12px", whiteSpace: "nowrap" }}>
                         {(row.postal_code || row.city) ? (
                           <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.3 }}>
                             {row.postal_code && <span>{row.postal_code}</span>}
@@ -410,27 +462,29 @@ export default async function AppDashboardPage() {
                       </td>
 
                       {/* Malo */}
-                      <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
+                      <td style={{ padding: "12px 16px", whiteSpace: "nowrap" }}>
                         {malo ? <span style={monoMuted}>{malo}</span> : dash}
                       </td>
 
                       {/* Zählernummer */}
-                      <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
+                      <td style={{ padding: "12px 16px", whiteSpace: "nowrap" }}>
                         {zNr ? <span style={monoMuted}>{zNr}</span> : dash}
                       </td>
 
                       {/* KNR */}
-                      <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
+                      <td style={{ padding: "12px 16px", whiteSpace: "nowrap" }}>
                         {knr ? <span style={monoMuted}>{knr}</span> : dash}
                       </td>
 
                       {/* Strom-Tarif */}
-                      <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
+                      <td style={{ padding: "12px 16px", whiteSpace: "nowrap" }}>
                         {stromRec?.neuer_versorger ? (
                           <div style={{ display: "flex", flexDirection: "column", gap: "1px" }}>
-                            <span style={{ fontSize: "var(--text-xs)", fontWeight: 500, color: "var(--text-bright)" }}>{stromRec.neuer_versorger}</span>
+                            <span style={{ fontSize: "12px", fontWeight: 500, color: "var(--text-bright)" }}>
+                              {stromRec.neuer_versorger}
+                            </span>
                             {stromRec.neu_ap != null && (
-                              <span style={{ fontSize: "var(--text-xs)", color: "#58a6ff" }}>
+                              <span style={{ fontSize: "11px", color: "#58a6ff" }}>
                                 {stromRec.neu_ap.toLocaleString("de-DE")} ct/kWh
                               </span>
                             )}
@@ -439,12 +493,14 @@ export default async function AppDashboardPage() {
                       </td>
 
                       {/* Gas-Tarif */}
-                      <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
+                      <td style={{ padding: "12px 16px", whiteSpace: "nowrap" }}>
                         {gasRec?.neuer_versorger ? (
                           <div style={{ display: "flex", flexDirection: "column", gap: "1px" }}>
-                            <span style={{ fontSize: "var(--text-xs)", fontWeight: 500, color: "var(--text-bright)" }}>{gasRec.neuer_versorger}</span>
+                            <span style={{ fontSize: "12px", fontWeight: 500, color: "var(--text-bright)" }}>
+                              {gasRec.neuer_versorger}
+                            </span>
                             {gasRec.neu_ap != null && (
-                              <span style={{ fontSize: "var(--text-xs)", color: "#f59e0b" }}>
+                              <span style={{ fontSize: "11px", color: "#f59e0b" }}>
                                 {gasRec.neu_ap.toLocaleString("de-DE")} ct/kWh
                               </span>
                             )}
@@ -453,30 +509,33 @@ export default async function AppDashboardPage() {
                       </td>
 
                       {/* Lieferstelle Status */}
-                      <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
+                      <td style={{ padding: "12px 16px", whiteSpace: "nowrap" }}>
                         {lieferStatus ? (
-                          <span style={{
-                            fontSize: "var(--text-xs)", fontWeight: 600,
-                            background: "rgba(139,148,158,0.1)", color: "var(--text-muted)",
-                            border: "1px solid var(--border)", borderRadius: "var(--radius-sm)",
-                            padding: "1px 7px",
-                          }}>{lieferStatus}</span>
+                          <span className="pill pill--inactive">
+                            {lieferStatus}
+                          </span>
                         ) : dash}
                       </td>
 
                       {/* Typ */}
-                      <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap" }}>
+                      <td style={{ padding: "12px 16px", whiteSpace: "nowrap" }}>
                         <span style={{
-                          background: "rgba(139,148,158,0.1)", color: "var(--text-muted)",
-                          border: "1px solid var(--border)", borderRadius: "var(--radius-sm)",
-                          padding: "1px 7px", fontSize: "10px", fontWeight: 600,
-                        }}>{objType === "weg" ? "WEG" : "Privat"}</span>
+                          background: "rgba(255,255,255,0.03)",
+                          color: "var(--text-muted)",
+                          border: "1px solid var(--border-subtle)",
+                          borderRadius: "var(--radius-sm)",
+                          padding: "2px 8px",
+                          fontSize: "10px",
+                          fontWeight: 600,
+                        }}>
+                          {objType === "weg" ? "WEG" : "Privat"}
+                        </span>
                       </td>
 
                       {/* Status + Alter */}
-                      <td style={{ padding: "var(--space-3) var(--space-4)", whiteSpace: "nowrap", textAlign: "right" }}>
+                      <td style={{ padding: "12px 16px", whiteSpace: "nowrap", textAlign: "right" }}>
                         <div style={{ display: "flex", flexDirection: "column", gap: "2px", alignItems: "flex-end" }}>
-                          <span style={{ fontSize: "var(--text-xs)", fontWeight: 600, color: statusColor }}>{statusLabel}</span>
+                          <span style={{ fontSize: "11px", fontWeight: 600, color: statusColor }}>{statusLabel}</span>
                           <span style={{ fontSize: "10px", fontWeight: 600, color: ageColor }}>{ageLabel}</span>
                         </div>
                       </td>
@@ -487,12 +546,12 @@ export default async function AppDashboardPage() {
             </table>
           </div>
         ) : (
-          <div style={{ padding: "var(--space-10)", textAlign: "center", color: "var(--text-muted)", fontSize: "var(--text-sm)" }}>
+          <div style={{ padding: "var(--space-10)", textAlign: "center", color: "var(--text-muted)", fontSize: "13px" }}>
             Noch keine Objekte vorhanden.{" "}
-            <a href="/admin/imports" style={{ color: "var(--primary-bright)" }}>Import starten →</a>
+            <a href="/admin/imports" style={{ color: "var(--accent)" }}>Import starten →</a>
           </div>
         )}
-        </div>
+      </div>
 
     </div>
   )
