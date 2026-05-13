@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
+import { PortalContactsSection } from "@/components/portal/PortalContactsSection"
 
 export const metadata = { title: "Support | UtilityHub" }
 
@@ -52,6 +53,9 @@ export default async function PortalContactsPage() {
           ))}
         </div>
       </section>
+
+      {/* ── Dynamische Ansprechpartner aus DB ── */}
+      <PortalContactsSection />
     </div>
   )
 }
