@@ -170,29 +170,6 @@ export default async function PortalDashboardPage() {
         gap: "var(--space-6)",
       }}
     >
-      {/* ── Begrüßung ── */}
-      <div>
-        <h1
-          style={{
-            fontSize: "var(--text-xl)",
-            fontWeight: 700,
-            marginBottom: "var(--space-1)",
-          }}
-        >
-          Willkommen
-          {displayName ? `, ${displayName}` : ""}
-        </h1>
-        <p
-          style={{
-            color: "var(--text-muted)",
-            fontSize: "var(--text-sm)",
-            margin: 0,
-          }}
-        >
-          {orgLabel}
-        </p>
-      </div>
-
       {/* ── KPI Cards ── */}
       <DashboardKPICards
         stromCount={stromCount}
