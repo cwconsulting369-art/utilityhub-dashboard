@@ -120,8 +120,6 @@ export default async function AppDashboardPage() {
   const { data: { user } } = await supabase.auth.getUser()
 
   const now = new Date()
-  const rowCount = recentCustomers?.length ?? 0
-  const cellPad  = rowCount <= 5 ? "18px 16px" : rowCount <= 10 ? "14px 16px" : "10px 16px"
 
   const [
     { data: profile },
@@ -152,6 +150,9 @@ export default async function AppDashboardPage() {
       .order("created_at", { ascending: false })
       .limit(15),
   ])
+
+  const rowCount = (recentCustomers as any[])?.length ?? 0
+  const cellPad  = rowCount <= 5 ? "18px 16px" : rowCount <= 10 ? "14px 16px" : "10px 16px"
 
   const total = objectCount ?? 0
 
