@@ -183,7 +183,7 @@ export default async function PortalDashboardPage() {
       />
       </div>
 
-      {/* ── Objekte Übersicht (3fr = 75%) ── */} (table-container) ── */}
+      {/* ── Objekte Übersicht (3fr = 75%) ── */}
       <div className="table-container" style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0 }}>
         <div
           style={{
