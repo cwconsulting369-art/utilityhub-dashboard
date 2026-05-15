@@ -134,13 +134,14 @@ export default async function PortalDashboardPage() {
       .eq("id", customerId)
       .single()
 
-    if (custRow) {
-      const recs = custRow.teleson_records ?? []
+    const typedRow = custRow as ObjRow | null
+    if (typedRow) {
+      const recs = typedRow.teleson_records ?? []
       stromCount   = recs.filter(r => r.energie?.toLowerCase() === "strom").length
       gasCount     = recs.filter(r => r.energie?.toLowerCase() === "gas").length
       totalObjects = 1
       totalLiefer  = recs.length
-      recentObjects = [custRow as ObjRow]
+      recentObjects = [typedRow]
     }
 
     /* fg finanz */
