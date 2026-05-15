@@ -296,7 +296,7 @@ export default function PortalNav({
           <div style={{ height: HEADER_H, flexShrink: 0 }} />
 
           {/* Nav items */}
-          <nav style={{ padding: "var(--space-3)", display: "flex", flexDirection: "column", gap: 2 }}>
+          <nav style={{ padding: "var(--space-3)", display: "flex", flexDirection: "column", gap: 6 }}>
             {items.map((item) => {
               const active = isActive(item.href)
               return (
@@ -306,14 +306,14 @@ export default function PortalNav({
                   style={{
                     display:        "flex",
                     alignItems:     "center",
-                    gap:            14,
-                    padding:        "18px 20px",
+                    gap:            16,
+                    padding:        "22px 24px",
                     borderRadius:   "var(--radius-sm)",
                     textDecoration: "none",
                     color:          active ? "var(--accent)" : "var(--text-muted)",
                     background:     active ? "var(--accent-dim)" : "transparent",
                     borderLeft:     active ? "2px solid var(--accent)" : "2px solid transparent",
-                    fontSize:       14,
+                    fontSize:       15,
                     fontWeight:     500,
                     transition:     "150ms",
                   }}
@@ -330,7 +330,7 @@ export default function PortalNav({
                     }
                   }}
                 >
-                  <span style={{ width: 20, display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+                  <span style={{ width: 22, display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
                     {item.icon}
                   </span>
                   <span>{item.label}</span>
@@ -380,7 +380,7 @@ export default function PortalNav({
                   paddingTop:     HEADER_H,
                 }}
               >
-                <nav style={{ padding: "var(--space-3)", display: "flex", flexDirection: "column", gap: 2 }}>
+                <nav style={{ padding: "var(--space-3)", display: "flex", flexDirection: "column", gap: 6 }}>
                   {items.map((item) => {
                     const active = isActive(item.href)
                     return (
@@ -391,17 +391,17 @@ export default function PortalNav({
                         style={{
                           display:        "flex",
                           alignItems:     "center",
-                          gap:            14,
-                          padding:        "18px 20px",
+                          gap:            16,
+                          padding:        "22px 24px",
                           borderRadius:   "var(--radius-sm)",
                           textDecoration: "none",
                           color:          active ? "var(--accent)" : "var(--text-muted)",
                           background:     active ? "var(--accent-dim)" : "transparent",
-                          fontSize:       14,
+                          fontSize:       15,
                           fontWeight:     500,
                         }}
                       >
-                        <span>{item.icon}</span>
+                        <span style={{ width: 22, display: "inline-flex", alignItems: "center", justifyContent: "center" }}>{item.icon}</span>
                         <span>{item.label}</span>
                       </Link>
                     )
