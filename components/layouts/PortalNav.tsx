@@ -38,8 +38,8 @@ interface PortalNavProps {
 /*  Constants                                                          */
 /* ------------------------------------------------------------------ */
 
-const HEADER_H      = 56
-const SIDEBAR_W     = 260
+const HEADER_H      = 72
+const SIDEBAR_W     = 280
 const BREAKPOINT_LG = 1024
 const BREAKPOINT_MD = 768
 
@@ -325,15 +325,15 @@ export default function PortalNav({
             {/* Logo Badge */}
             <div
               style={{
-                width:           36,
-                height:          36,
+                width:           44,
+                height:          44,
                 borderRadius:    "var(--radius-md)",
                 background:      "linear-gradient(135deg, #3b82f6, #60a5fa)",
                 display:         "flex",
                 alignItems:      "center",
                 justifyContent:  "center",
                 fontWeight:      800,
-                fontSize:        13,
+                fontSize:        16,
                 letterSpacing:   "-0.5px",
                 color:           "#fff",
                 flexShrink:      0,
@@ -345,7 +345,7 @@ export default function PortalNav({
             {/* Logo Text */}
             <div
               style={{
-                fontSize:     15,
+                fontSize:     18,
                 lineHeight:   1.2,
                 whiteSpace:   "nowrap",
               }}
@@ -656,7 +656,7 @@ export default function PortalNav({
         style={{
           display:    "flex",
           flex:       1,
-          minHeight:  0,
+          minHeight:  "100dvh",
           position:   "relative",
         }}
       >
@@ -774,10 +774,10 @@ export default function PortalNav({
                           style={{
                             display:        "flex",
                             alignItems:     "center",
-                            gap:            12,
-                            padding:        "10px 16px",
+                            gap:            16,
+                            padding:        "14px 20px",
                             borderRadius:   "var(--radius-sm)",
-                            fontSize:       13,
+                            fontSize:       15,
                             fontWeight:     active ? 600 : 500,
                             color:          active ? "var(--accent)" : "var(--text-muted)",
                             background:     active ? "var(--accent-dim)" : "transparent",
@@ -829,7 +829,7 @@ export default function PortalNav({
                               position:     "relative",
                               zIndex:       1,
                               flexShrink:   0,
-                              width:        18,
+                              width:        22,
                               textAlign:    "center",
                               display:      "inline-flex",
                               alignItems:   "center",
@@ -886,7 +886,7 @@ export default function PortalNav({
                   })}
 
                   {/* Push content to bottom */}
-                  <div style={{ flex: 1, minHeight: "var(--space-2)" }} />
+                  <div style={{ flex: 1, minHeight: "var(--space-8)" }} />
 
                   {/* Sidebar bottom slot (if provided) */}
                   {sidebarBottom && (
@@ -904,7 +904,7 @@ export default function PortalNav({
                   {portalType === "portal" && (
                     <div
                       style={{
-                        padding:      "var(--space-3) 0",
+                        padding:      "var(--space-4) 0",
                         borderTop:    "1px solid var(--border)",
                       }}
                     >

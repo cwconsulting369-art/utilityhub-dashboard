@@ -4,7 +4,7 @@ import {
   FadeInRow,
   KPICardLink,
 } from "./DashboardAnimations"
-export const dynamic  = "force-dynamic"
+
 export const metadata = { title: "Dashboard | UtilityHub Intern" }
 
 interface BatchErrorLogSummary {
@@ -148,7 +148,7 @@ export default async function AppDashboardPage() {
       )
       .not("full_name", "ilike", "% (Allgemein)")
       .order("created_at", { ascending: false })
-      .limit(5),
+      .limit(15),
   ])
 
   const total = objectCount ?? 0
@@ -208,7 +208,7 @@ export default async function AppDashboardPage() {
   }
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)", minHeight: "calc(100vh - 56px)" }}>
 
       {/* ── KPI Grid (1fr 1fr 1fr 2fr) ── */}
       <div style={{
@@ -321,7 +321,7 @@ export default async function AppDashboardPage() {
       </div>
 
       {/* ── Zuletzt hinzugefügte Objekte ── */}
-      <div className="table-container">
+      <div className="table-container" style={{ flex: 1 }}>
         {/* Header bar */}
         <div style={{
           padding: "16px 20px",
