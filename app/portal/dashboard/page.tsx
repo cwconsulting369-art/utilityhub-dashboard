@@ -168,7 +168,9 @@ export default async function PortalDashboardPage() {
         display: "flex",
         flexDirection: "column",
         gap: "var(--space-6)",
-        minHeight: "100%",
+        height: "100%",
+        flex: 1,
+        minHeight: 0,
       }}
     >
       {/* ── KPI Cards ── */}
@@ -289,7 +291,4 @@ export default async function PortalDashboardPage() {
       </div>
 
       {/* ── Ansprechpartner ── */}
-      <PortalContactsSection />
-    </div>
-  )
-}
+      <Portal
