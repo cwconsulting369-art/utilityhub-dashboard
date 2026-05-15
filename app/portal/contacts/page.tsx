@@ -64,59 +64,70 @@ export default async function SupportPage() {
         <div style={{ width: "100%", height: "1px", background: "var(--border)", marginTop: "16px" }} />
       </div>
 
-      {/* FG Finanz */}
-      <div style={{ position: "relative", zIndex: 1, marginBottom: "var(--space-6)" }}>
-        <span
-          style={{
-            fontSize: "11px",
-            fontWeight: 600,
-            textTransform: "uppercase",
-            letterSpacing: "0.08em",
-            color: "var(--accent)",
-            padding: "4px 10px",
-            borderRadius: "6px",
-            background: "rgba(59,130,246,0.08)",
-            border: "1px solid rgba(59,130,246,0.15)",
-            display: "inline-block",
-            marginBottom: "12px",
-          }}
-        >
-          FG Finanz
-        </span>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "16px" }}>
-          {allContacts
-            .filter((c) => c.role?.includes("FG Finanz"))
-            .map((c) => (
-              <Card key={c.id} contact={c} />
-            ))}
+      {/* 2-Spalten Layout: Links FG Finanz, Rechts Teleson */}
+      <div
+        style={{
+          position: "relative",
+          zIndex: 1,
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: "var(--space-6)",
+        }}
+      >
+        {/* Linke Spalte — FG Finanz */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)" }}>
+          <span
+            style={{
+              fontSize: "11px",
+              fontWeight: 600,
+              textTransform: "uppercase",
+              letterSpacing: "0.08em",
+              color: "var(--accent)",
+              padding: "4px 10px",
+              borderRadius: "6px",
+              background: "rgba(59,130,246,0.08)",
+              border: "1px solid rgba(59,130,246,0.15)",
+              display: "inline-block",
+              alignSelf: "flex-start",
+            }}
+          >
+            FG Finanz
+          </span>
+          <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)" }}>
+            {allContacts
+              .filter((c) => c.role?.includes("FG Finanz"))
+              .map((c) => (
+                <Card key={c.id} contact={c} />
+              ))}
+          </div>
         </div>
-      </div>
 
-      {/* Teleson */}
-      <div style={{ position: "relative", zIndex: 1, marginBottom: "var(--space-6)" }}>
-        <span
-          style={{
-            fontSize: "11px",
-            fontWeight: 600,
-            textTransform: "uppercase",
-            letterSpacing: "0.08em",
-            color: "var(--accent)",
-            padding: "4px 10px",
-            borderRadius: "6px",
-            background: "rgba(59,130,246,0.08)",
-            border: "1px solid rgba(59,130,246,0.15)",
-            display: "inline-block",
-            marginBottom: "12px",
-          }}
-        >
-          Teleson / UtilityHub
-        </span>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "16px" }}>
-          {allContacts
-            .filter((c) => !c.role?.includes("FG Finanz"))
-            .map((c) => (
-              <Card key={c.id} contact={c} />
-            ))}
+        {/* Rechte Spalte — Teleson / UtilityHub */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)" }}>
+          <span
+            style={{
+              fontSize: "11px",
+              fontWeight: 600,
+              textTransform: "uppercase",
+              letterSpacing: "0.08em",
+              color: "var(--accent)",
+              padding: "4px 10px",
+              borderRadius: "6px",
+              background: "rgba(59,130,246,0.08)",
+              border: "1px solid rgba(59,130,246,0.15)",
+              display: "inline-block",
+              alignSelf: "flex-start",
+            }}
+          >
+            Teleson / UtilityHub
+          </span>
+          <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)" }}>
+            {allContacts
+              .filter((c) => !c.role?.includes("FG Finanz"))
+              .map((c) => (
+                <Card key={c.id} contact={c} />
+              ))}
+          </div>
         </div>
       </div>
     </div>
