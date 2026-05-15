@@ -166,7 +166,7 @@ export default async function PortalDashboardPage() {
       style={{
         display: "flex",
         flexDirection: "column",
-        gap: 12,
+        gap: 10,
         height: "100%",
         minHeight: 0,
         overflow: "hidden",
@@ -174,7 +174,7 @@ export default async function PortalDashboardPage() {
       }}
     >
       {/* ── KPI Cards (fix ~110px) ── */}
-      <div style={{ flex: "0 0 110px", minHeight: 0 }}>
+      <div style={{ flex: "0 0 108px", minHeight: 0 }}>
         <DashboardKPICards
           stromCount={stromCount}
           gasCount={gasCount}
