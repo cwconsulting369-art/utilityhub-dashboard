@@ -41,8 +41,8 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
   }
 
   return (
-    <div style={{ overflow: "auto", height: "100%" }}>
-      <table style={{ width: "100%", height: "100%", borderCollapse: "collapse", fontSize: "var(--text-sm)" }}>
+    <div style={{ overflow: "hidden", height: "100%" }}>
+      <table style={{ width: "100%", height: "100%", borderCollapse: "separate", borderSpacing: 0, fontSize: "var(--text-sm)", tableLayout: "fixed" }}>
         <thead>
           <tr style={{ borderBottom: "1px solid var(--border-subtle)", background: "rgba(255,255,255,0.015)" }}>
             {["Objekt","Adresse","Malo","Zählernummer","KNR","Strom-Tarif","Gas-Tarif","Lieferstelle Status","Typ","Status"].map(h => (
@@ -50,7 +50,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
             ))}
           </tr>
         </thead>
-        <tbody style={{ height: "100%" }}>
+        <tbody style={{ height: "100%", display: "table-row-group" }}>
           {objects.map((row, idx) => {
             const recs = row.teleson_records ?? []
             const stromRec = recs.find(r => r.energie?.toLowerCase() === "strom") ?? null

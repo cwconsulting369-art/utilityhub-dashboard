@@ -328,10 +328,16 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1.8fr;
   gap: 12px;
+  height: 100%;
 }
 .kpi-card {
   padding: 12px 14px;
   gap: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+  overflow: hidden;
 }
 .kpi-header {
   display: flex;
@@ -363,6 +369,10 @@
   gap: 10px;
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
 }
 .summary-bar {
   position: absolute;

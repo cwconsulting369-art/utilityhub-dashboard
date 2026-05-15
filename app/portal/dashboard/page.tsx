@@ -165,14 +165,15 @@ export default async function PortalDashboardPage() {
     <div
       style={{
         display: "grid",
-        gridTemplateRows: "auto 1fr",
+        gridTemplateRows: "1fr 3fr",
         gap: "var(--space-6)",
         height: "100%",
         minHeight: 0,
       }}
     >
-      {/* ── KPI Cards ── */}
-      <DashboardKPICards
+      {/* ── KPI Cards (1fr = 25%) ── */}
+      <div style={{ minHeight: 0, overflow: "hidden" }}>
+        <DashboardKPICards
         stromCount={stromCount}
         gasCount={gasCount}
         orgFgFinanzCount={orgFgFinanzCount}
@@ -180,8 +181,9 @@ export default async function PortalDashboardPage() {
         totalLiefer={totalLiefer}
         allOptimized={allOptimized}
       />
+      </div>
 
-      {/* ── Objekte Übersicht (table-container) ── */}
+      {/* ── Objekte Übersicht (3fr = 75%) ── */} (table-container) ── */}
       <div className="table-container" style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0 }}>
         <div
           style={{
