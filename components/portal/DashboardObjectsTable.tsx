@@ -151,7 +151,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
               <th
                 key={h.label}
                 style={{
-                  padding: "{cellPad}",
+                  padding: cellPad,
                   textAlign: h.align,
                   fontWeight: 500,
                   color: "var(--text-muted)",
@@ -234,7 +234,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
                 {/* ── Objekt ── */}
                 <td
                   style={{
-                    padding: "{cellPad}",
+                    padding: cellPad,
                     whiteSpace: "nowrap",
                   }}
                 >
@@ -258,7 +258,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
                 {/* ── Adresse ── */}
                 <td
                   style={{
-                    padding: "{cellPad}",
+                    padding: cellPad,
                     color: "var(--text-muted)",
                     fontSize: "var(--text-xs)",
                     whiteSpace: "nowrap",
@@ -283,7 +283,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
                 {/* ── Malo ── */}
                 <td
                   style={{
-                    padding: "{cellPad}",
+                    padding: cellPad,
                     whiteSpace: "nowrap",
                   }}
                 >
@@ -293,7 +293,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
                 {/* ── Zählernummer ── */}
                 <td
                   style={{
-                    padding: "{cellPad}",
+                    padding: cellPad,
                     whiteSpace: "nowrap",
                   }}
                 >
@@ -303,7 +303,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
                 {/* ── KNR ── */}
                 <td
                   style={{
-                    padding: "{cellPad}",
+                    padding: cellPad,
                     whiteSpace: "nowrap",
                   }}
                 >
@@ -313,7 +313,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
                 {/* ── Strom-Tarif ── */}
                 <td
                   style={{
-                    padding: "{cellPad}",
+                    padding: cellPad,
                     whiteSpace: "nowrap",
                   }}
                 >
@@ -348,7 +348,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
                 {/* ── Gas-Tarif ── */}
                 <td
                   style={{
-                    padding: "{cellPad}",
+                    padding: cellPad,
                     whiteSpace: "nowrap",
                   }}
                 >
@@ -383,7 +383,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
                 {/* ── Lieferstelle Status ── */}
                 <td
                   style={{
-                    padding: "{cellPad}",
+                    padding: cellPad,
                     whiteSpace: "nowrap",
                   }}
                 >
@@ -409,7 +409,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
                 {/* ── Typ ── */}
                 <td
                   style={{
-                    padding: "{cellPad}",
+                    padding: cellPad,
                     whiteSpace: "nowrap",
                   }}
                 >
@@ -431,7 +431,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
                 {/* ── Status + Alter ── */}
                 <td
                   style={{
-                    padding: "{cellPad}",
+                    padding: cellPad,
                     whiteSpace: "nowrap",
                     textAlign: "right",
                   }}
