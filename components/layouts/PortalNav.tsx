@@ -202,7 +202,7 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
           position:      "sticky",
           top:           HEADER_H,
           height:        `calc(100dvh - ${HEADER_H})`,
-          overflowY:     "auto",
+          overflowY:     "hidden",
         }}>
           {/* Nav */}
           <nav style={{ padding: "var(--space-4) var(--space-5)", display: "flex", flexDirection: "column", gap: "var(--space-2)" }}>
