@@ -168,6 +168,7 @@ export default async function PortalDashboardPage() {
         display: "flex",
         flexDirection: "column",
         gap: "var(--space-6)",
+        minHeight: "100%",
       }}
     >
       {/* ── KPI Cards ── */}
@@ -181,7 +182,7 @@ export default async function PortalDashboardPage() {
       />
 
       {/* ── Objekte Übersicht (table-container) ── */}
-      <div className="table-container">
+      <div className="table-container" style={{ flex: 1 }}>
         <div
           style={{
             padding: "var(--space-4) var(--space-6)",

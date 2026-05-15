@@ -120,6 +120,8 @@ export default async function AppDashboardPage() {
   const { data: { user } } = await supabase.auth.getUser()
 
   const now = new Date()
+  const rowCount = recentCustomers?.length ?? 0
+  const cellPad  = rowCount <= 5 ? "18px 16px" : rowCount <= 10 ? "14px 16px" : "10px 16px"
 
   const [
     { data: profile },
@@ -348,7 +350,7 @@ export default async function AppDashboardPage() {
         </div>
 
         {recentCustomers && recentCustomers.length > 0 ? (
-          <div style={{ overflowX: "auto" }}>
+          <div style={{ overflowX: "auto", flex: 1 }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px" }}>
               <thead>
                 <tr style={{ background: "rgba(255,255,255,0.015)", borderBottom: "1px solid var(--border)" }}>
@@ -421,7 +423,7 @@ export default async function AppDashboardPage() {
                       }}
                     >
                       {/* Objekt */}
-                      <td style={{ padding: "12px 16px", whiteSpace: "nowrap" }}>
+                      <td style={{ padding: cellPad, whiteSpace: "nowrap" }}>
                         <a
                           href={`/admin/customers/${row.id}`}
                           style={{
@@ -439,7 +441,7 @@ export default async function AppDashboardPage() {
                       </td>
 
                       {/* Adresse */}
-                      <td style={{ padding: "12px 16px", color: "var(--text-muted)", fontSize: "12px", whiteSpace: "nowrap" }}>
+                      <td style={{ padding: cellPad, color: "var(--text-muted)", fontSize: "12px", whiteSpace: "nowrap" }}>
                         {(row.postal_code || row.city) ? (
                           <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.3 }}>
                             {row.postal_code && <span>{row.postal_code}</span>}
@@ -449,22 +451,22 @@ export default async function AppDashboardPage() {
                       </td>
 
                       {/* Malo */}
-                      <td style={{ padding: "12px 16px", whiteSpace: "nowrap" }}>
+                      <td style={{ padding: cellPad, whiteSpace: "nowrap" }}>
                         {malo ? <span style={monoMuted}>{malo}</span> : dash}
                       </td>
 
                       {/* Zählernummer */}
-                      <td style={{ padding: "12px 16px", whiteSpace: "nowrap" }}>
+                      <td style={{ padding: cellPad, whiteSpace: "nowrap" }}>
                         {zNr ? <span style={monoMuted}>{zNr}</span> : dash}
                       </td>
 
                       {/* KNR */}
-                      <td style={{ padding: "12px 16px", whiteSpace: "nowrap" }}>
+                      <td style={{ padding: cellPad, whiteSpace: "nowrap" }}>
                         {knr ? <span style={monoMuted}>{knr}</span> : dash}
                       </td>
 
                       {/* Strom-Tarif */}
-                      <td style={{ padding: "12px 16px", whiteSpace: "nowrap" }}>
+                      <td style={{ padding: cellPad, whiteSpace: "nowrap" }}>
                         {stromRec?.neuer_versorger ? (
                           <div style={{ display: "flex", flexDirection: "column", gap: "1px" }}>
                             <span style={{ fontSize: "12px", fontWeight: 500, color: "var(--text-bright)" }}>
@@ -480,7 +482,7 @@ export default async function AppDashboardPage() {
                       </td>
 
                       {/* Gas-Tarif */}
-                      <td style={{ padding: "12px 16px", whiteSpace: "nowrap" }}>
+                      <td style={{ padding: cellPad, whiteSpace: "nowrap" }}>
                         {gasRec?.neuer_versorger ? (
                           <div style={{ display: "flex", flexDirection: "column", gap: "1px" }}>
                             <span style={{ fontSize: "12px", fontWeight: 500, color: "var(--text-bright)" }}>
@@ -496,7 +498,7 @@ export default async function AppDashboardPage() {
                       </td>
 
                       {/* Lieferstelle Status */}
-                      <td style={{ padding: "12px 16px", whiteSpace: "nowrap" }}>
+                      <td style={{ padding: cellPad, whiteSpace: "nowrap" }}>
                         {lieferStatus ? (
                           <span className="pill pill--inactive">
                             {lieferStatus}
@@ -505,7 +507,7 @@ export default async function AppDashboardPage() {
                       </td>
 
                       {/* Typ */}
-                      <td style={{ padding: "12px 16px", whiteSpace: "nowrap" }}>
+                      <td style={{ padding: cellPad, whiteSpace: "nowrap" }}>
                         <span style={{
                           background: "rgba(255,255,255,0.03)",
                           color: "var(--text-muted)",
@@ -520,7 +522,7 @@ export default async function AppDashboardPage() {
                       </td>
 
                       {/* Status + Alter */}
-                      <td style={{ padding: "12px 16px", whiteSpace: "nowrap", textAlign: "right" }}>
+                      <td style={{ padding: cellPad, whiteSpace: "nowrap", textAlign: "right" }}>
                         <div style={{ display: "flex", flexDirection: "column", gap: "2px", alignItems: "flex-end" }}>
                           <span style={{ fontSize: "11px", fontWeight: 600, color: statusColor }}>{statusLabel}</span>
                           <span style={{ fontSize: "10px", fontWeight: 600, color: ageColor }}>{ageLabel}</span>

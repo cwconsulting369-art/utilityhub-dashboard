@@ -775,9 +775,9 @@ export default function PortalNav({
                             display:        "flex",
                             alignItems:     "center",
                             gap:            16,
-                            padding:        "14px 20px",
+                            padding:        "16px 24px",
                             borderRadius:   "var(--radius-sm)",
-                            fontSize:       15,
+                            fontSize:       16,
                             fontWeight:     active ? 600 : 500,
                             color:          active ? "var(--accent)" : "var(--text-muted)",
                             background:     active ? "var(--accent-dim)" : "transparent",
@@ -885,8 +885,8 @@ export default function PortalNav({
                     )
                   })}
 
-                  {/* Push content to bottom */}
-                  <div style={{ flex: 1, minHeight: "var(--space-8)" }} />
+                  {/* Push content to bottom - fills remaining space */}
+                  <div style={{ flex: "1 1 auto", minHeight: 0 }} />
 
                   {/* Sidebar bottom slot (if provided) */}
                   {sidebarBottom && (
@@ -904,8 +904,12 @@ export default function PortalNav({
                   {portalType === "portal" && (
                     <div
                       style={{
-                        padding:      "var(--space-4) 0",
+                        padding:      "var(--space-5) 0",
                         borderTop:    "1px solid var(--border)",
+                        minHeight:    "120px",
+                        display:      "flex",
+                        alignItems:   "center",
+                        justifyContent: "center",
                       }}
                     >
                       <PortalSidebarUpload />

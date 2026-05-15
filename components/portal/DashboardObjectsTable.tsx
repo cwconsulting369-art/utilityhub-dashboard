@@ -105,6 +105,7 @@ function BuildingPhoto() {
 
 export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
   const now = new Date()
+  const cellPad = objects.length <= 5 ? "18px 16px" : objects.length <= 10 ? "14px 16px" : "10px 16px"
   const dash = <span style={{ color: "var(--text-muted)", opacity: 0.4 }}>&mdash;</span>
 
   /* ── Empty state ── */
@@ -150,7 +151,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
               <th
                 key={h.label}
                 style={{
-                  padding: "var(--space-3) var(--space-4)",
+                  padding: "{cellPad}",
                   textAlign: h.align,
                   fontWeight: 500,
                   color: "var(--text-muted)",
@@ -233,7 +234,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
                 {/* ── Objekt ── */}
                 <td
                   style={{
-                    padding: "var(--space-3) var(--space-4)",
+                    padding: "{cellPad}",
                     whiteSpace: "nowrap",
                   }}
                 >
@@ -257,7 +258,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
                 {/* ── Adresse ── */}
                 <td
                   style={{
-                    padding: "var(--space-3) var(--space-4)",
+                    padding: "{cellPad}",
                     color: "var(--text-muted)",
                     fontSize: "var(--text-xs)",
                     whiteSpace: "nowrap",
@@ -282,7 +283,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
                 {/* ── Malo ── */}
                 <td
                   style={{
-                    padding: "var(--space-3) var(--space-4)",
+                    padding: "{cellPad}",
                     whiteSpace: "nowrap",
                   }}
                 >
@@ -292,7 +293,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
                 {/* ── Zählernummer ── */}
                 <td
                   style={{
-                    padding: "var(--space-3) var(--space-4)",
+                    padding: "{cellPad}",
                     whiteSpace: "nowrap",
                   }}
                 >
@@ -302,7 +303,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
                 {/* ── KNR ── */}
                 <td
                   style={{
-                    padding: "var(--space-3) var(--space-4)",
+                    padding: "{cellPad}",
                     whiteSpace: "nowrap",
                   }}
                 >
@@ -312,7 +313,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
                 {/* ── Strom-Tarif ── */}
                 <td
                   style={{
-                    padding: "var(--space-3) var(--space-4)",
+                    padding: "{cellPad}",
                     whiteSpace: "nowrap",
                   }}
                 >
@@ -347,7 +348,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
                 {/* ── Gas-Tarif ── */}
                 <td
                   style={{
-                    padding: "var(--space-3) var(--space-4)",
+                    padding: "{cellPad}",
                     whiteSpace: "nowrap",
                   }}
                 >
@@ -382,7 +383,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
                 {/* ── Lieferstelle Status ── */}
                 <td
                   style={{
-                    padding: "var(--space-3) var(--space-4)",
+                    padding: "{cellPad}",
                     whiteSpace: "nowrap",
                   }}
                 >
@@ -408,7 +409,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
                 {/* ── Typ ── */}
                 <td
                   style={{
-                    padding: "var(--space-3) var(--space-4)",
+                    padding: "{cellPad}",
                     whiteSpace: "nowrap",
                   }}
                 >
@@ -430,7 +431,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
                 {/* ── Status + Alter ── */}
                 <td
                   style={{
-                    padding: "var(--space-3) var(--space-4)",
+                    padding: "{cellPad}",
                     whiteSpace: "nowrap",
                     textAlign: "right",
                   }}
