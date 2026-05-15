@@ -29,7 +29,7 @@ const SIDEBAR_W     = 240
 
 /* ── Framer-motion ── */
 
-const TRANSITION_DEFAULT = { duration: 0.25, ease: [0.16, 1, 0.3, 1] }
+const TRANSITION_DEFAULT = { duration: 0.25, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }
 
 const slideIn = {
   initial: { x: -SIDEBAR_W, opacity: 0 },
