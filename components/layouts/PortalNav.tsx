@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion"
 
 /* ── Types ── */
 
-interface NavItem { href: string; label: string; icon?: string; badge?: number }
+interface NavItem { href: string; label: string; icon?: string }
 
 interface PortalNavProps {
   items:          NavItem[]
@@ -334,11 +334,6 @@ export default function PortalNav({
                     {item.icon}
                   </span>
                   <span>{item.label}</span>
-                  {item.badge ? (
-                    <span style={{ marginLeft: "auto", fontSize: 11, fontWeight: 700, background: "var(--accent-dim)", color: "var(--accent)", padding: "2px 8px", borderRadius: "var(--radius-full)" }}>
-                      {item.badge}
-                    </span>
-                  ) : null}
                 </Link>
               )
             })}
