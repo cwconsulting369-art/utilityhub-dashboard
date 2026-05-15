@@ -164,17 +164,17 @@ export default async function PortalDashboardPage() {
   return (
     <div
       style={{
-        display: "grid",
-        gridTemplateRows: "auto 1fr",
+        display: "flex",
+        flexDirection: "column",
         gap: 12,
         height: "100%",
-        maxHeight: "100%",
+        minHeight: 0,
         overflow: "hidden",
         padding: "0 4px",
       }}
     >
       {/* ── KPI Cards (fix ~110px) ── */}
-      <div style={{ height: 110, minHeight: 110, maxHeight: 110 }}>
+      <div style={{ flex: "0 0 110px", minHeight: 0 }}>
         <DashboardKPICards
           stromCount={stromCount}
           gasCount={gasCount}
@@ -186,7 +186,7 @@ export default async function PortalDashboardPage() {
       </div>
 
       {/* ── Tabelle (Rest) ── */}
-      <div className="table-container" style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0, overflow: "hidden" }}>
+      <div className="table-container" style={{ flex: "1 1 0", minHeight: 0, display: "flex", flexDirection: "column", overflow: "hidden" }}>
         {/* Header bar */}
         <div style={{ padding: "10px 16px", borderBottom: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <h2 style={{ fontSize: 14, fontWeight: 600, color: "var(--text-bright)", margin: 0 }}>Objekte Übersicht</h2>

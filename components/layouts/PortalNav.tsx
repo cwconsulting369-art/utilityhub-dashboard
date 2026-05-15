@@ -261,18 +261,18 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
         </aside>
 
         {/* Main content */}
-        <main style={{ flex: 1, overflowY: "auto", maxWidth: "calc(100% - 280px)", display: "flex", flexDirection: "column" }}>
+        <main style={{ flex: 1, maxWidth: "calc(100% - 280px)", display: "flex", flexDirection: "column", minHeight: 0 }}>
           {/* Back nav strip */}
           <div style={{
             padding: "var(--space-3) var(--space-8)",
             borderBottom: "1px solid var(--border)",
             background: "var(--bg)",
-            position: "sticky", top: 0, zIndex: 10,
+            flexShrink: 0,
           }}>
             <BackNavButton />
           </div>
 
-          <div style={{ padding: "var(--space-8) var(--space-8) var(--space-8) var(--space-12)", flex: 1, display: "flex", flexDirection: "column", minHeight: 0 }}>
+          <div style={{ padding: "var(--space-5) var(--space-8) var(--space-5) var(--space-12)", flex: 1, display: "flex", flexDirection: "column", minHeight: 0 }}>
             {children}
           </div>
         </main>

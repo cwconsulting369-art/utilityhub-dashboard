@@ -46,12 +46,12 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
   const rowH = `calc((100% - 40px) / ${objects.length})`
 
   return (
-    <div style={{ overflow: "hidden", height: "100%" }}>
-      <table style={{ width: "100%", height: "100%", borderCollapse: "separate", borderSpacing: 0, fontSize: "var(--text-sm)" }}>
+    <div style={{ overflow: "hidden", flex: "1 1 0", minHeight: 0 }}>
+      <table style={{ width: "100%", height: "100%", borderCollapse: "separate", borderSpacing: 0, fontSize: "var(--text-sm)", tableLayout: "fixed" }}>
         <thead>
           <tr style={{ height: 40, borderBottom: "1px solid var(--border-subtle)", background: "rgba(255,255,255,0.015)" }}>
             {["Objekt","Adresse","Malo","Zählernummer","KNR","Strom-Tarif","Gas-Tarif","Lieferstelle Status","Typ","Status"].map(h => (
-              <th key={h} style={{ padding: "0 16px", textAlign: "left", fontWeight: 500, color: "var(--text-muted)", fontSize: "var(--text-xs)", textTransform: "uppercase", letterSpacing: "0.04em", whiteSpace: "nowrap" }}>{h}</th>
+              <th key={h} style={{ padding: "0 12px", textAlign: "left", fontWeight: 500, color: "var(--text-muted)", fontSize: "var(--text-xs)", textTransform: "uppercase", letterSpacing: "0.04em", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{h}</th>
             ))}
           </tr>
         </thead>
