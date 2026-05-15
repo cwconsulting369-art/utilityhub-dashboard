@@ -3,7 +3,6 @@ import { redirect } from "next/navigation"
 import { getStreet } from "@/lib/customers/format"
 import { DashboardKPICards } from "@/components/portal/DashboardKPICards"
 import { DashboardObjectsTable } from "@/components/portal/DashboardObjectsTable"
-import { PortalContactsSection } from "@/components/portal/PortalContactsSection"
 
 export const metadata = { title: "Dashboard | UtilityHub" }
 
@@ -291,4 +290,38 @@ export default async function PortalDashboardPage() {
       </div>
 
       {/* ── Ansprechpartner ── */}
-      <Portal
+      <DBContacts />
+    </div>
+  )
+}
+
+async function DBContacts() {
+  const supabase = await createClient()
+  let contacts: { id: string; full_name: string; role: string | null; phone: string | null }[] = []
+  try {
+    const { data } = await supabase.from("contacts").select("id, full_name, role, phone").order("full_name")
+    if (data) contacts = data
+  } catch { /* ignore */ }
+
+  if (contacts.length === 0) return null
+
+  return (
+    <div>
+      <h2 style={{ fontSize: "var(--text-lg)", fontWeight: 600, marginBottom: "var(--space-3)" }}>Ihre Ansprechpartner</h2>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "var(--space-4)" }}>
+        {contacts.map((c) => (
+          <div key={c.id} className="card" style={{ padding: "var(--space-4)", display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
+            <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "var(--accent-dim)", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, fontSize: "14px", color: "var(--accent)", flexShrink: 0 }}>
+              {c.full_name.split(" ").map((s) => s[0]).join("").slice(0, 2).toUpperCase()}
+            </div>
+            <div>
+              <div style={{ fontWeight: 600, fontSize: "var(--text-sm)" }}>{c.full_name}</div>
+              <div style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>{c.role}</div>
+              {c.phone && <div style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>{c.phone}</div>}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
