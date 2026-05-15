@@ -319,6 +319,150 @@
 .stagger-4 { animation-delay: 200ms; }
 .stagger-5 { animation-delay: 250ms; }
 
+/* ═══════════════════════════════════════════
+   RESPONSIVE: KPI Cards & Table Heights
+   ═══════════════════════════════════════════ */
+
+/* Default (small screens < 700px height) */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1.8fr;
+  gap: 12px;
+}
+.kpi-card {
+  padding: 12px 14px;
+  gap: 6px;
+}
+.kpi-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.kpi-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+.kpi-number {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--text-bright);
+  line-height: 1;
+  text-align: center;
+  align-self: center;
+}
+.kpi-sub {
+  font-size: 10px;
+  color: var(--text-faint);
+  text-align: center;
+  align-self: center;
+}
+.summary-card {
+  padding: 14px 16px;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+}
+.summary-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, #3b82f6, #60a5fa);
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
+}
+.summary-counts {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.summary-num {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--text-bright);
+}
+.summary-label {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.summary-sep {
+  color: var(--border-subtle);
+}
+.summary-check {
+  font-size: 11px;
+  color: #58a6ff;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.progress-wrap {
+  margin-top: 4px;
+}
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+.progress-labels span {
+  font-size: 10px;
+  color: var(--text-faint);
+}
+.progress-track {
+  height: 4px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+  border-radius: 999px;
+}
+
+/* Medium screens: 700-900px height */
+@media (min-height: 700px) {
+  .kpi-card { padding: 16px 18px; gap: 8px; }
+  .kpi-number { font-size: 26px; }
+  .kpi-sub { font-size: 11px; }
+  .summary-card { padding: 18px 20px; gap: 12px; }
+  .summary-num { font-size: 24px; }
+  .progress-track { height: 5px; }
+}
+
+/* Large screens: 900-1100px height */
+@media (min-height: 900px) {
+  .kpi-grid { gap: 16px; }
+  .kpi-card { padding: 20px 22px; gap: 10px; }
+  .kpi-number { font-size: 30px; }
+  .kpi-label { font-size: 12px; }
+  .summary-card { padding: 22px 24px; gap: 14px; }
+  .summary-num { font-size: 28px; }
+  .summary-check { font-size: 12px; }
+  .progress-track { height: 6px; }
+}
+
+/* Extra large: > 1100px height */
+@media (min-height: 1100px) {
+  .kpi-grid { gap: 20px; }
+  .kpi-card { padding: 24px 28px; gap: 12px; }
+  .kpi-number { font-size: 34px; }
+  .kpi-label { font-size: 13px; }
+  .kpi-sub { font-size: 12px; }
+  .summary-card { padding: 28px 32px; gap: 18px; }
+  .summary-num { font-size: 32px; }
+  .summary-label { font-size: 13px; }
+  .summary-check { font-size: 13px; }
+  .progress-labels span { font-size: 12px; }
+  .progress-track { height: 8px; }
+}
+
 /* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
