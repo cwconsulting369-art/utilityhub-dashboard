@@ -205,7 +205,7 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
           overflowY:     "auto",
         }}>
           {/* Nav */}
-          <nav style={{ padding: "var(--space-4) var(--space-5)", display: "flex", flexDirection: "column", gap: "var(--space-2)" }}
+          <nav style={{ padding: "var(--space-4) var(--space-5)", display: "flex", flexDirection: "column", gap: "var(--space-2)" }}>
             {items.map((item) => {
               const isActive = pathname === item.href || pathname.startsWith(item.href + "/")
               return (
