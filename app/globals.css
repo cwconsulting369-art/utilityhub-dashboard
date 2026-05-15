@@ -86,6 +86,10 @@
     min-height: 100vh;
   }
 
+  body.no-scroll {
+    overflow: hidden;
+  }
+
   /* ── Scrollbar ── */
   * {
     scrollbar-width: thin;
@@ -458,7 +462,40 @@
   .progress-track { height: 6px; }
 }
 
-/* Extra large: > 1100px height */
+/* ═══════════════════════════════════════════
+   FIXED TABLE — no scrolling, fills screen
+   ═══════════════════════════════════════════ */
+
+.table-container.no-scroll {
+  overflow: hidden !important;
+}
+
+.fixed-table {
+  width: 100%;
+  height: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: var(--text-sm);
+  table-layout: fixed;
+}
+
+.fixed-table tbody {
+  height: 100%;
+}
+
+.fixed-table tbody tr {
+  height: calc(100% / var(--row-count, 5));
+  max-height: calc(100% / var(--row-count, 5));
+}
+
+.fixed-table td,
+.fixed-table th {
+  padding: 0 16px;
+  vertical-align: middle;
+}
+
+/* ═══════════════════════════════════════════
+   Extra large: > 1100px height */
 @media (min-height: 1100px) {
   .kpi-grid { gap: 20px; }
   .kpi-card { padding: 24px 28px; gap: 12px; }

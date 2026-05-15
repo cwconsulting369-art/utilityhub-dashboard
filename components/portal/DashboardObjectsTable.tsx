@@ -42,7 +42,10 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
 
   return (
     <div style={{ overflow: "hidden", height: "100%" }}>
-      <table style={{ width: "100%", height: "100%", borderCollapse: "separate", borderSpacing: 0, fontSize: "var(--text-sm)", tableLayout: "fixed" }}>
+      <table
+        className="fixed-table"
+        style={{ "--row-count": objects.length } as React.CSSProperties}
+      >
         <thead>
           <tr style={{ borderBottom: "1px solid var(--border-subtle)", background: "rgba(255,255,255,0.015)" }}>
             {["Objekt","Adresse","Malo","Zählernummer","KNR","Strom-Tarif","Gas-Tarif","Lieferstelle Status","Typ","Status"].map(h => (

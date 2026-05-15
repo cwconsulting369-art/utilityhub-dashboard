@@ -168,7 +168,8 @@ export default async function PortalDashboardPage() {
         gridTemplateRows: "1fr 3fr",
         gap: "var(--space-6)",
         height: "100%",
-        minHeight: 0,
+        maxHeight: "100%",
+        overflow: "hidden",
       }}
     >
       {/* ── KPI Cards (1fr = 25%) ── */}
@@ -184,7 +185,7 @@ export default async function PortalDashboardPage() {
       </div>
 
       {/* ── Objekte Übersicht (3fr = 75%) ── */}
-      <div className="table-container" style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0 }}>
+      <div className="table-container no-scroll" style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0, overflow: "hidden" }}>
         <div
           style={{
             padding: "var(--space-4) var(--space-6)",
