@@ -272,7 +272,7 @@ export default function PortalNav({ items, user, portalType, children, sidebarBo
             <BackNavButton />
           </div>
 
-          <div style={{ padding: "var(--space-8) var(--space-8) var(--space-8) var(--space-12)" }}>
+          <div style={{ padding: "var(--space-8) var(--space-8) var(--space-8) var(--space-12)", flex: 1, display: "flex", flexDirection: "column", minHeight: 0 }}>
             {children}
           </div>
         </main>
