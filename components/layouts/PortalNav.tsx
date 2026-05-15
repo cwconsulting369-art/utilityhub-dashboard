@@ -18,6 +18,7 @@ interface PortalNavProps {
   }
   portalType:     "admin" | "portal"
   sidebarBottom?: React.ReactNode
+  searchApiPath?: string
   children:       React.ReactNode
 }
 
