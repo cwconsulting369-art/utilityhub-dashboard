@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion"
 
 /* ── Types ── */
 
-interface NavItem { href: string; label: string; icon?: string }
+interface NavItem { href: string; label: string; icon?: string; badge?: number }
 
 interface PortalNavProps {
   items:          NavItem[]
