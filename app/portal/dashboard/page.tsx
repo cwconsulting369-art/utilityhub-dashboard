@@ -173,8 +173,8 @@ export default async function PortalDashboardPage() {
         padding: "0 4px",
       }}
     >
-      {/* ── KPI Cards (fix ~110px) ── */}
-      <div style={{ flex: "0 0 108px", minHeight: 0 }}>
+      {/* ── KPI Cards (fix ~140px) ── */}
+      <div style={{ flex: "0 0 140px", minHeight: 0 }}>
         <DashboardKPICards
           stromCount={stromCount}
           gasCount={gasCount}
