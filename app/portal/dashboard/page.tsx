@@ -118,7 +118,7 @@ export default async function PortalDashboardPage() {
       .eq("organization_id", orgId)
       .order("created_at", { ascending: false })
       .limit(10)
-    recentObjects = recent ?? []
+    recentObjects = (recent as ObjRow[] | null) ?? []
 
   } else if (customerId) {
     /* single-customer fallback */
