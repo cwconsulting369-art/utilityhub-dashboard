@@ -85,29 +85,21 @@ function FadeInRow({
   )
 }
 
-/* ── Building icon (SVG, no external image) ── */
-function BuildingIcon() {
+/* ── Building photo (replaces SVG icon) ── */
+function BuildingPhoto() {
   return (
-    <div
+    <img
+      src="/building-placeholder.jpg"
+      alt="Gebäude"
       style={{
         width: "36px",
         height: "36px",
         borderRadius: "var(--radius-md)",
-        background: "var(--surface-2)",
-        border: "1px solid var(--border)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        color: "var(--text-muted)",
+        objectFit: "cover",
+        border: "1px solid var(--border-subtle)",
         flexShrink: 0,
       }}
-    >
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M3 21h18" />
-        <path d="M5 21V7l7-4 7 4v14" />
-        <path d="M9 21v-9h6v9" />
-      </svg>
-    </div>
+    />
   )
 }
 
@@ -255,7 +247,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
                       color: "inherit",
                     }}
                   >
-                    <BuildingIcon />
+                    <BuildingPhoto />
                     <span style={{ fontWeight: 600, color: "var(--text-bright)" }}>
                       {objektLabel}
                     </span>

@@ -432,21 +432,8 @@ export default async function AppDashboardPage() {
                             color: "inherit",
                           }}
                         >
-                          <div style={{
-                            width: "36px",
-                            height: "36px",
-                            borderRadius: "var(--radius-md)",
-                            background: "var(--surface)",
-                            border: "1px solid var(--border-subtle)",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            flexShrink: 0,
-                          }}>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21V12h6v9"/>
-                            </svg>
-                          </div>
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src="/building-placeholder.jpg" alt="Gebäude" style={{ width: "36px", height: "36px", borderRadius: "var(--radius-md)", objectFit: "cover", flexShrink: 0, border: "1px solid var(--border-subtle)" }} />
                           <span style={{ fontWeight: 600, color: "var(--text-bright)" }}>{objektLabel}</span>
                         </a>
                       </td>

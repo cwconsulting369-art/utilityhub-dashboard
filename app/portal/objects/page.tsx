@@ -154,16 +154,8 @@ export default async function PortalObjectsPage() {
                       {/* Objekt */}
                       <td style={{ padding: 0 }}>
                         <a href={detailHref} style={{ ...cellLinkBase, whiteSpace: "nowrap", display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
-                          <div style={{
-                            width: "36px", height: "36px", borderRadius: "var(--radius-md)",
-                            background: "var(--surface-2)", border: "1px solid var(--border-subtle)",
-                            display: "flex", alignItems: "center", justifyContent: "center",
-                            color: "var(--text-muted)", flexShrink: 0,
-                          }}>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M3 21h18" /><path d="M5 21V7l7-4 7 4v14" /><path d="M9 21v-9h6v9" />
-                            </svg>
-                          </div>
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src="/building-placeholder.jpg" alt="Gebäude" style={{ width: "36px", height: "36px", borderRadius: "var(--radius-md)", objectFit: "cover", flexShrink: 0, border: "1px solid var(--border-subtle)" }} />
                           <span style={{ fontWeight: 600, color: "#ffffff" }}>{getStreet(c.full_name)}</span>
                         </a>
                       </td>
