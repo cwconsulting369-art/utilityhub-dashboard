@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { getStreet } from "@/lib/customers/format"
 
@@ -54,20 +55,25 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
   const now = new Date()
   const dash = <span style={{ color: "var(--text-muted)", opacity: 0.4 }}>—</span>
 
-  // Dynamisches Padding: Berechne verfügbare Höhe (~viewport - header - KPIs - Titel)
-  // Dann teile durch Zeilenanzahl für gleichmäßige Verteilung
-  const availableH = typeof window !== "undefined" ? window.innerHeight - 280 : 600
-  const minRowH = 56
-  const maxRowH = 80
-  const calculatedH = Math.floor(availableH / Math.max(objects.length, 1))
-  const rowHeight = objects.length <= 3
-    ? Math.min(Math.max(calculatedH, minRowH), maxRowH + 16)
-    : objects.length <= 6
-      ? Math.min(Math.max(calculatedH, minRowH), maxRowH)
-      : minRowH
+  // Messe die verfügbare Höhe der Tabelle (Grid-Zelle)
+  const [containerH, setContainerH] = useState(400)
+  useEffect(() => {
+    const update = () => {
+      const el = document.querySelector("[data-table-root]")
+      if (el) setContainerH((el as HTMLElement).clientHeight)
+    }
+    update()
+    const ro = new ResizeObserver(update)
+    const el = document.querySelector("[data-table-root]")
+    if (el) ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
 
-  const cellPadV = Math.floor((rowHeight - 28) / 2)
-  const cellPad = `${cellPadV}px 16px`
+  // Teile verfügbare Höhe durch Zeilenanzahl
+  const headerH = 40
+  const availableRowsH = Math.max(containerH - headerH, 100)
+  const rowHeight = Math.floor(availableRowsH / Math.max(objects.length, 1))
+  const cellPad = `${Math.floor((rowHeight - 28) / 2)}px 16px`
 
   if (objects.length === 0) {
     return (
@@ -78,8 +84,8 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
   }
 
   return (
-    <div style={{ overflow: "auto", flex: 1 }}>
-      <table style={{ width: "100%", borderCollapse: "separate", borderSpacing: 0, fontSize: "var(--text-sm)" }}>
+    <div data-table-root style={{ overflow: "auto", height: "100%" }}>
+      <table style={{ width: "100%", height: "100%", borderCollapse: "separate", borderSpacing: 0, fontSize: "var(--text-sm)" }}>
         <thead>
           <tr style={{ borderBottom: "1px solid var(--border-subtle)", background: "rgba(255,255,255,0.015)" }}>
             {["Objekt", "Adresse", "Malo", "Zählernummer", "KNR", "Strom-Tarif", "Gas-Tarif", "Lieferstelle Status", "Typ", "Status"].map(h => (

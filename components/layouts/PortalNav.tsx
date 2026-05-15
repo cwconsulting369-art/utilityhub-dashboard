@@ -948,8 +948,11 @@ export default function PortalNav({
           {/* Page content */}
           <div
             style={{
-              padding:    "var(--space-6) var(--space-6) var(--space-8)",
-              flex:       1,
+              padding:       "var(--space-6) var(--space-6) var(--space-8)",
+              flex:          1,
+              display:       "flex",
+              flexDirection: "column",
+              minHeight:     0,
             }}
           >
             {children}

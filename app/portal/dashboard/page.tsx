@@ -164,11 +164,10 @@ export default async function PortalDashboardPage() {
   return (
     <div
       style={{
-        display: "flex",
-        flexDirection: "column",
+        display: "grid",
+        gridTemplateRows: "auto 1fr",
         gap: "var(--space-6)",
         height: "100%",
-        flex: 1,
         minHeight: 0,
       }}
     >
