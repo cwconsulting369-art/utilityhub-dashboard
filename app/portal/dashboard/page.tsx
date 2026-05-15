@@ -182,7 +182,7 @@ export default async function PortalDashboardPage() {
       />
 
       {/* ── Objekte Übersicht (table-container) ── */}
-      <div className="table-container" style={{ flex: 1 }}>
+      <div className="table-container" style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0 }}>
         <div
           style={{
             padding: "var(--space-4) var(--space-6)",

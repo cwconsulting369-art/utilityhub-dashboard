@@ -148,7 +148,7 @@ export default async function AppDashboardPage() {
       )
       .not("full_name", "ilike", "% (Allgemein)")
       .order("created_at", { ascending: false })
-      .limit(15),
+      .limit(100),
   ])
 
   const rowCount = (recentCustomers as any[])?.length ?? 0
@@ -324,7 +324,7 @@ export default async function AppDashboardPage() {
       </div>
 
       {/* ── Zuletzt hinzugefügte Objekte ── */}
-      <div className="table-container" style={{ flex: 1 }}>
+      <div className="table-container" style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0 }}>
         {/* Header bar */}
         <div style={{
           padding: "16px 20px",
@@ -351,7 +351,7 @@ export default async function AppDashboardPage() {
         </div>
 
         {recentCustomers && recentCustomers.length > 0 ? (
-          <div style={{ overflowX: "auto", flex: 1 }}>
+          <div style={{ overflow: "auto", flex: 1, maxHeight: "calc(100vh - 320px)" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px" }}>
               <thead>
                 <tr style={{ background: "rgba(255,255,255,0.015)", borderBottom: "1px solid var(--border)" }}>

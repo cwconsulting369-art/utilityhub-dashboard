@@ -125,7 +125,7 @@ export function DashboardObjectsTable({ objects }: { objects: ObjectRow[] }) {
   }
 
   return (
-    <div style={{ overflowX: "auto" }}>
+    <div style={{ overflow: "auto", flex: 1, maxHeight: "calc(100vh - 320px)" }}>
       <table
         style={{
           width: "100%",
