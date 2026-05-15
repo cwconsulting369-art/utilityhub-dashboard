@@ -87,12 +87,12 @@ function SingleKPICard({
       }}
       className="card"
       style={{
-        borderRadius: "var(--radius-lg)",
-        padding: "var(--space-5) var(--space-6)",
+        borderRadius: "var(--radius-md)",
+        padding: "var(--space-4) var(--space-4)",
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
-        gap: "var(--space-3)",
+        alignItems: "flex-start",
+        gap: "var(--space-2)",
         cursor: "default",
         willChange: "transform",
       }}
@@ -107,7 +107,7 @@ function SingleKPICard({
             {icon}
           </IconCircle>
         </motion.div>
-        <span style={{ fontSize: "var(--text-sm)", color: "var(--text-muted)", fontWeight: 500 }}>
+        <span style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", fontWeight: 500 }}>
           {label}
         </span>
       </div>
@@ -118,17 +118,18 @@ function SingleKPICard({
         transition={{ delay: 0.15, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
         style={{
           fontFamily: "var(--font-serif)",
-          fontSize: "28px",
+          fontSize: "32px",
           fontWeight: 400,
           color: "var(--text-bright)",
           lineHeight: 1,
           textAlign: "center",
+          alignSelf: "center",
         }}
       >
         {count.toLocaleString("de-DE")}
       </motion.div>
 
-      <div style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", textAlign: "center" }}>
+      <div style={{ fontSize: "11px", color: "var(--text-faint)", textAlign: "center", alignSelf: "center" }}>
         {sub}
       </div>
     </motion.div>
@@ -158,22 +159,23 @@ function SummaryCard({
         background: "var(--surface)",
         border: "1px solid rgba(59,130,246,0.10)",
         borderLeft: "3px solid #3b82f6",
-        borderRadius: "var(--radius-lg)",
-        padding: "var(--space-5) var(--space-6)",
+        borderRadius: "var(--radius-md)",
+        padding: "var(--space-4) var(--space-5)",
         display: "flex",
         flexDirection: "column",
-        gap: "var(--space-4)",
+        gap: "var(--space-3)",
+        justifyContent: "center",
         willChange: "transform",
       }}
     >
-      <div style={{ display: "flex", alignItems: "baseline", gap: "var(--space-3)", flexWrap: "wrap" }}>
+      <div style={{ display: "flex", alignItems: "baseline", gap: "var(--space-2)", flexWrap: "wrap" }}>
         <motion.span
           initial={{ opacity: 0, scale: 0.85 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.28, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
           style={{
             fontFamily: "var(--font-serif)",
-            fontSize: "28px",
+            fontSize: "24px",
             fontWeight: 400,
             lineHeight: 1,
             color: "var(--text-bright)",
@@ -181,15 +183,15 @@ function SummaryCard({
         >
           {totalObjects.toLocaleString("de-DE")}
         </motion.span>
-        <span style={{ fontSize: "var(--text-sm)", color: "var(--text-muted)" }}>Objekte</span>
-        <span style={{ color: "var(--border)" }}>|</span>
+        <span style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>Objekte</span>
+        <span style={{ color: "var(--border-subtle)" }}>|</span>
         <motion.span
           initial={{ opacity: 0, scale: 0.85 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.35, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
           style={{
             fontFamily: "var(--font-serif)",
-            fontSize: "28px",
+            fontSize: "24px",
             fontWeight: 400,
             lineHeight: 1,
             color: "var(--text-bright)",
@@ -197,27 +199,22 @@ function SummaryCard({
         >
           {totalLiefer.toLocaleString("de-DE")}
         </motion.span>
-        <span style={{ fontSize: "var(--text-sm)", color: "var(--text-muted)" }}>Lieferstellen</span>
+        <span style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>Lieferstellen</span>
       </div>
 
       <div
         style={{
-          fontSize: "var(--text-sm)",
+          fontSize: "var(--text-xs)",
           color: "#58a6ff",
           fontWeight: 600,
           display: "flex",
           alignItems: "center",
-          gap: "var(--space-2)",
+          gap: "var(--space-1)",
         }}
       >
-        <motion.span
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ delay: 0.5, duration: 0.4, type: "spring", bounce: 0.4 }}
-          style={{ display: "inline-block" }}
-        >
-          &#10003;
-        </motion.span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#58a6ff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
         Alle koordiniert
       </div>
 
@@ -227,17 +224,17 @@ function SummaryCard({
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            marginBottom: "6px",
+            marginBottom: "4px",
           }}
         >
-          <span style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>
-            Alle Vertr&auml;ge optimiert {allOptimized ? "\u2713" : ""}
+          <span style={{ fontSize: "11px", color: "var(--text-faint)" }}>
+            Alle Verträge optimiert
           </span>
           <span
             style={{
-              fontSize: "var(--text-xs)",
+              fontSize: "11px",
               fontWeight: 700,
-              color: allOptimized ? "#58a6ff" : "var(--text-muted)",
+              color: allOptimized ? "#58a6ff" : "var(--text-faint)",
             }}
           >
             {allOptimized ? "100%" : "0%"}
@@ -245,8 +242,8 @@ function SummaryCard({
         </div>
         <div
           style={{
-            height: "6px",
-            background: "var(--border)",
+            height: "4px",
+            background: "rgba(255,255,255,0.06)",
             borderRadius: "999px",
             overflow: "hidden",
           }}
@@ -283,7 +280,7 @@ export function DashboardKPICards({
       animate="show"
       style={{
         display: "grid",
-        gridTemplateColumns: "1fr 1fr 1fr 2fr",
+        gridTemplateColumns: "1fr 1fr 1fr 1.8fr",
         gap: "var(--space-4)",
         alignItems: "stretch",
       }}
